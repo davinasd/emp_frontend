@@ -182,7 +182,7 @@ const GetAllProject = () => {
                     <Td>{project.projectName}</Td>
                     <Td className={`md:table-cell hidden capitalize`}>
                       <Menu>
-                        <MenuButton
+                        {/* <MenuButton
                           size={"sm"}
                           as={Button}
                           variant={"outline"}
@@ -201,6 +201,21 @@ const GetAllProject = () => {
                           >
                             {project?.priority}
                           </div>
+                        </MenuButton> */}
+                        <MenuButton
+                          as={Button}
+                          bg={
+                            (priorityArray[project.priority] === "urgent" || project.priority.toLowerCase() === "urgent") ? "red" :
+                              ((priorityArray[project.priority] === "high" || project.priority.toLowerCase() === "high") ? "orange.500" :
+                                (priorityArray[project.priority] === "medium" || project.priority.toLowerCase() === "medium") ? "gold" :
+                                  "green.300")
+                          }
+                          _hover={{ color: "black" }}
+                          fontWeight={"bold"}
+                          textTransform={"capitalize"}
+                          color={"white"}
+                        >
+                          {priorityArray[project.priority] || project.priority}
                         </MenuButton>
                         <MenuList>
                           {priorityArray.map((priority, index) => (
@@ -271,12 +286,25 @@ const GetAllProject = () => {
                     <Td>{project.projectName}</Td>
                     <Td className={`md:table-cell hidden capitalize`}>
                       <Menu>
-                        <MenuButton
+                        {/* <MenuButton
                           size={"sm"}
                           as={Button}
                           variant={"outline"}
+                        > */}
+                        <MenuButton
+                        size={"sm"}
+                        as={Button}
+                        bg={
+                          (priorityArray[project.priority] === "urgent" || project.priority.toLowerCase() === "urgent") ? "red" :
+                            ((priorityArray[project.priority] === "high" || project.priority.toLowerCase() === "high") ? "orange.500" :
+                              (priorityArray[project.priority] === "medium" || project.priority.toLowerCase() === "medium") ? "gold" :
+                                "green.300")
+                        }
+                        fontWeight={"bold"}
+                        textTransform={"capitalize"}
+                        color={"white"}
                         >
-                          <div
+                          {/* <div
                             className={`
                                   p-1 text-center flex gap-2 items-center capitalize
                                   ${project.priority.toLowerCase() === "high" && "text-red-500"}
@@ -289,7 +317,8 @@ const GetAllProject = () => {
                             }}
                           >
                             {project?.priority}
-                          </div>
+                          </div> */}
+                          {priorityArray[project.priority] || project.priority}
                         </MenuButton>
                         <MenuList>
                           {priorityArray.map((priority, index) => (
