@@ -85,6 +85,7 @@ const SelectSource = ({ selectSourceValue, setSelectSourceValue, width }) => {
         tagRender={TagRender}
         style={{
             width: width ? width : 300,
+            height: 40
         }}
         value={selectSourceValue}
         onChange={setSelectSourceValue}

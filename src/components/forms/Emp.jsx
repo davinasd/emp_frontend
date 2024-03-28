@@ -8,7 +8,7 @@ import {
   TabPanels,
   TabPanel,
   Text,
-
+  Select as ChakraSelect,
 } from "@chakra-ui/react";
 import { Input, Select } from "antd";
 import axios from "axios";
@@ -21,7 +21,7 @@ const RequiredIndicator = () => {
 };
 const Emp = () => {
   const [projectData, setProjectData] = useState({
-    type:"",
+    type: "",
     name: "",
     gender: "",
     contactNo: "",
@@ -64,9 +64,9 @@ const Emp = () => {
   //   });
   // };
   const handleChange = (e) => {
-    
+
     const { name, value } = e.target;
-    
+
     setProjectData({ ...projectData, [name]: value });
   };
   const handleSelectOption = (name, value) => {
@@ -169,7 +169,7 @@ const Emp = () => {
       { key: 'type', label: 'Bank Type' },
       { key: 'branch', label: 'Branch Name' },
 
-      
+
     ];
 
     for (let { key, label, isArray } of requiredFields) {
@@ -184,7 +184,7 @@ const Emp = () => {
         formData,
         {
           headers: {
-            "Content-Type": "application/json", 
+            "Content-Type": "application/json",
           },
         }
       )
@@ -223,7 +223,7 @@ const Emp = () => {
                 <FormControl id="title" maxWidth={100}>
                   <FormLabel>Title <RequiredIndicator /> </FormLabel>
                   <Select
-                    style={{ width: "100%" }}
+                    style={{ width: "100%", height: "40px" }}
                     placeholder="Select Title"
                     onChange={(value) => handleSelectOption("title", value)}
                   >
@@ -234,13 +234,13 @@ const Emp = () => {
 
                 <FormControl id="employeeName" >
                   <FormLabel>Employee Name <RequiredIndicator /> </FormLabel>
-                  <Input name="name" onChange={handleChange} />
+                  <Input style={{ height: 40 }} name="name" onChange={handleChange} />
                 </FormControl>
 
                 <FormControl id="gender" maxWidth={100} >
                   <FormLabel>Gender <RequiredIndicator /> </FormLabel>
                   <Select
-                    style={{ width: "100%" }}
+                    style={{ width: "100%", height: "40px" }}
                     name="gender"
                     onChange={(value) => handleSelectOption("gender", value)}
                     placeholder="Select gender"
@@ -253,12 +253,12 @@ const Emp = () => {
 
                 <FormControl id="contactNo" >
                   <FormLabel>Contact Number<RequiredIndicator /> </FormLabel>
-                  <Input name="contactNo" onChange={handleChange} />
+                  <Input style={{ height: 40 }} name="contactNo" onChange={handleChange} />
                 </FormControl>
                 <FormControl id="dob" maxWidth={150} >
                   <FormLabel>DOB<RequiredIndicator /> </FormLabel>
                   <MyDatePicker
-                    className="mb-1"
+                    className="mb-1 h-[40px]"
                     selected={projectData.dob}
                     onChange={(date) =>
                       setProjectData({ ...projectData, dob: date })
@@ -270,11 +270,11 @@ const Emp = () => {
                 </FormControl>
               </div>
 
-              <div className="flex gap-2 mb-2">
+              <div className="flex gap-3 mb-4">
                 <FormControl id="position" maxWidth={150}>
                   <FormLabel>Position<RequiredIndicator /> </FormLabel>
                   <Select
-                    style={{ width: "100%" }}
+                    style={{ width: "100%", height: "40px" }}
                     name="position"
                     onChange={(value) => handleSelectOption("position", value)}
                     placeholder="Select Position"
@@ -290,6 +290,7 @@ const Emp = () => {
                   <Input
                     name="designation"
                     onChange={handleChange}
+                    style={{ height: 40 }}
                   />
                 </FormControl>
               </div>
@@ -297,35 +298,36 @@ const Emp = () => {
               <div className="flex gap-3 mb-3">
                 <FormControl id="department" maxWidth={500}>
                   <FormLabel>Department<RequiredIndicator /> </FormLabel>
-                  <Input name="department" onChange={handleChange} />
+                  <Input name="department" onChange={handleChange} style={{ height: 40 }} />
                 </FormControl>
                 <FormControl id="email" maxWidth={350}>
                   <FormLabel>Email<RequiredIndicator /> </FormLabel>
-                  <Input name="email" onChange={handleChange} />
+                  <Input name="email" onChange={handleChange} style={{ height: 40 }} />
                 </FormControl>
                 <FormControl id="password" maxWidth={350} >
                   <FormLabel>Password<RequiredIndicator /> </FormLabel>
-                  <Input name="password" onChange={handleChange} />
+                  <Input name="password" onChange={handleChange} style={{ height: 40 }} />
                 </FormControl>
               </div>
 
               <div className="flex gap-3 mb-3">
                 <FormControl id="joiningDate" maxWidth={300} >
                   <FormLabel>Joining Date<RequiredIndicator /> </FormLabel>
-                  <MyDatePicker
-                    className="mb-1"
-                    selected={projectData.joiningDate}
-                    onChange={(date) =>
-                      setProjectData({ ...projectData, joiningDate: date })
-                    }
-                    format={"DD/MM/YYYY"}
-                  />
-                  <br />
-                  {projectData?.joiningDate?._d && <>{converDateStringFormat(joiningDate)}</>}
+                  <div className="flex gap-2 items-center">
+                    <MyDatePicker
+                      className="mb-1 h-[40px]"
+                      selected={projectData.joiningDate}
+                      onChange={(date) =>
+                        setProjectData({ ...projectData, joiningDate: date })
+                      }
+                      format={"DD/MM/YYYY"}
+                    />
+                    {projectData?.joiningDate?._d && <>{converDateStringFormat(joiningDate)}</>}
+                  </div>
                 </FormControl>
                 <FormControl id="manager_id" >
                   <FormLabel>Assigned Manager</FormLabel>
-                  <select
+                  <ChakraSelect
                     onChange={handleSelectManager}
                     value={projectData.manager_id}
                   >
@@ -335,13 +337,13 @@ const Emp = () => {
                         {manager.name}
                       </option>
                     ))}
-                  </select>
+                  </ChakraSelect>
                 </FormControl>
 
-                <FormControl id="type" maxWidth={150} >
+                <FormControl id="type" maxWidth={200} >
                   <FormLabel>Employment Type<RequiredIndicator /> </FormLabel>
                   <Select
-                    style={{ width: "100%" }}
+                    style={{ width: "100%", height: 40 }}
                     name="type"
                     onChange={(value) => handleSelectOption("type", value)}
                     placeholder="Select Type"
@@ -389,7 +391,7 @@ const Emp = () => {
 
             <TabPanel>
               <div className="flex gap-3">
-              <FormControl id="guardianDetails.relation">
+                <FormControl id="guardianDetails.relation">
                   <FormLabel>Relation<RequiredIndicator /></FormLabel>
                   <Input
                     name="guardianDetails.relation"
@@ -414,7 +416,7 @@ const Emp = () => {
             </TabPanel>
 
             <TabPanel>
-              <div className="flex gap-3">
+              <div className="flex gap-3 mb-4">
                 <FormControl id="bankDetails.bankName" >
                   <FormLabel>Bank Name<RequiredIndicator />  </FormLabel>
                   <Input name="bankDetails.bankName" onChange={handleChange} />
@@ -478,7 +480,7 @@ const Emp = () => {
 
                 <FormControl id="employeeName">
                   <FormLabel>Employee Name<RequiredIndicator /> </FormLabel>
-                  <Input name="name" onChange={handleChange}  />
+                  <Input name="name" onChange={handleChange} />
                 </FormControl>
 
                 <FormControl id="gender" maxWidth={150}>
@@ -524,7 +526,7 @@ const Emp = () => {
                   />
                 </FormControl>
               </div>
-\
+              \
               <div className="flex flex-col gap-3 mb-3">
                 <FormControl id="department" maxWidth={500} >
                   <FormLabel>Department<RequiredIndicator /></FormLabel>

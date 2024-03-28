@@ -86,7 +86,7 @@ const SelectTag = ({ selectTagValue, setSelectTagValue }) => {
         <Select
         mode="multiple"
         tagRender={TagRender}
-        style={{ width: 300 }}
+        style={{ width: 300, height: 40 }}
         value={selectTagValue}
         onChange={setSelectTagValue}
         placeholder="Choose a value"

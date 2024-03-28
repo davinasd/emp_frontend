@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Thead,
   Tbody,
@@ -102,6 +102,10 @@ const GetAllLead = () => {
     }
   };
 
+  const handleUpdateClient = (leadId) => {
+    dispatch(setLeadId(leadId));
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -109,10 +113,6 @@ const GetAllLead = () => {
       </div>
     );
   }
-
-  const handleUpdateClient = (leadId) => {
-    dispatch(setLeadId(leadId));
-  };
 
   return (
     <>
@@ -221,7 +221,7 @@ const GetAllLead = () => {
                           ml={2}
                           onClick={() => handleUpdateClient(lead.lead_id)}
                         >
-                        <MdModeEditOutline size={18} />
+                          <MdModeEditOutline size={18} />
                         </Button>
                       </Link>
                     </Td>
@@ -315,7 +315,7 @@ const GetAllLead = () => {
                           p={0}
                           onClick={() => handleUpdateClient(lead.lead_id)}
                         >
-                        <MdModeEditOutline size={18} />
+                          <MdModeEditOutline size={18} />
                         </Button>
                       </Link>
                     </Td>

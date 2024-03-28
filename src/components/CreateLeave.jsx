@@ -181,44 +181,47 @@ const CreateLeave = () => {
               </FormControl>
               <FormControl id="startDate">
                 <FormLabel>Start Date <RequiredIndicator /> </FormLabel>
-                <MyDatePicker
-                  className="mb-1"
-                  selected={projectData.startDate}
-                  onChange={(date) =>
-                    setProjectData({ ...projectData, startDate: date })
-                  }
-                  defaultValue={moment()}
-                  format={"DD/MM/YYYY"}
-                />
-                <br />
-                <div>{formatDate(projectData.startDate)}</div>
+                <div className="flex gap-2 items-center">
+                  <MyDatePicker
+                    className="mb-1 h-[40px]"
+                    selected={projectData.startDate}
+                    onChange={(date) =>
+                      setProjectData({ ...projectData, startDate: date })
+                    }
+                    defaultValue={moment()}
+                    format={"DD/MM/YYYY"}
+                  />
+                  <div>{formatDate(projectData.startDate)}</div>
+                </div>
               </FormControl>
               <FormControl id="endDate">
                 <FormLabel>End Date <RequiredIndicator /> </FormLabel>
-                <MyDatePicker
-                  className="mb-1"
-                  selected={projectData.endDate}
-                  onChange={(date) =>
-                    setProjectData({ ...projectData, endDate: date })
-                  }
-                  format={"DD/MM/YYYY"}
-                />
-                <br />
-                <div>{formatDate(projectData.endDate)}</div>
+                <div className="flex gap-2 items-center">
+                  <MyDatePicker
+                    className="mb-1 h-[40px]"
+                    selected={projectData.endDate}
+                    onChange={(date) =>
+                      setProjectData({ ...projectData, endDate: date })
+                    }
+                    format={"DD/MM/YYYY"}
+                  />
+                  <div>{formatDate(projectData.endDate)}</div>
+                </div>
               </FormControl>
               <FormControl id="applicationDate">
                 <FormLabel>Application Date <RequiredIndicator /> </FormLabel>
-                <MyDatePicker
-                  className="mb-1"
-                  selected={projectData.createdAt}
-                  onChange={(date) =>
-                    setProjectData({ ...projectData, createdAt: date })
-                  }
-                  defaultValue={moment()}
-                  format={"DD/MM/YYYY"}
-                />
-                <br />
-                <div>{formatDate(projectData.createdAt)}</div>
+                <div className="flex gap-2 items-center">
+                  <MyDatePicker
+                    className="mb-1 h-[40px]"
+                    selected={projectData.createdAt}
+                    onChange={(date) =>
+                      setProjectData({ ...projectData, createdAt: date })
+                    }
+                    defaultValue={moment()}
+                    format={"DD/MM/YYYY"}
+                  />
+                  <div>{formatDate(projectData.createdAt)}</div>
+                </div>
               </FormControl>
             </div>
 

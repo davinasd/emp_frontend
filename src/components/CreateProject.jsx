@@ -300,34 +300,42 @@ const CreateProject = () => {
                   Start Date
                   <RequiredIndicator />{" "}
                 </FormLabel>
-                <MyDatePicker
-                  className="mb-1"
-                  selected={projectData.startDate}
-                  onChange={handleStartDateChange}
-                  format={"DD/MM/YYYY"}
-                  placeholderText="Pick Date"
-                />
-                <br />
-                {projectData.startDate && (
-                  <p>{convertDateFormatString(projectData.startDate)}</p>
-                )}
+                <div className="flex gap-2 items-center">
+                  <MyDatePicker
+                    className="mb-1 h-[40px]"
+                    selected={projectData.startDate}
+                    onChange={handleStartDateChange}
+                    format={"DD/MM/YYYY"}
+                    placeholderText="Pick Date"
+                    disabledDate={(current) => {
+                      return projectData.deadline && current > projectData.deadline;
+                    }}
+                  />
+                  {projectData.startDate && (
+                    <p>{convertDateFormatString(projectData.startDate)}</p>
+                  )}
+                </div>
               </FormControl>
               <FormControl mb="4">
                 <FormLabel>
                   Deadline
                   <RequiredIndicator />{" "}
                 </FormLabel>
-                <MyDatePicker
-                  className="mb-1"
-                  selected={projectData.deadline}
-                  onChange={handleEndDateChange}
-                  format={"DD/MM/YYYY"}
-                  placeholderText="Pick Date"
-                />
-                <br />
-                {projectData.deadline && (
-                  <p>{convertDateFormatString(projectData.deadline)}</p>
-                )}
+                <div className="flex gap-2 items-center">
+                  <MyDatePicker
+                    className="mb-1 h-[40px]"
+                    selected={projectData.deadline}
+                    onChange={handleEndDateChange}
+                    format={"DD/MM/YYYY"}
+                    placeholderText="Pick Date"
+                    disabledDate={(current) => {
+                      return projectData.startDate && current < projectData.startDate;
+                    }}
+                  />
+                  {projectData.deadline && (
+                    <p>{convertDateFormatString(projectData.deadline)}</p>
+                  )}
+                </div>
               </FormControl>
             </div>
             <FormControl id="employees">

@@ -234,24 +234,30 @@ const CreateTask = () => {
             <FormControl maxWidth={200} >
               <FormLabel>Start Date<RequiredIndicator /> </FormLabel>
               <MyDatePicker
-                className="mb-1"
+                className="mb-1 h-[40px]"
                 selected={startDate}
                 onChange={(date) => setStartDate(date)}
                 format={"DD/MM/YYYY"}
                 placeholderText="Pick Date"
+                disabledDate={(current) => {
+                  return deadline && current > deadline;
+                }}
               />
               <br />
               {startDate && <p>{convertDateFormatString(startDate)}</p>}
             </FormControl>
 
-            <FormControl maxWidth={200} >
+            <FormControl maxWidth={200} ml={3}>
               <FormLabel>Deadline<RequiredIndicator /></FormLabel>
               <MyDatePicker
-                className="mb-1"
+                className="mb-1 h-[40px]"
                 selected={deadline}
                 onChange={(date) => setDeadline(date)}
                 format={"DD/MM/YYYY"}
                 placeholderText="Pick Date"
+                disabledDate={(current) => {
+                  return startDate && current < startDate;
+                }}
               />
               <br />
               {deadline && <p>{convertDateFormatString(deadline)}</p>}
