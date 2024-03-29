@@ -274,10 +274,11 @@ const Client = () => {
 
           <TabPanels>
             <TabPanel>
-              <div className="flex gap-2 items-center">
+              <div className="flex gap-2 items-center mb-4">
                 <FormControl id="workStartDate" maxWidth={150}>
                   <FormLabel>Work Start Date</FormLabel>
                   <MyDatePicker
+                    className="h-[40px]"
                     selected={projectData.workStartDate}
                     onChange={(date) =>
                       setProjectData({ ...projectData, workStartDate: date })
@@ -288,13 +289,13 @@ const Client = () => {
                 <div className="mt-[28px]">{formatDate(projectData.workStartDate)}</div>
               </div>
 
-              <div className="flex gap-3 my-2">
+              <div className="flex gap-3 mb-4">
                 <FormControl id="title" maxWidth={130}>
                   <FormLabel>
                     Title <RequiredIndicator />
                   </FormLabel>
                   <Select
-                    style={{ width: "100%" }}
+                    style={{ width: "100%", height: "40px" }}
                     placeholder="Select Title"
                     onChange={(value) => handleSelectOption("title", value)}
                   >
@@ -315,7 +316,7 @@ const Client = () => {
                     Gender <RequiredIndicator />
                   </FormLabel>
                   <Select
-                    style={{ width: "100%" }}
+                    style={{ width: "100%", height: "40px" }}
                     name="gender"
                     onChange={(value) => handleSelectOption("gender", value)}
                     placeholder="Select gender"
@@ -326,7 +327,7 @@ const Client = () => {
                   </Select>
                 </FormControl>
               </div>
-              <div className="flex gap-3">
+              <div className="flex gap-3 mb-4">
                 <FormControl id="brandName">
                   <FormLabel>
                     Brand Name <RequiredIndicator />{" "}
@@ -340,8 +341,8 @@ const Client = () => {
                   <Input name="companyName" onChange={handleChange} />
                 </FormControl>
               </div>
-              <div className="flex gap-3">
-                <FormControl id="tags" maxWidth={250} mr={3}>
+              <div className="flex gap-3 mb-4">
+                <FormControl id="tags" maxWidth={250}>
                   <FormLabel>
                     Source <RequiredIndicator />{" "}
                   </FormLabel>
@@ -358,7 +359,7 @@ const Client = () => {
                 </FormControl>
               </div>
 
-              <div className="flex gap-3 my-3">
+              <div className="flex gap-3 mb-4">
                 <FormControl id="phone1">
                   <FormLabel>
                     Phone Number 1 <RequiredIndicator />{" "}
@@ -388,7 +389,7 @@ const Client = () => {
               </div>
             </TabPanel>
             <TabPanel>
-              <div className="flex gap-3 mb-3 flex-col md:flex-row">
+              <div className="flex gap-3 mb-4 flex-col md:flex-row">
                 <FormControl id="country">
                   <FormLabel>Country</FormLabel>
                   <CountryDropdown
@@ -397,7 +398,7 @@ const Client = () => {
                     onChange={(e) =>
                       handleSelectChange(setSelectedCountry, "country", e)
                     }
-                    className="border-[0.375px] rounded-md max-w-[200px] h-[2rem]"
+                    className="border-[0.375px] rounded-md max-w-[200px] h-[40px]"
                   />
                 </FormControl>
                 <FormControl id="state">
@@ -409,7 +410,7 @@ const Client = () => {
                     onChange={(e) =>
                       handleSelectChange(setSelectedState, "state", e)
                     }
-                    className="border-[0.375px] rounded-md h-[2rem] max-w-24"
+                    className="border-[0.375px] rounded-md h-[40px] max-w-24"
                   />
                 </FormControl>
                 <FormControl id="city">
@@ -447,43 +448,52 @@ const Client = () => {
               <div className="flex gap-3">
                 <FormControl id="clientBirthday">
                   <FormLabel>Client Birthday</FormLabel>
-                  <MyDatePicker
-                    selected={projectData.clientBirthday}
-                    onChange={(date) =>
-                      setProjectData({ ...projectData, clientBirthday: date })
-                    }
-                    format={"DD/MM/YYYY"}
-                  />
-                  <div>{formatDate(projectData.clientBirthday)}</div>
+                  <div className="flex gap-2 items-center">
+                    <MyDatePicker
+                      className="h-[40px]"
+                      selected={projectData.clientBirthday}
+                      onChange={(date) =>
+                        setProjectData({ ...projectData, clientBirthday: date })
+                      }
+                      format={"DD/MM/YYYY"}
+                    />
+                    <div>{formatDate(projectData.clientBirthday)}</div>
+                  </div>
                 </FormControl>
 
                 <FormControl id="clientAnniversary">
                   <FormLabel>Client Anniversary</FormLabel>
-                  <MyDatePicker
-                    selected={projectData.clientAnniversary}
-                    onChange={(date) =>
-                      setProjectData({
-                        ...projectData,
-                        clientAnniversary: date,
-                      })
-                    }
-                    format={"DD/MM/YYYY"}
-                  />
-                  <div>{formatDate(projectData.clientAnniversary)}</div>
+                  <div className="flex gap-2 items-center">
+                    <MyDatePicker
+                      className="h-[40px]"
+                      selected={projectData.clientAnniversary}
+                      onChange={(date) =>
+                        setProjectData({
+                          ...projectData,
+                          clientAnniversary: date,
+                        })
+                      }
+                      format={"DD/MM/YYYY"}
+                    />
+                    <div>{formatDate(projectData.clientAnniversary)}</div>
+                  </div>
                 </FormControl>
                 <FormControl id="companyAnniversary">
                   <FormLabel>Company Anniversary</FormLabel>
-                  <MyDatePicker
-                    selected={projectData.companyAnniversary}
-                    onChange={(date) =>
-                      setProjectData({
-                        ...projectData,
-                        companyAnniversary: date,
-                      })
-                    }
-                    format={"DD/MM/YYYY"}
-                  />
-                  <div>{formatDate(projectData.companyAnniversary)}</div>
+                  <div className="flex gap-2 items-center">
+                    <MyDatePicker
+                      className="h-[40px]"
+                      selected={projectData.companyAnniversary}
+                      onChange={(date) =>
+                        setProjectData({
+                          ...projectData,
+                          companyAnniversary: date,
+                        })
+                      }
+                      format={"DD/MM/YYYY"}
+                    />
+                    <div>{formatDate(projectData.companyAnniversary)}</div>
+                  </div>
                 </FormControl>
               </div>
               <Button type="submit" colorScheme="purple" className="mt-5">
@@ -576,6 +586,7 @@ const Client = () => {
                 <FormControl id="companyAnniversary" maxWidth={150}>
                   <FormLabel>Work Start Date</FormLabel>
                   <MyDatePicker
+                    className="h-[40px]"
                     selected={projectData.workStartDate}
                     onChange={(date) =>
                       setProjectData({ ...projectData, workStartDate: date })
@@ -755,6 +766,7 @@ const Client = () => {
                 <FormControl id="clientBirthday">
                   <FormLabel>Client Birthday</FormLabel>
                   <MyDatePicker
+                    className="h-[40px]"
                     selected={projectData.clientBirthday}
                     onChange={(date) =>
                       setProjectData({ ...projectData, clientBirthday: date })
@@ -767,6 +779,7 @@ const Client = () => {
                 <FormControl id="clientAnniversary">
                   <FormLabel>Client Anniversary</FormLabel>
                   <MyDatePicker
+                    className="h-[40px]"
                     selected={projectData.clientAnniversary}
                     onChange={(date) =>
                       setProjectData({

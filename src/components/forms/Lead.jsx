@@ -246,7 +246,7 @@ const Lead = () => {
       <FormControl id="enquiryDate" >
         <FormLabel>Enquiry Date <RequiredIndicator /> </FormLabel>
         <MyDatePicker
-          className="mb-1"
+          className="mb-1 h-[40px]"
           selected={projectData.enquiryDate}
           onChange={(date) =>
             setProjectData({ ...projectData, enquiryDate: date })
@@ -517,7 +517,7 @@ const Lead = () => {
               <FormControl id="enquiryDate" >
                 <FormLabel>Enquiry Date <RequiredIndicator /> </FormLabel>
                 <MyDatePicker
-                  className="mb-1"
+                  className="mb-1 h-[40px]"
                   selected={projectData.enquiryDate}
                   onChange={(date) =>
                     setProjectData({ ...projectData, enquiryDate: date })

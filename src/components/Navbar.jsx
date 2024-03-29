@@ -21,6 +21,7 @@ import { LiaProjectDiagramSolid, LiaTtySolid } from 'react-icons/lia';
 import { MdOutlineAddTask } from 'react-icons/md';
 import { LuNewspaper } from 'react-icons/lu';
 import { HiOutlineDocumentDuplicate } from 'react-icons/hi2';
+import { SlEnvolopeLetter } from "react-icons/sl";
 
 const Navbar = ({ showSidebar, setShowSidebar }) => {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -91,6 +92,9 @@ const Navbar = ({ showSidebar, setShowSidebar }) => {
                 </MenuItem>
                 <MenuItem p={0}>
                   <Link to={"/createSlip"} className='w-full py-2 px-4 flex items-center gap-3'><LuNewspaper /> Slip</Link>
+                </MenuItem>
+                <MenuItem p={0}>
+                  <Link to={"/createLetter"} className='w-full py-2 px-4 flex items-center gap-3'><SlEnvolopeLetter /> Letter</Link>
                 </MenuItem>
               </MenuGroup>
             </MenuList>

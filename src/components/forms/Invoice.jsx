@@ -353,6 +353,7 @@ const Invoice = () => {
                     <FormControl maxWidth={100}>
                       <FormLabel>Start Date<RequiredIndicator /></FormLabel>
                       <MyDatePicker
+                        className="h-[40px]"
                         selected={service.startDate}
                         onChange={(date) =>
                           handleServiceChange(index, "startDate", date)
@@ -364,6 +365,7 @@ const Invoice = () => {
                     <FormControl maxWidth={100}>
                       <FormLabel>End Date<RequiredIndicator /></FormLabel>
                       <MyDatePicker
+                        className="h-[40px]"
                         selected={service.endDate}
                         onChange={(date) =>
                           handleServiceChange(index, "endDate", date)

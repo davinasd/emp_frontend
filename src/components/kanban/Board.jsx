@@ -7,6 +7,7 @@ import { Button } from "@chakra-ui/react";
 import InfoModal from "../common/InfoModal";
 import { IoMdEye } from "react-icons/io";
 import { MdModeEditOutline } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 export const CustomKanban = ({ data }) => {
     return (
@@ -179,8 +180,17 @@ const Column = ({ title, headingColor, cards, column, setCards, data }) => {
     );
 };
 
+import { useDispatch } from "react-redux";
+import { setLeadId } from "../../store/slice/LeadSlice";
+
 const Card = ({ card, column, handleDragStart }) => {
     const [selectedLead, setSelectedLead] = useState(null);
+    const dispatch = useDispatch();
+
+    const handleUpdateLead = (leadId) => {
+        dispatch(setLeadId(leadId));
+    }
+
 
     return (
         <>
@@ -196,7 +206,9 @@ const Card = ({ card, column, handleDragStart }) => {
                 <div className="flex gap-2 items-center justify-between">
                     <h2 className="text-lg capitalize">{card?.title && card?.title} {card?.clientName}</h2>
                     <div className="flex gap-2">
-                        <Button variant={"outline"} colorScheme="red" p={1} size={"sm"} onClick={() => setSelectedLead(card)}><MdModeEditOutline size={18} /></Button>
+                    <Link to="/UpdateLead">
+                        <Button variant={"outline"} colorScheme="red" p={1} size={"sm"} onClick={() => handleUpdateLead(card?.lead_id)}><MdModeEditOutline size={18} /></Button>
+                        </Link>
                         <Button bg="purple.500" _hover={{ bg: "purple.400" }} color={"purple.50"} p={2} size={"sm"} onClick={() => setSelectedLead(card)}><IoMdEye size={18} /></Button>
                     </div>
                 </div>
