@@ -18,6 +18,8 @@ const ProjectCard = () => {
   const [selectedYear, setSelectedYear] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(null);
   const [financialYears, setFinancialYears] = useState([]);
+  const [selectedFilter, setSelectedFilter] = useState(null);
+  const [selectedQuarter, setSelectedQuarter] = useState(null);
 
   useEffect(() => {
     fetchDataDefault();
@@ -127,17 +129,30 @@ const ProjectCard = () => {
         
         <div className="flex gap-2 items-center mt-4">
           <Select
-            placeholder='Select Year'
-            value={selectedYear || ""}
-            onChange={(e) => setSelectedYear(e.target.value)}
+            placeholder='Filter by'
+            value={selectedFilter || ""}
+            onChange={(e) => setSelectedFilter(e.target.value)}
             size={"sm"}
             rounded={"lg"}
           >
-          {financialYears.map((year) => (
-            <option key={`fy-${year._id}`} value={year.financial_year.split('-')[0]}>{year.financial_year}</option>
-          ))}
+            <option value={"month"}>Month</option>
+            <option value={"financial year"}>Financial year</option>
+            <option value={"quarter"}>Quarter</option>
           </Select>
-          {selectedYear && (
+          {selectedFilter === "financial year" && (
+            <Select
+              placeholder='Select Year'
+              value={selectedYear || ""}
+              onChange={(e) => setSelectedYear(e.target.value)}
+              size={"sm"}
+              rounded={"lg"}
+            >
+              {financialYears.map((year) => (
+                <option key={`fy-${year._id}`} value={year.financial_year.split('-')[0]}>{year.financial_year}</option>
+              ))}
+            </Select>
+          )}
+          {(selectedFilter === "month" || selectedYear) && (
             <Select
               placeholder='Select Month'
               value={selectedMonth || ""}
@@ -146,11 +161,24 @@ const ProjectCard = () => {
               rounded={"lg"}
             >
               {allMonths.map((month, index) => (
-                <option key={month} value={index + 1}>{month}</option>
+                <option key={`m-${month}`} value={index + 1}>{month}</option>
               ))}
             </Select>
           )}
-          {selectedYear && <Button width={100} size={"sm"} onClick={handleYearClear}>Clear</Button>}
+          {selectedFilter === "quarter" && (
+            <Select
+              placeholder='Select Quarter'
+              value={selectedQuarter || ""}
+              onChange={(e) => setSelectedQuarter(e.target.value)}
+              size={"sm"}
+              rounded={"lg"}
+            >
+              {allMonths.map((month, index) => (
+                <option key={`quarter-${month}`} value={index + 1}>{month}</option>
+              ))}
+            </Select>
+          )}
+          {selectedFilter && <Button width={100} size={"sm"} onClick={handleYearClear}>Clear</Button>}
         </div>
         <Divider />
         <CardBody m={0} p={0}>

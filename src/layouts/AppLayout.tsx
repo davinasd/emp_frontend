@@ -34,7 +34,7 @@ const AppLayout = ({ children,
                 </main>
 
                 <footer>
-                    <div className='w-full flex flex-col items-center justify-center p-4 bg-white'>
+                    <div className='w-full flex flex-col items-center justify-center p-4'>
                         &copy; A product of adverist pvt ltd
                     </div>
                 </footer>
