@@ -29,8 +29,17 @@ const AppLayout = ({ children,
 
             <div className='w-full'>
                 <Navbar showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
-                {children}
+                <main>
+                    {children}
+                </main>
+
+                <footer>
+                    <div className='w-full flex flex-col items-center justify-center p-4'>
+                        &copy; A product of adverist pvt ltd
+                    </div>
+                </footer>
             </div>
+
         </div>
     )
 }

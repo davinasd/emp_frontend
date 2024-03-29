@@ -5,21 +5,34 @@ import axios from "axios";
 
 const CalendarComponent = () => {
   const [specialDates, setSpecialDates] = useState([]);
+  const [empSpecialDates, setEmpSpecialDates] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_BASE}/api/admin/specialDates`
-        );
-        setSpecialDates(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
+    fetchSpecialDates();
+    fetchEmpSpecialDates();
   }, []);
+
+  const fetchSpecialDates = async () => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_BASE}/api/admin/specialDates`
+      );
+      setSpecialDates(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const fetchEmpSpecialDates = async () => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_BASE}/api/admin/EmployeespecialDates`
+      );
+      setEmpSpecialDates(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   const getListData = (value) => {
     const today = new Date();
@@ -39,8 +52,17 @@ const CalendarComponent = () => {
       );
     });
 
-    const listData = events.map((event) => {
-      let eventType = "";
+    const empEvents = empSpecialDates.filter((date) => {
+      return (
+        date.clientBirthday === formattedDate ||
+        date.clientAnniversary === formattedDate ||
+        date.workStartDate === formattedDate ||
+        date.companyAnniversary === formattedDate
+      );
+    });
+
+    let listData = events.map((event) => {
+      let eventType = "client";
       if (event.clientBirthday === formattedDate) {
         eventType = "Client Birthday";
       } else if (event.clientAnniversary === formattedDate) {
@@ -57,6 +79,26 @@ const CalendarComponent = () => {
         eventType: eventType,
       };
     });
+
+    listData = [...listData, empEvents.map((event) => {
+      let eventType = "emp";
+      if (event.clientBirthday === formattedDate) {
+        eventType = "Client Birthday";
+      } else if (event.clientAnniversary === formattedDate) {
+        eventType = "Client Anniversary";
+      } else if (event.workStartDate === formattedDate) {
+        eventType = "Work Start Date";
+      } else if (event.companyAnniversary === formattedDate) {
+        eventType = "Company Anniversary";
+      }
+      return {
+        type: "success",
+        client: `${event.clientName} `,
+        brand: `${event.brandName} `,
+        eventType: eventType,
+      };
+    })
+    ]
     return listData;
   };
 
@@ -65,20 +107,23 @@ const CalendarComponent = () => {
     return (
       <ul className="events">
         {listData.map((item, index) => (
-          <li key={index}>
-            <Badge
-              status={item.type}
-              text={
-                <>
-                  Client: {item.client}
-                  <br />
-                  Brand: {item.brand}
-                  <br />
-                  Event: {item.eventType}
-                </>
-              }
-            />
-          </li>
+          <>
+            {item.eventType === "client" ? "Client" : item.eventType === "emp" && "Employee"}
+            <li key={index}>
+              <Badge
+                status={item.type}
+                text={
+                  <>
+                    Client: {item.client}
+                    <br />
+                    Brand: {item.brand}
+                    <br />
+                    Event: {item.eventType}
+                  </>
+                }
+              />
+            </li >
+          </>
         ))}
       </ul>
     );

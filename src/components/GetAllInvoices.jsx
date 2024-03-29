@@ -24,8 +24,6 @@ import { Empty } from "antd";
 import { Link } from "react-router-dom";
 import { DownloadIcon, DeleteIcon } from "@chakra-ui/icons";
 import { GoPlus } from "react-icons/go";
-import download from "downloadjs";
-import { allMonths } from "../helpers";
 import GetInvoiceByBrandName from "./common/GetInvoiceByBrandName";
 import { IoMdEye } from "react-icons/io";
 
@@ -41,8 +39,6 @@ const GetAllInvoices = () => {
   const [deleteInvoiceId, setDeleteInvoiceId] = useState(null);
   const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
   const [downloading, setDownloading] = useState(null);
-  const [invoiceIDs, setInvoiceIDs] = useState([]);
-  const [brandName, setBrandName] = useState("");
   const [getInvoiceByBrandName, setGetInvoiceByBrandName] = useState(false);
 
   const toast = useToast();
@@ -137,22 +133,6 @@ const GetAllInvoices = () => {
       });
   }
 
-  const handleCumulativeInvoices = () => {
-    const url = `${import.meta.env.VITE_API_BASE}/api/admin/getAllInvoiceByBrand`;
-    axios({
-      url,
-      method: "POST",
-      responseType: "blob",
-      data: { invoiceIds: invoiceIDs },
-    })
-      .then((response) => {
-        const content = response.headers['content-type'];
-        const currDate = new Date();
-        const file_name = `invoice-${currDate}.pdf`;
-        download(response, file_name, content);
-      });
-  }
-
   return (
     <>
       <div className="w-full p-8 md:block flex flex-col items-center">
@@ -173,7 +153,7 @@ const GetAllInvoices = () => {
               onClick={() => setGetInvoiceByBrandName(true)}
               variant={"solid"}
             >
-              Get by Brand Name
+              Get Combined Invoices
             </Button>
           </div>
 
@@ -230,41 +210,6 @@ const GetAllInvoices = () => {
             </Button>
           </div>
         </div>
-        {/* <div className="flex gap-3 mb-2">
-          <Input
-            value={brandName}
-            onChange={() => setBrandName()}
-            maxWidth={250}
-            placeholder="Enter brand name"
-            size={"sm"}
-            rounded={"lg"}
-          />
-          <Select
-            showSearch
-            optionFilterProp="children"
-            onSearch={onBrandSearch}
-            filterOption={(input, option) =>
-              option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              || option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
-            }
-            placeholder="Choose a brand"
-          >
-            {allMonths.map((month) => (
-              <option key={month} value={month}>{month}</option>
-            ))}
-          </Select>
-          <Button
-            colorScheme="blue"
-            size={"sm"}
-            _hover={{ bg: "blue.600" }}
-            mb="2"
-            className="flex gap-2 items-center"
-            onClick={() => handleGetInvoiceByBrand()}
-          >
-            Get by Brand Name
-          </Button>
-        </div> */}
-
         {isLoading ? (
           <div className="flex items-center justify-center h-screen">
             <Spinner size="xl" color="purple.500" />
