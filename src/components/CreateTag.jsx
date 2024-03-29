@@ -219,8 +219,8 @@ const CreateTag = () => {
   };
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-semibold mb-4">Tags Management</h1>
+    <div className="p-6">
+      <h1 className="text-3xl font-bold mb-4">Tags Management</h1>
       <h1 className="text-lg font-semibold mt-8 mb-4">Proposal Tags</h1>
       <div className="flex justify-start gap-2 max-w-[400px]">
         <Input
@@ -326,7 +326,7 @@ const CreateTag = () => {
       <h1 className="text-lg font-semibold mt-10 mb-4">Years</h1>
       <div className="flex justify-start gap-2 max-w-[400px]">
         <Input
-          placeholder="Enter New Source"
+          placeholder="Enter financial year (ex: 2024-2025)"
           value={newYear}
           onChange={(e) => setNewYear(e.target.value)}
         />

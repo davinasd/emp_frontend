@@ -142,7 +142,7 @@ const Column = ({ title, headingColor, cards, column, setCards, data }) => {
     const filteredCards = cards.filter((c) => c.status.toLowerCase() === column.toLowerCase());
 
     return (
-        <div className={`w-full bg-gray-100 rounded-md p-4 min-h-[250px] h-full ${column === "converted" ? "col-span-3" : "col-span-3 md:col-span-1"}`}>
+        <div className={`w-full bg-gray-100 rounded-md p-4 h-[270px] ${column === "converted" ? "col-span-3" : "col-span-3 md:col-span-1"}`}>
             <div className="mb-3 flex items-center justify-between">
                 <h3 className={`font-medium ${headingColor}`}>{title}</h3>
                 <span className="rounded text-sm text-neutral-400">

@@ -3,7 +3,6 @@ import { Button, Checkbox, Drawer, Flex, Select, Tag } from "antd";
 import axios from "axios";
 import download from "downloadjs";
 import { useEffect, useState } from "react";
-import { LiaFileInvoiceSolid } from "react-icons/lia";
 
 const GetInvoiceByBrandName = ({ open, setOpen }) => {
     const onBrandSearch = () => { }
@@ -64,7 +63,7 @@ const GetInvoiceByBrandName = ({ open, setOpen }) => {
             width="100VW"
             height="100vh"
             title={
-                <h1 className="text-[24px] flex gap-2 items-center text-gray-700"><LiaFileInvoiceSolid /> Cumulative Invoices</h1>
+                <h1 className="text-[24px] flex gap-2 items-center text-gray-700 max-w-[700px]">Collected Invoices</h1>
             }
             extra={
                 <Button type="text" onClick={() => setOpen(!open)} className="flex items-center justify-center"><CloseIcon /></Button>
@@ -74,7 +73,7 @@ const GetInvoiceByBrandName = ({ open, setOpen }) => {
                     <div className="flex gap-2 max-w-[800px] w-full justify-end mt-1 mb-3">
                         <Button onClick={handleClose}>Cancel</Button>
                         <Button disabled={selectedInvoiceIds?.length === 0} onClick={handleCumulativeInvoices} type="primary" className="bg-blue-500">
-                            Get Cumulative Invoices
+                            Get Combined Invoices
                         </Button>
                     </div>
                 </Flex>

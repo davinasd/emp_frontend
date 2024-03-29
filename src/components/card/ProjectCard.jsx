@@ -17,9 +17,11 @@ const ProjectCard = () => {
   const [rawLeads, setRawLeads] = useState(0);
   const [selectedYear, setSelectedYear] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(null);
+  const [financialYears, setFinancialYears] = useState([]);
 
   useEffect(() => {
     fetchDataDefault();
+    fetchFinancialYears();
   }, []);
 
   useEffect(() => {
@@ -35,6 +37,17 @@ const ProjectCard = () => {
 
     fetchData(selectedYear);
   }, [selectedYear, selectedMonth])
+
+  const fetchFinancialYears = () => {
+    try {
+      axios.get(`${import.meta.env.VITE_API_BASE}/api/admin/getAllYears`)
+        .then((res) => {
+          setFinancialYears(res.data);
+        });
+    } catch (error) {
+      console.log(`Error fetching financial years: ${error}`);
+    }
+  }
 
   const fetchDataDefault = () => {
     // Fetch leads by status
@@ -120,21 +133,9 @@ const ProjectCard = () => {
             size={"sm"}
             rounded={"lg"}
           >
-            <option value="2025">2025-2026</option>
-            <option value="2024">2024-2025</option>
-            <option value="2023">2023-2024</option>
-            <option value="2022">2022-2023</option>
-            <option value="2021">2021-2022</option>
-            <option value="2020">2020-2021</option>
-            <option value="2020">2019-2020</option>
-            <option value="2019">2018-2019</option>
-            <option value="2018">2017-2018</option>
-            <option value="2017">2016-2017</option>
-            <option value="2015">2015-2016</option>
-            <option value="2014">2014-2015</option>
-            <option value="2013">2013-2014</option>
-            <option value="2012">2012-2013</option>
-            <option value="2011">2011-2012</option>
+          {financialYears.map((year) => (
+            <option key={`fy-${year._id}`} value={year.financial_year.split('-')[0]}>{year.financial_year}</option>
+          ))}
           </Select>
           {selectedYear && (
             <Select

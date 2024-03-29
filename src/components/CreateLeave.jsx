@@ -134,9 +134,10 @@ const CreateLeave = () => {
           <VStack spacing={4} align="stretch">
             <FormControl id="manager_id" isRequired>
               <FormLabel>Select Employee</FormLabel>
-              <select
+              <Select
                 onChange={handleSelectManager}
                 value={projectData.employee_id}
+                maxWidth={300}
               >
                 <option value="">Select Employee</option>
                 {employee.map((manager) => (
@@ -144,7 +145,7 @@ const CreateLeave = () => {
                     {manager.name}
                   </option>
                 ))}
-              </select>
+              </Select>
             </FormControl>
             {selectedEmployeeInfo && (
               <VStack align="start" spacing={2}>
@@ -190,6 +191,9 @@ const CreateLeave = () => {
                     }
                     defaultValue={moment()}
                     format={"DD/MM/YYYY"}
+                    disabledDate={(current) => {
+                      return projectData.endDate && current > projectData.endDate;
+                    }}
                   />
                   <div>{formatDate(projectData.startDate)}</div>
                 </div>
@@ -204,6 +208,9 @@ const CreateLeave = () => {
                       setProjectData({ ...projectData, endDate: date })
                     }
                     format={"DD/MM/YYYY"}
+                    disabledDate={(current) => {
+                      return projectData.startDate && current < projectData.startDate;
+                    }}
                   />
                   <div>{formatDate(projectData.endDate)}</div>
                 </div>
@@ -225,7 +232,7 @@ const CreateLeave = () => {
               </FormControl>
             </div>
 
-            <div className="flex gap-3">
+            {/* <div className="flex gap-3">
               <FormControl id="status">
                 <FormLabel>
                   Status
@@ -243,7 +250,7 @@ const CreateLeave = () => {
                   <option value="Rejected">Rejected</option>
                 </Select>
               </FormControl>
-            </div>
+            </div> */}
 
             <div className="flex gap-3">
               <FormControl id="Reason" isRequired>
