@@ -8,12 +8,13 @@ const CreateTag = () => {
   const [tags, setTags] = useState([]);
   const [products, setProducts] = useState([]);
   const [sources, setSources] = useState([]);
+  const [supplies, setSupplies] = useState([]);
   const [newTag, setNewTag] = useState("");
   const [newProduct, setNewProduct] = useState("");
-  const [newProductPrice, setNewProductPrice] = useState(0);
   const [newSource, setNewSource] = useState("");
   const [years, setYears] = useState(null);
   const [newYear, setNewYear] = useState(null);
+  const [newSupply, setNewSupply] = useState(null)
 
   const toast = useToast();
 
@@ -22,6 +23,7 @@ const CreateTag = () => {
     fetchProducts();
     fetchSources();
     fetchYears();
+    fetchSupply();
   }, []);
 
   const fetchTags = async () => {
@@ -68,6 +70,17 @@ const CreateTag = () => {
     }
   };
 
+  const fetchSupply = async () => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_BASE}/api/admin/getAllSupplys`
+      );
+      setSupplies(response.data);
+    } catch (error) {
+      console.error("Error fetching sources:", error);
+    }
+  };
+
   const handleAddTag = async () => {
     try {
       if (newTag === "") {
@@ -103,7 +116,7 @@ const CreateTag = () => {
       } else {
         await axios.post(
           `${import.meta.env.VITE_API_BASE}/api/admin/addProducts`,
-          { product: newProduct, unitPrice: newProductPrice }
+          { product: newProduct }
         );
         setNewProduct("");
         // setNewProductPrice(0);
@@ -160,6 +173,26 @@ const CreateTag = () => {
     }
   };
 
+  const handleAddSupply = async () => {
+    try {
+      if (newSupply === "") {
+        toast({
+          title: "Error",
+          description: "Please fill all the fields",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+      } else {
+        await axios.post(`${import.meta.env.VITE_API_BASE}/api/admin/addSupply`, { supplyTagName: newSupply });
+        setNewSupply("");
+        fetchSupply();
+      }
+    } catch (error) {
+      console.error("Error adding source:", error);
+    }
+  };
+
   const handleDeleteTag = async (tagId) => {
     try {
       await axios.delete(
@@ -181,17 +214,16 @@ const CreateTag = () => {
   const handleDeleteProduct = async (productId) => {
     try {
       await axios.delete(
-        `${
-          import.meta.env.VITE_API_BASE
+        `${import.meta.env.VITE_API_BASE
         }/api/admin/deleteProductById/${productId}`
       );
-       toast({
-         title: "Success",
-         description: "Successfully deleted Product",
-         status: "success",
-         duration: 5000,
-         isClosable: true,
-       });
+      toast({
+        title: "Success",
+        description: "Successfully deleted Product",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
       fetchProducts();
     } catch (error) {
       console.error("Error deleting product:", error);
@@ -201,8 +233,7 @@ const CreateTag = () => {
   const handleDeleteSource = async (sourceTagId) => {
     try {
       await axios.delete(
-        `${
-          import.meta.env.VITE_API_BASE
+        `${import.meta.env.VITE_API_BASE
         }/api/admin/deleteSourceTagById/${sourceTagId}`
       );
       toast({
@@ -213,6 +244,25 @@ const CreateTag = () => {
         isClosable: true,
       });
       fetchSources();
+    } catch (error) {
+      console.error("Error deleting source:", error);
+    }
+  };
+
+  const handleDeleteSupply = async (sourceTagId) => {
+    try {
+      await axios.delete(
+        `${import.meta.env.VITE_API_BASE
+        }/api/admin/deleteSupplyById/${sourceTagId}`
+      );
+      toast({
+        title: "Success",
+        description: "Successfully deleted Source Tag",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+      fetchSupply();
     } catch (error) {
       console.error("Error deleting source:", error);
     }
@@ -349,6 +399,39 @@ const CreateTag = () => {
               <div
                 className="p-[7px] transition-all bg-blue-500 hover:bg-blue-400 rounded-full cursor-pointer"
                 onClick={() => handleDeleteSource(year?.year_id)}
+              >
+                <FaTrash size={12} />
+              </div>
+            </div>
+          </Tag>
+        ))}
+      </Box>
+      <h1 className="text-lg font-semibold mt-10 mb-4">Supply</h1>
+      <div className="flex justify-start gap-2 max-w-[400px]">
+        <Input
+          placeholder="Enter supply name"
+          value={newSupply}
+          onChange={(e) => setNewSupply(e.target.value)}
+        />
+        <Button
+          colorScheme="green"
+          variant={"outline"}
+          onClick={handleAddSupply}
+        >
+          <FaPlus />
+        </Button>
+      </div>
+      <Box mt={6} p={4} boxShadow={"md"} rounded={"lg"} width={"full"}>
+        {supplies?.map((supply) => (
+          <Tag
+            key={supply._id}
+            className="px-2 py-1 mb-2 bg-green-400 border-green-600 text-[16px] font-semibold text-white"
+          >
+            <div className="flex gap-5 items-center">
+              {supply?.supplyTagName}
+              <div
+                className="p-[7px] transition-all bg-green-500 hover:bg-green-400 rounded-full cursor-pointer"
+                onClick={() => handleDeleteSupply(supply?.supply_id)}
               >
                 <FaTrash size={12} />
               </div>
