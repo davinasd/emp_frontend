@@ -50,16 +50,11 @@ const Sidebar = ({ isPhoneView, showSidebar, setShowSidebar, activeLink, setActi
             <Link to="/getAllClient" onClick={handleNavClose} className={`flex flex-col md:flex-row pt-2 text-center md:text-left items-center md:h-[45px] gap-2 mx-4 my-2 p-2 rounded-md transition-all cursor-pointer ${activeLink === 'getAllClient' ? 'bg-gray-500' : "hover:bg-gray-700"}`}>
                 <FcVoicePresentation size={20} />  <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Client {!isPhoneView && "Management"}</span>
             </Link>
-            <Link to="/getAllProject" onClick={handleNavClose} className={`flex flex-col md:flex-row pt-2 text-center md:text-left items-center md:h-[45px] gap-2 mx-4 my-2 p-2 rounded-md transition-all cursor-pointer ${activeLink === 'getAllProject' ? 'bg-gray-500' : "hover:bg-gray-700"}`}>
-                <FcInspection size={20} /> <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Project {!isPhoneView && "Management"}</span>
-            </Link>
+    
             {/* <Link to="/getAllLead" onClick={handleNavClose} className={`flex items-center gap-2 mx-4 my-2 p-2 rounded-md transition-all cursor-pointer ${activeLink === 'getAllLead' && 'bg-gray-500'}`}>
                 <FaTty size={20} /> Lead Management
             </Link> */}
-            <Link to="/getAllTask" onClick={handleNavClose} className={`flex flex-col md:flex-row pt-2 text-center md:text-left items-center md:h-[45px] gap-2 mx-4 my-2 p-2 rounded-md transition-all cursor-pointer ${activeLink === 'getAllTask' ? 'bg-gray-500' : "hover:bg-gray-700"}`}>
-                <FcList size={20} />  <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Task {!isPhoneView && "Management"}</span>
-            </Link>
-
+           
             <Accordion className='m-0 p-0 md:px-2 md:pr-3 flex gap-2 flex-col items-center justify-center md:justify-start w-full' allowToggle index={accordionIndex}>
                 <AccordionItem width={"full"} border={"none"} onClick={() => accordionClick(0)}>
                     <AccordionButton className='flex w-full justify-center md:justify-between'>
@@ -110,6 +105,41 @@ const Sidebar = ({ isPhoneView, showSidebar, setShowSidebar, activeLink, setActi
                         <Link to="/getDepartment" onClick={handleNavClose} className={`flex md:pt-0 pb-3 md:pb-0 pt-4 flex-colmd:flex-row text-center md:text-left items-center md:h-[45px] gap-2 px-4 rounded-md transition-all cursor-pointer ${activeLink === 'getDepartment' ? 'bg-gray-500' : "hover:bg-gray-700"}`}>
                             <FaBuilding /> <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Department {!isPhoneView && "Manager"}</span>
                         </Link>
+                    </AccordionPanel>
+                </AccordionItem>
+                <AccordionItem width={"full"} border={"none"} onClick={() => accordionClick(3)}>
+                    <AccordionButton className='flex w-full justify-center md:justify-between'>
+                        <div className='flex flex-col items-center justify-center md:flex-row text-center md:text-left gap-2'>
+                            <FcCurrencyExchange size={20} /> <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Project</span>
+                        </div>
+                        {(!isPhoneView && showSidebar) && <AccordionIcon />}
+                    </AccordionButton>
+                    <AccordionPanel bg={"#090f29"} rounded={"md"} p={0}>
+                    <Link to="/getAllProject" onClick={handleNavClose} className={`flex flex-col md:flex-row pt-2 text-center md:text-left items-center md:h-[45px] gap-2 mx-4 my-2 p-2 rounded-md transition-all cursor-pointer ${activeLink === 'getAllProject' ? 'bg-gray-500' : "hover:bg-gray-700"}`}>
+                <FcInspection size={20} /> <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Ongoing {!isPhoneView && "Projects"}</span>
+            </Link>
+            <Link to="/GetAllCompletedProject" onClick={handleNavClose} className={`flex flex-col md:flex-row pt-2 text-center md:text-left items-center md:h-[45px] gap-2 mx-4 my-2 p-2 rounded-md transition-all cursor-pointer ${activeLink === 'getAllProject' ? 'bg-gray-500' : "hover:bg-gray-700"}`}>
+                <FcInspection size={20} /> <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Completed {!isPhoneView && "Projects"}</span>
+            </Link>
+                    </AccordionPanel>
+                </AccordionItem>
+                <AccordionItem width={"full"} border={"none"} onClick={() => accordionClick(4)}>
+                    <AccordionButton className='flex w-full justify-center md:justify-between'>
+                        <div className='flex flex-col items-center justify-center md:flex-row text-center md:text-left gap-2'>
+                            <FcBusinessman size={20} /> <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Task {!isPhoneView && "Management"}</span>
+                        </div>
+                        {(!isPhoneView && showSidebar) && <AccordionIcon />}
+                    </AccordionButton>
+                    <AccordionPanel bg={"#090f29"} rounded={"md"} p={0}>
+                 
+                    <Link to="/getAllTask" onClick={handleNavClose} className={`flex flex-col md:flex-row pt-2 text-center md:text-left items-center md:h-[45px] gap-2 mx-4 my-2 p-2 rounded-md transition-all cursor-pointer ${activeLink === 'getAllTask' ? 'bg-gray-500' : "hover:bg-gray-700"}`}>
+                <FcList size={20} />  <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Ongoing {!isPhoneView && "Management"}</span>
+            </Link>
+            <Link to="/getAllCompletedProject" onClick={handleNavClose} className={`flex flex-col md:flex-row pt-2 text-center md:text-left items-center md:h-[45px] gap-2 mx-4 my-2 p-2 rounded-md transition-all cursor-pointer ${activeLink === 'getAllTask' ? 'bg-gray-500' : "hover:bg-gray-700"}`}>
+                <FcList size={20} />  <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Completed {!isPhoneView && "Management"}</span>
+            </Link>
+        
+
                     </AccordionPanel>
                 </AccordionItem>
             </Accordion>
