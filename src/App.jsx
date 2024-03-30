@@ -16,7 +16,7 @@ import CreateLead from "./components/CreateLead";
 import AppLayout from "./layouts/AppLayout";
 import { useState } from "react";
 import ToDoPage from "./components/ToDoPage";
-import Settings from "./components/Settings";
+import ChangePassword from "./components/changePassword";
 
 import GetAllProject from "./components/GetAllProject";
 import InfoBoxByID from "./components/common/InfoBoxByID";
@@ -41,6 +41,12 @@ import GetAllLeaves from "./components/GetAllLeaves";
 import GetAllLetters from "./components/GetAllLetters";
 import CreateLeave from "./components/CreateLeave";
 import CreateLetter from "./components/CreateLetter";
+import GetAllCompletedProject from "./components/GetAllCompletedProjects";
+import GetAllCompletedTask from "./components/GetAllCompletedTasks";
+import Settings from "./components/Settings";
+import EmployeeById from "./components/EmployeeByID";
+import InvoiceDashboardStatsCard from "./components/invoiceDashBoard";
+
 function App() {
   const isLoggedIn = useSelector(selectIsLoggedIn);
   // const refreshPage = () => {
@@ -119,6 +125,18 @@ function App() {
               </AppLayout>
             }
           />
+            <Route
+            path="/employeeById"
+            element={
+              <AppLayout
+                activeSideabarLink={"employeeById"}
+                setActiveSideabarLink={setActiveSideabarLink}
+              >
+                <EmployeeById />
+              </AppLayout>
+            }
+          />
+          
           <Route
             path="/getAllProject"
             element={
@@ -138,6 +156,18 @@ function App() {
                 setActiveSideabarLink={setActiveSideabarLink}
               >
                 <GetAllClient />
+              </AppLayout>
+            }
+          />
+          
+          <Route
+            path="/getAllCompletedProject"
+            element={
+              <AppLayout
+                activeSideabarLink={"getAllCompletedProject"}
+                setActiveSideabarLink={setActiveSideabarLink}
+              >
+                <GetAllCompletedProject />
               </AppLayout>
             }
           />
@@ -186,16 +216,28 @@ function App() {
             }
           />
              <Route
+            path="/changePassword"
+            element={
+              <AppLayout
+                activeSideabarLink={"changePassword"}
+                setActiveSideabarLink={setActiveSideabarLink}
+              >
+                <ChangePassword />
+              </AppLayout>
+            }
+          />
+                 <Route
             path="/settings"
             element={
               <AppLayout
-                activeSideabarLink={"settings"}
+                activeSideabarLink={"Settings"}
                 setActiveSideabarLink={setActiveSideabarLink}
               >
                 <Settings />
               </AppLayout>
             }
           />
+          
           <Route
             path="/createEmp"
             element={
@@ -328,6 +370,18 @@ function App() {
               </AppLayout>
             }
           />
+              <Route
+            path="/getAllCompletedTask"
+            element={
+              <AppLayout
+                activeSideabarLink={"getAllCompletedTask"}
+                setActiveSideabarLink={setActiveSideabarLink}
+              >
+                <GetAllCompletedTask />
+              </AppLayout>
+            }
+          />
+          
           <Route
             path="/createProject"
             element={
