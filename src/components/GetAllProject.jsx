@@ -247,7 +247,7 @@ const GetAllProject = () => {
                             {project.status}
                           </div>
                         </MenuButton>
-                        <MenuList>
+                        <MenuList zIndex={11}>
                           <MenuItem color={"red.600"} onClick={() => handleStatusChange(project.project_id, 0)}>Not Started</MenuItem>
                           <MenuItem color={"yellow.400"} onClick={() => handleStatusChange(project.project_id, 1)}>In Progress</MenuItem>
                           <MenuItem color={"blue.600"} onClick={() => handleStatusChange(project.project_id, 2)}>Completed</MenuItem>
@@ -320,7 +320,7 @@ const GetAllProject = () => {
                           </div> */}
                           {priorityArray[project.priority] || project.priority}
                         </MenuButton>
-                        <MenuList>
+                        <MenuList zIndex={11}>
                           {priorityArray.map((priority, index) => (
                             <MenuItem key={index} color={"gray.500"} onClick={() => handlePriorityChange(project.project_id, index)}>{priority}</MenuItem>
                           ))}

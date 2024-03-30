@@ -193,7 +193,7 @@ const GetAllTask = () => {
                         >
                           {priorityArray[task.priority] || task.priority}
                         </MenuButton>
-                        <MenuList>
+                        <MenuList zIndex={11}>
                           {priorityArray.map((priority, index) => (
                             <MenuItem
                               key={priority}
@@ -325,7 +325,7 @@ const GetAllTask = () => {
                         >
                           {priorityArray[task.priority] || task.priority}
                         </MenuButton>
-                        <MenuList>
+                        <MenuList zIndex={11}>
                           {priorityArray.map((priority, index) => (
                             <MenuItem
                               key={priority}
