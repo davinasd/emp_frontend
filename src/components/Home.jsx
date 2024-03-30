@@ -13,10 +13,12 @@ import TodoCheckbox from "./common/TodoCheckbox";
 import { CheckIcon, WarningTwoIcon } from "@chakra-ui/icons";
 import { GoVerified } from "react-icons/go";
 import { Link } from "react-router-dom";
-import UpcomingEventsCard from "./card/UpcomingEventsCard";
+import UpcomingClientEventsCard from "./card/UpcomingEventsCard";
 import ConvertedLeads from "./card/ConvertedLeads";
 import ProjectCard from "./card/ProjectCard";
 import LeaveCard from "./card/LeaveCard";
+import UpcomingEmployeeEventsCard from "./card/upcomingEmployeeEventsCard";
+import InvoiceDashboardStatsCard from "./invoiceDashBoard";
 
 const theme = extendTheme({
   styles: {
@@ -53,278 +55,9 @@ function Home() {
         </div>
         <div className="flex gap-4 flex-col md:flex-row">
           <Card className="w-full md:w-[65%]">
-            <CardBody>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div>
-                  <div className="flex gap-4 items-center text-md text-gray-600">
-                    <LiaFileInvoiceSolid fontSize={20} />
-                    Invoice overview
-                  </div>
-                  <div className="mt-6 text-gray-500">
-                    <div className="flex justify-between">
-                      <span>0 Draft</span>
-                      <span>0.00%</span>
-                    </div>
-                    <Progress
-                      value={0}
-                      colorScheme="gray"
-                      mt={4}
-                      height={2}
-                      rounded={"lg"}
-                    />
-                  </div>
-                  <div className="mt-6 text-gray-500">
-                    <div className="flex justify-between">
-                      <span>13 Not Sent</span>
-                      <span>65.00%</span>
-                    </div>
-                    <Progress
-                      value={65}
-                      colorScheme="gray"
-                      mt={4}
-                      height={2}
-                      rounded={"lg"}
-                    />
-                  </div>
-                  <div className="mt-6 text-gray-500">
-                    <div className="flex justify-between">
-                      <span>9 Unpaid</span>
-                      <span>45.00%</span>
-                    </div>
-                    <Progress
-                      value={45}
-                      colorScheme="red"
-                      mt={4}
-                      height={2}
-                      rounded={"lg"}
-                    />
-                  </div>
-                  <div className="mt-6 text-gray-500">
-                    <div className="flex justify-between">
-                      <span>4 Partially Paid</span>
-                      <span>20.00%</span>
-                    </div>
-                    <Progress
-                      value={20}
-                      colorScheme="yellow"
-                      mt={4}
-                      height={2}
-                      rounded={"lg"}
-                    />
-                  </div>
-                  <div className="mt-6 text-gray-500">
-                    <div className="flex justify-between">
-                      <span>0 Overdue</span>
-                      <span>0.00%</span>
-                    </div>
-                    <Progress
-                      value={0}
-                      colorScheme="yellow"
-                      mt={4}
-                      height={2}
-                      rounded={"lg"}
-                    />
-                  </div>
-                  <div className="mt-6 text-gray-500">
-                    <div className="flex justify-between">
-                      <span>7 Paid</span>
-                      <span>35.00%</span>
-                    </div>
-                    <Progress
-                      value={30}
-                      colorScheme="green"
-                      mt={4}
-                      height={2}
-                      rounded={"lg"}
-                    />
-                  </div>
-                </div>
-                <div>
-                  <div className="flex gap-4 items-center text-md text-gray-600">
-                    <PiNewspaperLight fontSize={20} />
-                    Estimate overview
-                  </div>
-                  <div className="mt-6 text-gray-500">
-                    <div className="flex justify-between">
-                      <span>0 Draft</span>
-                      <span>0.00%</span>
-                    </div>
-                    <Progress
-                      value={0}
-                      colorScheme="gray"
-                      mt={4}
-                      height={2}
-                      rounded={"lg"}
-                    />
-                  </div>
-                  <div className="mt-6 text-gray-500">
-                    <div className="flex justify-between">
-                      <span>13 Not Sent</span>
-                      <span>65.00%</span>
-                    </div>
-                    <Progress
-                      value={65}
-                      colorScheme="gray"
-                      mt={4}
-                      height={2}
-                      rounded={"lg"}
-                    />
-                  </div>
-                  <div className="mt-6 text-gray-500">
-                    <div className="flex justify-between">
-                      <span>9 Unpaid</span>
-                      <span>45.00%</span>
-                    </div>
-                    <Progress
-                      value={45}
-                      colorScheme="red"
-                      mt={4}
-                      height={2}
-                      rounded={"lg"}
-                    />
-                  </div>
-                  <div className="mt-6 text-gray-500">
-                    <div className="flex justify-between">
-                      <span>4 Partially Paid</span>
-                      <span>20.00%</span>
-                    </div>
-                    <Progress
-                      value={20}
-                      colorScheme="yellow"
-                      mt={4}
-                      height={2}
-                      rounded={"lg"}
-                    />
-                  </div>
-                  <div className="mt-6 text-gray-500">
-                    <div className="flex justify-between">
-                      <span>0 Overdue</span>
-                      <span>0.00%</span>
-                    </div>
-                    <Progress
-                      value={0}
-                      colorScheme="yellow"
-                      mt={4}
-                      height={2}
-                      rounded={"lg"}
-                    />
-                  </div>
-                  <div className="mt-6 text-gray-500">
-                    <div className="flex justify-between">
-                      <span>7 Paid</span>
-                      <span>35.00%</span>
-                    </div>
-                    <Progress
-                      value={30}
-                      colorScheme="green"
-                      mt={4}
-                      height={2}
-                      rounded={"lg"}
-                    />
-                  </div>
-                </div>
-                <div>
-                  <div className="flex gap-4 items-center text-md text-gray-600">
-                    <PiNewspaperClipping fontSize={20} />
-                    Proposal overview
-                  </div>
-                  <div className="mt-6 text-gray-500">
-                    <div className="flex justify-between">
-                      <span>0 Draft</span>
-                      <span>0.00%</span>
-                    </div>
-                    <Progress
-                      value={0}
-                      colorScheme="gray"
-                      mt={4}
-                      height={2}
-                      rounded={"lg"}
-                    />
-                  </div>
-                  <div className="mt-6 text-gray-500">
-                    <div className="flex justify-between">
-                      <span>13 Not Sent</span>
-                      <span>65.00%</span>
-                    </div>
-                    <Progress
-                      value={65}
-                      colorScheme="gray"
-                      mt={4}
-                      height={2}
-                      rounded={"lg"}
-                    />
-                  </div>
-                  <div className="mt-6 text-gray-500">
-                    <div className="flex justify-between">
-                      <span>9 Unpaid</span>
-                      <span>45.00%</span>
-                    </div>
-                    <Progress
-                      value={45}
-                      colorScheme="red"
-                      mt={4}
-                      height={2}
-                      rounded={"lg"}
-                    />
-                  </div>
-                  <div className="mt-6 text-gray-500">
-                    <div className="flex justify-between">
-                      <span>4 Partially Paid</span>
-                      <span>20.00%</span>
-                    </div>
-                    <Progress
-                      value={20}
-                      colorScheme="yellow"
-                      mt={4}
-                      height={2}
-                      rounded={"lg"}
-                    />
-                  </div>
-                  <div className="mt-6 text-gray-500">
-                    <div className="flex justify-between">
-                      <span>0 Overdue</span>
-                      <span>0.00%</span>
-                    </div>
-                    <Progress
-                      value={0}
-                      colorScheme="yellow"
-                      mt={4}
-                      height={2}
-                      rounded={"lg"}
-                    />
-                  </div>
-                  <div className="mt-6 text-gray-500">
-                    <div className="flex justify-between">
-                      <span>7 Paid</span>
-                      <span>35.00%</span>
-                    </div>
-                    <Progress
-                      value={30}
-                      colorScheme="green"
-                      mt={4}
-                      height={2}
-                      rounded={"lg"}
-                    />
-                  </div>
-                </div>
-              </div>
-              <Divider mt={10} mb={4} />
-              <div className="flex gap-6 flex-col md:flex-row">
-                <Stat className="rounded-md border-[0.6px] px-4 py-2">
-                  <StatLabel>Outstanding Invoices</StatLabel>
-                  <StatNumber>$38,353.00</StatNumber>
-                </Stat>
-                <Stat className="rounded-md border-[0.6px] px-4 py-2">
-                  <StatLabel>Past Due Invoices</StatLabel>
-                  <StatNumber>$38,353.00</StatNumber>
-                </Stat>
-                <Stat className="rounded-md border-[0.6px] px-4 py-2">
-                  <StatLabel>Paid Invoices</StatLabel>
-                  <StatNumber>$38,353.00</StatNumber>
-                </Stat>
-              </div>
-            </CardBody>
+          <InvoiceDashboardStatsCard/>
           </Card>
+          
 
           <div className="overflow-auto w-full md:w-[35%]">
             <Card>
@@ -368,8 +101,12 @@ function Home() {
           </div>
         </div>
         <div className="mt-4">
-          <UpcomingEventsCard />
+          <UpcomingClientEventsCard />
         </div>
+        <div className="mt-4">
+          <UpcomingEmployeeEventsCard />
+        </div>
+        
         <CalendarComponent />
       </div>
     </ChakraProvider>

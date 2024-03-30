@@ -3,7 +3,7 @@ import { Card, CardBody, Divider, Text } from "@chakra-ui/react";
 import { RxCalendar } from "react-icons/rx";
 import axios from "axios";
 
-const UpcomingEventsCard = () => {
+const UpcomingClientEventsCard = () => {
   const [clients, setClients] = useState([]);
   const [selectedClient, setSelectedClient] = useState(null);
   function parseUpcomingEvents(clientData) {
@@ -80,4 +80,4 @@ const UpcomingEventsCard = () => {
   );
 };
 
-export default UpcomingEventsCard;
+export default UpcomingClientEventsCard;
