@@ -1,6 +1,5 @@
 import { Box, Card, CardBody, Divider, Heading, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 
 const InvoiceById = () => {
     const userDataString = localStorage.getItem("userData");
