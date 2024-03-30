@@ -10,12 +10,14 @@ import { Divider } from "antd";
 import { allMonths } from "../../helpers";
 
 const ConvertedLeads = () => {
+  const currentYear = new Date().getFullYear();
+
   const [totalLeads, setTotalLeads] = useState(0);
   const [leadsInProgress, setLeadsInProgress] = useState(0);
   const [convertedLeads, setConvertedLeads] = useState(0);
   const [lostLeads, setLostLeads] = useState(0);
   const [rawLeads, setRawLeads] = useState(0);
-  const [selectedYear, setSelectedYear] = useState(null);
+  const [selectedYear, setSelectedYear] = useState(currentYear-1);
   const [selectedMonth, setSelectedMonth] = useState(null);
   const [financialYears, setFinancialYears] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState(null);
@@ -30,10 +32,10 @@ const ConvertedLeads = () => {
     // Fetch total lead count
     axios
       .post(`${import.meta.env.VITE_API_BASE}/api/admin/getTotalLeadCount`, {
-        financialYear: selectedYear || "2023",
-        month: "",
-        quarter: "",
-        firstQuarterMonth: ""
+        financialYear: selectedYear,
+        month: selectedMonth || "",
+        quarter: selectedQuarter || "",
+        firstQuarterMonth: selectedQuarter || ""
       })
       .then((response) => {
         console.log(response.data)
@@ -70,7 +72,7 @@ const ConvertedLeads = () => {
         console.error("Error fetching leads by status:", error);
       });
   }
-  
+
   console.log(totalLeads);
 
   const fetchFinancialYears = () => {
@@ -120,7 +122,7 @@ const ConvertedLeads = () => {
 
   const handleYearClear = () => {
     setSelectedFilter(null);
-    setSelectedYear(null);
+    setSelectedYear(currentYear);
     setSelectedMonth(null);
     fetchDataDefault();
   }
@@ -136,6 +138,17 @@ const ConvertedLeads = () => {
         </div>
         <div className="flex gap-2 items-center mt-4">
           <Select
+            placeholder='Select Year'
+            value={selectedYear || ""}
+            onChange={(e) => setSelectedYear(e.target.value)}
+            size={"sm"}
+            rounded={"lg"}
+          >
+            {financialYears.map((year) => (
+              <option key={`fy-${year._id}`} value={year.financial_year.split('-')[0]}>{year.financial_year}</option>
+            ))}
+          </Select>
+          <Select
             placeholder='Filter by'
             value={selectedFilter || ""}
             onChange={(e) => setSelectedFilter(e.target.value)}
@@ -146,20 +159,7 @@ const ConvertedLeads = () => {
             <option value={"financial year"}>Financial year</option>
             <option value={"quarter"}>Quarter</option>
           </Select>
-          {selectedFilter === "financial year" && (
-            <Select
-              placeholder='Select Year'
-              value={selectedYear || ""}
-              onChange={(e) => setSelectedYear(e.target.value)}
-              size={"sm"}
-              rounded={"lg"}
-            >
-              {financialYears.map((year) => (
-                <option key={`fy-${year._id}`} value={year.financial_year.split('-')[0]}>{year.financial_year}</option>
-              ))}
-            </Select>
-          )}
-          {(selectedFilter === "month" || selectedYear) && (
+          {selectedFilter === "month" && (
             <Select
               placeholder='Select Month'
               value={selectedMonth || ""}

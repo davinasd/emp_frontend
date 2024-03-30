@@ -48,8 +48,8 @@ function Home() {
       <div className="px-4 mt-8 mb-10 flex flex-col gap-4">
         <div className="flex flex-col md:flex-row gap-4">
           <ConvertedLeads />
-          <ProjectCard />
-          <LeaveCard></LeaveCard>
+          {/* <ProjectCard />
+          <LeaveCard></LeaveCard> */}
         </div>
         <div className="flex gap-4 flex-col md:flex-row">
           <Card className="w-full md:w-[65%]">
