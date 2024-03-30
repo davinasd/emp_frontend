@@ -19,7 +19,6 @@ import ToDoPage from "./components/ToDoPage";
 import ChangePassword from "./components/changePassword";
 
 import GetAllProject from "./components/GetAllProject";
-import InfoBoxByID from "./components/common/InfoBoxByID";
 import GetAllLead from "./components/GetAllLead";
 import CreateTag from "./components/CreateTag";
 import CreateTask from "./components/CreateTask";
@@ -45,7 +44,10 @@ import GetAllCompletedProject from "./components/GetAllCompletedProjects";
 import GetAllCompletedTask from "./components/GetAllCompletedTasks";
 import Settings from "./components/Settings";
 import EmployeeById from "./components/EmployeeByID";
-import InvoiceDashboardStatsCard from "./components/invoiceDashBoard";
+import TagsById from "./components/TagsById";
+import GetAllPaidInvoices from "./components/GetAllPaidInvoices";
+import AddSupply from "./components/AddSupply";
+import UpdateEmp from "./components/forms/UpdateEmp";
 
 function App() {
   const isLoggedIn = useSelector(selectIsLoggedIn);
@@ -125,7 +127,18 @@ function App() {
               </AppLayout>
             }
           />
-            <Route
+          <Route
+            path="/addSupply"
+            element={
+              <AppLayout
+                activeSideabarLink={"addSupply"}
+                setActiveSideabarLink={setActiveSideabarLink}
+              >
+                <AddSupply />
+              </AppLayout>
+            }
+          />
+          <Route
             path="/employeeById"
             element={
               <AppLayout
@@ -136,7 +149,39 @@ function App() {
               </AppLayout>
             }
           />
-          
+          <Route
+            path="/tagById"
+            element={
+              <AppLayout
+                activeSideabarLink={"tagById"}
+                setActiveSideabarLink={setActiveSideabarLink}
+              >
+                <TagsById />
+              </AppLayout>
+            }
+          />
+          <Route
+            path="/invoiceById"
+            element={
+              <AppLayout
+                activeSideabarLink={"invoiceById"}
+                setActiveSideabarLink={setActiveSideabarLink}
+              >
+                <TagsById />
+              </AppLayout>
+            }
+          />
+          <Route
+            path="/getAllPaidInvoices"
+            element={
+              <AppLayout
+                activeSideabarLink={"getAllPaidInvoices"}
+                setActiveSideabarLink={setActiveSideabarLink}
+              >
+                <GetAllPaidInvoices />
+              </AppLayout>
+            }
+          />
           <Route
             path="/getAllProject"
             element={
@@ -159,7 +204,7 @@ function App() {
               </AppLayout>
             }
           />
-          
+
           <Route
             path="/getAllCompletedProject"
             element={
@@ -200,7 +245,7 @@ function App() {
                 activeSideabarLink={"getAllLetters"}
                 setActiveSideabarLink={setActiveSideabarLink}
               >
-                <GetAllLetters/>
+                <GetAllLetters />
               </AppLayout>
             }
           />
@@ -215,7 +260,7 @@ function App() {
               </AppLayout>
             }
           />
-             <Route
+          <Route
             path="/changePassword"
             element={
               <AppLayout
@@ -226,7 +271,7 @@ function App() {
               </AppLayout>
             }
           />
-                 <Route
+          <Route
             path="/settings"
             element={
               <AppLayout
@@ -237,7 +282,7 @@ function App() {
               </AppLayout>
             }
           />
-          
+
           <Route
             path="/createEmp"
             element={
@@ -278,7 +323,7 @@ function App() {
                 activeSideabarLink={"CreateLetter"}
                 setActiveSideabarLink={setActiveSideabarLink}
               >
-                <CreateLetter/>
+                <CreateLetter />
               </AppLayout>
             }
           />
@@ -301,6 +346,17 @@ function App() {
                 setActiveSideabarLink={setActiveSideabarLink}
               >
                 <UpdateClient></UpdateClient>
+              </AppLayout>
+            }
+          />
+          <Route
+            path="/UpdateEmp"
+            element={
+              <AppLayout
+                activeSideabarLink={"CreateEmp"}
+                setActiveSideabarLink={setActiveSideabarLink}
+              >
+                <UpdateEmp />
               </AppLayout>
             }
           />
@@ -370,7 +426,7 @@ function App() {
               </AppLayout>
             }
           />
-              <Route
+          <Route
             path="/getAllCompletedTask"
             element={
               <AppLayout
@@ -381,7 +437,7 @@ function App() {
               </AppLayout>
             }
           />
-          
+
           <Route
             path="/createProject"
             element={

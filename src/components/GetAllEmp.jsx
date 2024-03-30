@@ -25,8 +25,12 @@ import { GoPlus } from "react-icons/go";
 import { toast } from "react-toastify";
 import { DeleteIcon } from "@chakra-ui/icons";
 import { IoMdEye } from "react-icons/io";
+import { MdModeEditOutline } from "react-icons/md";
+import { useDispatch } from "react-redux";
+import { addEmployeeId } from "../store/slice/EmployeeSlice";
 
 const GetAllEmp = () => {
+  const dispatch = useDispatch();
   const [employees, setEmployees] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedEmployee, setSelectedEmployee] = useState(null);
@@ -82,14 +86,18 @@ const GetAllEmp = () => {
     );
   }
 
-  const handleDeleteConfirmation = (projectId) => {
-    setDeleteProjectId(projectId);
+  const handleDeleteConfirmation = (id) => {
+    setDeleteProjectId(id);
     setIsDeleteAlertOpen(true);
   };
 
   const handleDeleteCancel = () => {
     setIsDeleteAlertOpen(false);
   };
+
+  const handleUpdateEmp = (id) => {
+    dispatch(addEmployeeId(id));
+  }
 
   return (
     <>
@@ -154,6 +162,18 @@ const GetAllEmp = () => {
                       >
                         <IoMdEye />
                       </Button>
+                    <Link to="/UpdateEmp">
+                      <Button
+                        size={"sm"}
+                        variant={"outline"}
+                        colorScheme="blue"
+                        ml={2}
+                        p={0}
+                        onClick={() => handleUpdateEmp(emp.employee_id)}
+                      >
+                      <MdModeEditOutline size={18} />
+                      </Button>
+                    </Link>
                     </Td>
                     <Td>
                       <Button
@@ -187,6 +207,18 @@ const GetAllEmp = () => {
                       >
                         <IoMdEye />
                       </Button>
+                    <Link to="/UpdateEmp">
+                      <Button
+                        size={"sm"}
+                        variant={"outline"}
+                        colorScheme="blue"
+                        ml={2}
+                        p={0}
+                        onClick={() => handleUpdateEmp(emp.employee_id)}
+                      >
+                      <MdModeEditOutline size={18} />
+                      </Button>
+                    </Link>
                     </Td>
                     <Td>
                       <Button
