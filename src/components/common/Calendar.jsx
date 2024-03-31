@@ -52,16 +52,16 @@ const CalendarComponent = () => {
       );
     });
 
+    console.log(empSpecialDates)
+
     const empEvents = empSpecialDates.filter((date) => {
       return (
-        date.clientBirthday === formattedDate ||
-        date.clientAnniversary === formattedDate ||
-        date.workStartDate === formattedDate ||
-        date.companyAnniversary === formattedDate
+        date.dob === formattedDate ||
+        date.joiningDate === formattedDate
       );
     });
 
-    let listData = events.map((event) => {
+    const clientListData = events.map((event) => {
       let eventType = "client";
       if (event.clientBirthday === formattedDate) {
         eventType = "Client Birthday";
@@ -80,52 +80,73 @@ const CalendarComponent = () => {
       };
     });
 
-    listData = [...listData, empEvents.map((event) => {
+    const empListData = empEvents.map((event) => {
       let eventType = "emp";
-      if (event.clientBirthday === formattedDate) {
-        eventType = "Client Birthday";
-      } else if (event.clientAnniversary === formattedDate) {
-        eventType = "Client Anniversary";
-      } else if (event.workStartDate === formattedDate) {
-        eventType = "Work Start Date";
-      } else if (event.companyAnniversary === formattedDate) {
-        eventType = "Company Anniversary";
+      if (event.dob === formattedDate) {
+        eventType = "Emp DOB";
+      } else if (event.joiningDate === formattedDate) {
+        eventType = "Emp Joining Date";
       }
       return {
         type: "success",
-        client: `${event.clientName} `,
-        brand: `${event.brandName} `,
+        employee: `${event.name} `,
         eventType: eventType,
       };
     })
-    ]
-    return listData;
-  };
+    return { clientListData, empListData };
+  }
 
   const dateCellRender = (value) => {
-    const listData = getListData(value);
+    const { clientListData, empListData } = getListData(value);
+    console.log(`emp: ${empListData}`)
     return (
-      <ul className="events">
-        {listData.map((item, index) => (
+      <>
+        <ul className="events">
+          {clientListData?.map((item, index) => (
+            <>
+              {item.eventType === "client" ? "Client" : item.eventType === "emp" && "Employee"}
+              <li key={index}>
+                <Badge
+                  status={item.type}
+                  text={
+                    <>
+                      Client: {item.client}
+                      <br />
+                      Brand: {item.brand}
+                      <br />
+                      Event: {item.eventType}
+                    </>
+                  }
+                />
+              </li >
+            </>
+          ))}
+        </ul>
+        {empListData?.length > 0 && (
           <>
-            {item.eventType === "client" ? "Client" : item.eventType === "emp" && "Employee"}
-            <li key={index}>
-              <Badge
-                status={item.type}
-                text={
-                  <>
-                    Client: {item.client}
-                    <br />
-                    Brand: {item.brand}
-                    <br />
-                    Event: {item.eventType}
-                  </>
-                }
-              />
-            </li >
+            <h4 className="text-lg font-semibold">Events</h4>
+            <ul>
+              {empListData?.map((item, index) => (
+                <>
+                  {item.eventType === "client" ? "Client" : item.eventType === "emp" && "Employee"}
+                  <li key={index}>
+                    <Badge
+                      status={item.type}
+                      text={
+                        <>
+                          Client: {item.dob}
+                          <br />
+                          Brand: {item.joiningDate}
+                        </>
+                      }
+                    />
+                  </li >
+                </>
+              ))}
+            </ul>
           </>
-        ))}
-      </ul>
+        )}
+      </>
     );
   };
 
