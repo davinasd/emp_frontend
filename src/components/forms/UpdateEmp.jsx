@@ -7,28 +7,23 @@ import {
     Tab,
     TabPanels,
     TabPanel,
-    Flex,
     Input,
-    Box
+    Box,
+    Select as ChakraSelect
 } from "@chakra-ui/react";
 import { Select } from "antd";
 import axios from "axios";
-import { useState, useEffect, useRef } from "react";
-import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
+import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import SelectSource from "../common/SelectSource";
 import MyDatePicker from "../common/MyDatePicker";
-import SelectTag from "../common/SelectTag";
 import { useSelector, useDispatch } from "react-redux";
-import moment from "moment";
-import { convertDateFormatString } from "../../helpers";
+import { converDateStringFormat, convertDateFormatString } from "../../helpers";
 import { useNavigate } from "react-router-dom";
 import ViewLeadByBrand from "../common/ViewLeadByBrand";
 import { clearEmployeeId, selectEmployeeIds } from "../../store/slice/EmployeeSlice";
+import moment from "moment";
 
 const UpdateEmp = () => {
-    const singleFileRef = useRef();
-    const multipleFileRef = useRef();
     const clientId = useSelector(selectEmployeeIds)[0];
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -65,78 +60,76 @@ const UpdateEmp = () => {
         },
     });
 
-    
+
     useEffect(() => {
-        // console.log(clientId);
-        axios.get(
-                `${import.meta.env.VITE_API_BASE
-                }/api/admin/getEmployeeByID/${clientId}`
-            )
+        fetchData();
+    }, [clientId]);
+
+    const fetchData = async () => {
+        await axios.get(
+            `${import.meta.env.VITE_API_BASE
+            }/api/admin/getEmployeeByID/${clientId}`
+        )
             .then((response) => {
                 const clientData = response.data;
-                setClient(response.data);
-                setProjectData(prev => ({
-                    ...prev,
-                    // Populate client with fetched data
-                    type: clientData?.type || prev.type,
-                    name: clientData?.name || prev.name,
-                    gender: clientData?.gender || prev.gender,
-                    contactNo: clientData?.contactNo || prev.contactNo,
-                    title: clientData?.title || prev.title,
-                    dob: clientData?.dob || prev.dob,
-                    position: clientData?.position || prev.position,
-                    designation: clientData?.designation || prev.designation,
-                    department: clientData?.department || prev.department,
-                    email: clientData?.email || prev.email,
-                    joiningDate: clientData?.joiningDate || prev.joiningDate,
-                    manager_id: clientData?.manager_id || prev.manager_id,
-                    probationPeriod: clientData?.probationPeriod || prev.probationPeriod,
-                    leavingDate: clientData?.leavingDate || prev.leavingDate,
-                    aadharNumber: clientData?.aadharNumber || prev.aadharNumber,
-                    panNumber: clientData?.panNumber || prev.panNumber,
-                    permanentAddress: clientData?.permanentAddress || prev.permanentAddress,
-                    correspondenceAddress: clientData?.correspondenceAddress || prev.correspondenceAddress,
-                    guardianDetails: {
-                        ...prev.guardianDetails,
-                        guardianName: clientData?.guardianDetails?.guardianName || prev.guardianDetails.guardianName,
-                        guardianContactNo: clientData?.guardianDetails?.guardianContactNo || prev.guardianDetails.guardianContactNo,
-                    },
-                    bankDetails: {
-                        ...prev.bankDetails,
-                        bankName: clientData?.bankDetails?.bankName || prev.bankDetails.bankName,
-                        bankAccountNo: clientData?.bankDetails?.bankAccountNo || prev.bankDetails.bankAccountNo,
-                        bankIfscCode: clientData?.bankDetails?.bankIfscCode || prev.bankDetails.bankIfscCode,
-                        type: clientData?.bankDetails?.type || prev.bankDetails.type,
-                    },
-                }));
+                setClient(clientData);
+                setProjectData((prev) => {
+                    return {
+                        // Populate client with fetched data
+                        name: clientData?.name || prev.name,
+                        gender: clientData?.gender || prev.gender,
+                        contactNo: clientData?.contactNo || prev.contactNo,
+                        type: clientData?.type || prev.type,
+                        dob: clientData?.dob || prev.dob,
+                        position: clientData?.position || prev.position,
+                        department: clientData?.department || prev.department,
+                        designation: clientData?.designation || prev.designation,
+                        manager_id: clientData?.manager_id || prev.manager_id,
+                        email: clientData?.email || prev.email,
+                        joiningDate: clientData?.joiningDate || prev.joiningDate,
+                        probationPeriod: clientData?.probationPeriod || prev.probationPeriod,
+                        leavingDate: clientData?.leavingDate || prev.leavingDate,
+                        aadharNumber: clientData?.aadharNumber || prev.aadharNumber,
+                        panNumber: clientData?.panNumber || prev.panNumber,
+                        permanentAddress: clientData?.permanentAddress || prev.permanentAddress,
+                        correspondenceAddress: clientData?.correspondenceAddress || prev.correspondenceAddress,
+                        title: clientData?.title || prev.title,
+                        guardianDetails: {
+                            ...prev.guardianDetails,
+                            guardianName: clientData?.guardianDetails?.guardianName || prev.guardianDetails.guardianName,
+                            guardianContactNo: clientData?.guardianDetails?.guardianContactNo || prev.guardianDetails.guardianContactNo,
+                        },
+                        bankDetails: {
+                            ...prev.bankDetails,
+                            bankName: clientData?.bankDetails?.bankName || prev.bankDetails.bankName,
+                            bankAccountNo: clientData?.bankDetails?.bankAccountNo || prev.bankDetails.bankAccountNo,
+                            bankIfscCode: clientData?.bankDetails?.bankIfscCode || prev.bankDetails.bankIfscCode,
+                            type: clientData?.bankDetails?.type || prev.bankDetails.type,
+                        },
+                    }
+                });
 
-                setSelectedCountry(clientData.country);
-                setSelectedState(clientData.state);
                 setSelectSourceValue(clientData.source);
                 setSelectedTagValue(clientData.requirement);
                 dispatch(clearEmployeeId);
             })
-            .catch((error) => {
-                console.error("Error fetching employee details:", error);
-                toast.error("Failed to fetch employee details");
-            });
-    }, [clientId]);
-    const workStartDate = projectData.workStartDate ? moment(projectData.workStartDate, 'DD-MM-YY') : null;
-    const clientBirthdayDate = projectData.clientBirthday ? moment(projectData.clientBirthday, 'DD-MM-YY') : null;
-    const clientAnniversaryDate = projectData.clientAnniversary ? moment(projectData.clientAnniversary, 'DD-MM-YY') : null;
-    const companyAnniversaryDate = projectData.companyAnniversary ? moment(projectData.companyAnniversary, 'DD-MM-YY') : null;
+        // .catch((error) => {
+        //     console.log(`Error fetching emp: ${error}`);
+        //     toast.error("Failed to fetch employee details");
+        // })
+    }
+    const dob = projectData.enquiryDate ? moment(projectData.dob, 'DD-MM-YY') : null;
+    const renderJoiningDate = projectData.enquiryDate ? moment(projectData.joiningDate, 'DD-MM-YY') : null;
 
-
-    const [selectedCountry, setSelectedCountry] = useState(projectData.country);
-    const [selectedState, setSelectedState] = useState(projectData.state);
     const [selectSourceValue, setSelectSourceValue] = useState([]);
     const [selectedTagValue, setSelectedTagValue] = useState([]);
 
     const [viewLeadByBrand, setViewLeadByBrand] = useState(false);
 
-    const handleSelectOption = (name, value) => {
-        setProjectData({ ...projectData, [name]: value });
-    };
+    if (!projectData) {
+        toast.error("Failed to fetch employee details");
+    }
+
     useEffect(() => {
         setProjectData((prev) => ({
             ...prev,
@@ -145,65 +138,63 @@ const UpdateEmp = () => {
         }));
     }, [selectSourceValue, selectedTagValue]);
 
+    // const handleSingleFileChange = (e) => {
+    //     setProjectData({ ...projectData, singleFile: e.target.files[0] });
+    // };
+
+    // const handleMultipleFilesChange = (e) => {
+    //     const files = Array.from(e.target.files);
+    //     console.log(files);
+    //     setProjectData({
+    //         ...projectData,
+    //         multipleFiles: [...projectData.multipleFiles, ...files],
+    //     });
+    // };
+
+    // const handleDeleteSingleFile = () => {
+    //     singleFileRef.current.value = "";
+    //     const { singleFile, ...newData } = projectData;
+    //     setProjectData({ ...newData });
+    // };
+
+    // const handleDeleteMultipleFile = (index) => {
+    //     console.log(multipleFileRef.current.value);
+    //     const updatedFiles = [...projectData.multipleFiles];
+    //     updatedFiles.splice(index, 1);
+    //     multipleFileRef.current.value = "";
+    //     console.log(multipleFileRef.current.value);
+    //     setProjectData({ ...projectData, multipleFiles: updatedFiles });
+    // };
+    // const [tags, setTags] = useState([]);
+    // const [managers, setManagers] = useState([]);
+    // useEffect(() => {
+    //     axios
+    //         .get(`${import.meta.env.VITE_API_BASE}/api/admin/getManagersAllDetails`)
+    //         .then((response) => {
+    //             setManagers(response.data);
+    //         })
+    //         .catch((error) => {
+    //             console.error("Error fetching clients:", error);
+    //         });
+    // }, []);
+
+    const joiningDate = `${projectData?.joiningDate?._d}`.slice(4, 15);
+
     const handleChange = (e) => {
+
         const { name, value } = e.target;
+
+        setProjectData({ ...projectData, [name]: value });
+    };
+    const handleSelectOption = (name, value) => {
         setProjectData({ ...projectData, [name]: value });
     };
 
-    const handleSelectChange = (setSelected, name) => (value) => {
-        setSelected(value);
-        setProjectData({ ...projectData, [name]: value });
+    const handleSelectManager = (e) => {
+        const selectedManagerId = e.target.value;
+        setProjectData({ ...projectData, manager_id: selectedManagerId });
     };
 
-    const handleSingleFileChange = (e) => {
-        setProjectData({ ...projectData, singleFile: e.target.files[0] });
-    };
-
-    const handleMultipleFilesChange = (e) => {
-        const files = Array.from(e.target.files);
-        console.log(files);
-        setProjectData({
-            ...projectData,
-            multipleFiles: [...projectData.multipleFiles, ...files],
-        });
-    };
-
-    const handleDeleteSingleFile = () => {
-        singleFileRef.current.value = "";
-        const { singleFile, ...newData } = projectData;
-        setProjectData({ ...newData });
-    };
-
-    const handleDeleteMultipleFile = (index) => {
-        console.log(multipleFileRef.current.value);
-        const updatedFiles = [...projectData.multipleFiles];
-        updatedFiles.splice(index, 1);
-        multipleFileRef.current.value = "";
-        console.log(multipleFileRef.current.value);
-        setProjectData({ ...projectData, multipleFiles: updatedFiles });
-    };
-
-    const handleAddSingleFileToRemove = (filename) => {
-        projectData.singleFileToRemove = filename;
-        projectData.singleFileView = null;
-        setProjectData({ ...projectData });
-    };
-    const handleAddMultipleFilesToRemove = (filename) => {
-        const updatedMultipleFilesView = projectData.multipleFilesView.filter(
-            (file) => file !== filename
-        );
-
-        const updatedMultipleFilesToRemove = [...projectData.multipleFilesToRemove, filename];
-        if (!updatedMultipleFilesToRemove.includes(filename)) {
-            updatedMultipleFilesToRemove.push(filename);
-        }
-
-        setProjectData({
-            ...projectData,
-            multipleFilesToRemove: updatedMultipleFilesToRemove,
-            multipleFilesView: updatedMultipleFilesView,
-        });
-    };
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -245,6 +236,8 @@ const UpdateEmp = () => {
             });
     };
 
+    console.log(projectData)
+
     return (
         <>
             {" "}
@@ -259,7 +252,7 @@ const UpdateEmp = () => {
                 <div className="flex flex-col mb-4 md:flex-row justify-between gap-4 md:items-center">
                     <div>
                         <h1 className="text-md font-semibold">Update Employee</h1>
-                        <h1 className="text-2xl font-semibold">{client.clientName}</h1>
+                        <h1 className="text-2xl font-semibold">{client.name}</h1>
                     </div>
 
                     <ViewLeadByBrand open={viewLeadByBrand} setOpen={setViewLeadByBrand} brandName={projectData.brandName} />
@@ -269,153 +262,167 @@ const UpdateEmp = () => {
                     <div className="hidden md:block">
                         <Tabs>
                             <TabList>
-                                <Tab>Client Information</Tab>
+                                <Tab>Employee Information</Tab>
                                 <Tab>Address Information</Tab>
-                                <Tab>Personal Information</Tab>
-                                <Tab>Additional Information</Tab>
-                                <Tab>Files Information</Tab>
+                                <Tab>Guardian Information</Tab>
+                                <Tab>Bank Information</Tab>
                             </TabList>
 
                             <TabPanels>
                                 <TabPanel>
-                                    <div className="flex gap-3">
-                                        <FormControl id="companyAnniversary">
-                                            <FormLabel>Work Start Date</FormLabel>
-                                            <MyDatePicker
-                                                value={workStartDate}
-                                                selected={projectData.workStartDate}
-                                                onChange={(date) =>
-                                                    setProjectData({
-                                                        ...projectData,
-                                                        workStartDate: date,
-                                                    })
-                                                }
-                                                format={"DD/MM/YYYY"}
-                                            />
-                                            {workStartDate && (
-                                                <p>{convertDateFormatString(workStartDate)}</p>
-                                            )}
-                                        </FormControl>
-                                    </div>
-                                    <div className="flex gap-3 mb-2">
-                                        <FormControl id="title" maxWidth={130}>
-                                            <FormLabel>Title</FormLabel>
+                                    <div className="flex gap-3 mb-3">
+                                        <FormControl id="title" maxWidth={100}>
+                                            <FormLabel>Title </FormLabel>
                                             <Select
+                                                style={{ width: "100%", height: "40px" }}
                                                 placeholder="Select Title"
+                                                value={projectData?.title}
                                                 onChange={(value) => handleSelectOption("title", value)}
-                                                value={projectData.title}
                                             >
                                                 <Select.Option value="Mr.">Mr.</Select.Option>
                                                 <Select.Option value="Mrs.">Mrs.</Select.Option>
                                             </Select>
                                         </FormControl>
 
-                                        <FormControl id="clientName">
-                                            <FormLabel>Client Name</FormLabel>
-                                            <Input
-                                                name="clientName"
-                                                onChange={handleChange}
-                                                value={projectData.clientName}
-                                            />
+                                        <FormControl id="employeeName" >
+                                            <FormLabel>Employee Name </FormLabel>
+                                            <Input style={{ height: 40 }} name="name" value={projectData?.name} onChange={handleChange} />
                                         </FormControl>
 
-                                        <FormControl id="brandName">
-                                            <FormLabel>Brand Name</FormLabel>
-                                            <Input
-                                                name="brandName"
-                                                onChange={handleChange}
-                                                value={projectData.brandName}
-                                            />
-                                        </FormControl>
-                                    </div>
-                                    <div className="flex gap-3 my-3">
-                                        <FormControl id="gender" maxWidth={150}>
-                                            <FormLabel>Gender</FormLabel>
+                                        <FormControl id="gender" maxWidth={100} >
+                                            <FormLabel>Gender </FormLabel>
                                             <Select
+                                                style={{ width: "100%", height: "40px" }}
                                                 name="gender"
-                                                onChange={(value) =>
-                                                    handleSelectOption("gender", value)
-                                                }
+                                                value={projectData?.gender}
+                                                onChange={(value) => handleSelectOption("gender", value)}
                                                 placeholder="Select gender"
-                                                value={projectData.gender}
                                             >
                                                 <Select.Option value="Male">Male</Select.Option>
                                                 <Select.Option value="Female">Female</Select.Option>
                                                 <Select.Option value="Others">Others</Select.Option>
                                             </Select>
                                         </FormControl>
-                                        <FormControl id="brandName" maxWidth={250}>
-                                            <FormLabel>Source</FormLabel>
-                                            <Flex>
-                                                <SelectSource
-                                                    selectSourceValue={selectSourceValue}
-                                                    setSelectSourceValue={setSelectSourceValue}
-                                                />
-                                            </Flex>
+
+                                        <FormControl id="contactNo" >
+                                            <FormLabel>Contact Number </FormLabel>
+                                            <Input style={{ height: 40 }} name="contactNo" value={projectData?.contactNo} onChange={handleChange} />
                                         </FormControl>
-                                        <FormControl id="brandName">
-                                            <FormLabel>Source Information</FormLabel>
-                                            <Input
-                                                name="sourceInformation"
-                                                onChange={handleChange}
-                                                value={projectData.sourceInformation}
+                                        <FormControl id="dob" maxWidth={150} >
+                                            <FormLabel>DOD </FormLabel>
+                                            <MyDatePicker
+                                                className="mb-1 h-[40px]"
+                                                value={dob}
+                                                selected={projectData.dob}
+                                                onChange={(date) =>
+                                                    setProjectData({ ...projectData, dob: date })
+                                                }
+                                                format={"DD/MM/YYYY"}
                                             />
+                                            <br />
+                                            {projectData?.dob?._d && <>{convertDateFormatString(projectData?.dob?._d)}</>}
                                         </FormControl>
                                     </div>
-                                    <div className="flex gap-3 my-3">
-                                        <FormControl id="tags">
-                                            <FormControl id="companyName">
-                                                <FormLabel>Company Name</FormLabel>
-                                                <Input
-                                                    name="companyName"
-                                                    onChange={handleChange}
-                                                    value={projectData.companyName}
-                                                />
-                                            </FormControl>
-                                        </FormControl>
 
-                                        <FormControl id="phone1">
-                                            <FormLabel>Phone Number 1</FormLabel>
-                                            <Input
-                                                name="phone1"
-                                                onChange={handleChange}
-                                                value={projectData.phone1}
-                                            />
+                                    <div className="flex gap-3 mb-4">
+                                        <FormControl id="position" maxWidth={150}>
+                                            <FormLabel>Position </FormLabel>
+                                            <Select
+                                                style={{ width: "100%", height: "40px" }}
+                                                name="position"
+                                                value={projectData?.position}
+                                                onChange={(value) => handleSelectOption("position", value)}
+                                                placeholder="Select Position"
+                                            >
+                                                <Select.Option value="0">Superadmin</Select.Option>
+                                                <Select.Option value="1">Admin</Select.Option>
+                                                <Select.Option value="2">User</Select.Option>
+                                                <Select.Option value="3">Manager</Select.Option>
+                                            </Select>
                                         </FormControl>
-                                        <FormControl id="phone2">
-                                            <FormLabel>Phone Number 2</FormLabel>
+                                        <FormControl id="designation" >
+                                            <FormLabel>Designation </FormLabel>
                                             <Input
-                                                name="phone2"
+                                                name="designation"
+                                                value={projectData?.designation}
                                                 onChange={handleChange}
-                                                value={projectData.phone2}
+                                                style={{ height: 40 }}
                                             />
                                         </FormControl>
                                     </div>
 
                                     <div className="flex gap-3 mb-3">
-                                        <FormControl id="email1">
-                                            <FormLabel>Email 1</FormLabel>
-                                            <Input
-                                                name="email1"
-                                                onChange={handleChange}
-                                                value={projectData.email1}
-                                            />
+                                        <FormControl id="department" maxWidth={500}>
+                                            <FormLabel>Department </FormLabel>
+                                            <Input name="department" onChange={handleChange} value={projectData?.department} style={{ height: 40 }} />
                                         </FormControl>
-                                        <FormControl id="email2">
-                                            <FormLabel>Email 2</FormLabel>
-                                            <Input
-                                                name="email2"
-                                                onChange={handleChange}
-                                                value={projectData.email2}
-                                            />
+                                        <FormControl id="email" maxWidth={350}>
+                                            <FormLabel>Email </FormLabel>
+                                            <Input name="email" onChange={handleChange} value={projectData?.email} style={{ height: 40 }} />
                                         </FormControl>
-                                        <FormControl id="website">
-                                            <FormLabel>Website</FormLabel>
-                                            <Input
-                                                name="website"
-                                                onChange={handleChange}
-                                                value={projectData.website}
-                                            />
+                                        <FormControl id="password" maxWidth={350} >
+                                            <FormLabel>Password </FormLabel>
+                                            <Input name="password" onChange={handleChange} style={{ height: 40 }} />
+                                        </FormControl>
+                                    </div>
+
+                                    <div className="flex gap-3 mb-3">
+                                        <FormControl id="joiningDate" maxWidth={300} >
+                                            <FormLabel>Joining Date </FormLabel>
+                                            <div className="flex gap-2 items-center">
+                                                <MyDatePicker
+                                                    className="mb-1 h-[40px]"
+                                                    value={renderJoiningDate}
+                                                    selected={projectData.joiningDate}
+                                                    onChange={(date) =>
+                                                        setProjectData({ ...projectData, joiningDate: date })
+                                                    }
+                                                    format={"DD/MM/YYYY"}
+                                                />
+                                                {projectData?.joiningDate?._d && <>{converDateStringFormat(joiningDate)}</>}
+                                            </div>
+                                        </FormControl>
+                                        <FormControl id="manager_id" >
+                                            <FormLabel>Assigned Manager</FormLabel>
+                                            <ChakraSelect
+                                                onChange={handleSelectManager}
+                                                value={projectData.manager_id}
+                                            >
+                                                <option value="">Select Manager</option>
+                                                {/* {managers.map((manager, index) => (
+                                                    <option key={`manager-${index}`} value={manager.id}>
+                                                        {manager.name}
+                                                    </option>
+                                                ))} */}
+                                            </ChakraSelect>
+                                        </FormControl>
+
+                                        <FormControl id="type" maxWidth={200} >
+                                            <FormLabel>Employment Type </FormLabel>
+                                            <Select
+                                                style={{ width: "100%", height: 40 }}
+                                                name="type"
+                                                value={projectData.type}
+                                                onChange={(value) => handleSelectOption("type", value)}
+                                                placeholder="Select Type"
+                                            >
+                                                <Select.Option value="Full-Time">Full-Time</Select.Option>
+                                                <Select.Option value="Part-Time">Part-Time</Select.Option>
+                                            </Select>
+                                        </FormControl>
+                                    </div>
+                                    <div className="flex gap-3 mb-3">
+                                        <FormControl id="aadharNumber" >
+                                            <FormLabel>Aadhar Number </FormLabel>
+                                            <Input name="aadharNumber" value={projectData?.aadharNumber} onChange={handleChange} />
+                                        </FormControl>
+                                        <FormControl id="panNumber" >
+                                            <FormLabel>Pan Number </FormLabel>
+                                            <Input name="panNumber" value={projectData?.panNumber} onChange={handleChange} />
+                                        </FormControl>
+                                        <FormControl id="probationPeriod" >
+                                            <FormLabel>Probation Period </FormLabel>
+                                            <Input name="probationPeriod" value={projectData?.probationPeriod} onChange={handleChange} />
                                         </FormControl>
                                     </div>
                                     <Button type="submit" colorScheme="purple" className="mt-5">
@@ -423,57 +430,26 @@ const UpdateEmp = () => {
                                     </Button>
                                 </TabPanel>
                                 <TabPanel>
-                                    <div className="flex gap-3 mb-3 flex-col md:flex-row">
-                                        <FormControl id="country">
-                                            <FormLabel>Country</FormLabel>
-                                            <CountryDropdown
-                                                name="country"
-                                                value={selectedCountry}
-                                                onChange={handleSelectChange(
-                                                    setSelectedCountry,
-                                                    "selectedCountry"
-                                                )}
-                                                className="border-[0.375px] rounded-md max-w-[200px] h-[2rem]"
-                                            />
-                                        </FormControl>
-                                        <FormControl id="state">
-                                            <FormLabel>State</FormLabel>
-                                            <RegionDropdown
-                                                country={selectedCountry}
-                                                name="state"
-                                                value={selectedState}
-                                                onChange={(e) =>
-                                                    handleSelectChange(setSelectedState, "state", e)
-                                                }
-                                                className="border-[0.375px] rounded-md h-[2rem] max-w-24"
-                                            />
-                                        </FormControl>
-                                        <FormControl id="city">
-                                            <FormLabel>City</FormLabel>
+                                    <div className="flex gap-3">
+                                        <FormControl id="permanentAddress" className="w-1/2" >
+                                            <FormLabel>Permanent Address </FormLabel>
                                             <Input
-                                                name="city"
+                                                name="permanentAddress"
+                                                value={projectData?.permanentAddress}
                                                 onChange={handleChange}
-                                                value={projectData.city}
+                                                className="h-16"
                                             />
                                         </FormControl>
-                                        <FormControl id="pincode">
-                                            <FormLabel>Pincode</FormLabel>
+                                        <FormControl id="correspondenceAddress" className="w-1/2" >
+                                            <FormLabel>Correspondence Address </FormLabel>
                                             <Input
-                                                name="pincode"
+                                                name="correspondenceAddress"
+                                                value={projectData?.correspondenceAddress}
                                                 onChange={handleChange}
-                                                value={projectData.pincode}
+                                                className="h-16"
                                             />
                                         </FormControl>
                                     </div>
-                                    <FormControl id="businessAddress" className="w-1/2">
-                                        <FormLabel>Business Address</FormLabel>
-                                        <Input
-                                            name="businessAddress"
-                                            onChange={handleChange}
-                                            h="5rem"
-                                            value={projectData.businessAddress}
-                                        />
-                                    </FormControl>
                                     <Button type="submit" colorScheme="purple" className="mt-5">
                                         Update Employee
                                     </Button>
@@ -481,84 +457,28 @@ const UpdateEmp = () => {
 
                                 <TabPanel>
                                     <div className="flex gap-3">
-                                        <FormControl id="clientBirthday">
-                                            <FormLabel>Client Birthday</FormLabel>
-                                            <MyDatePicker
-                                                value={clientBirthdayDate}
-                                                selected={projectData.clientBirthday}
-                                                onChange={(date) =>
-                                                    setProjectData({
-                                                        ...projectData,
-                                                        clientBirthday: date,
-                                                    })
-                                                }
-                                                format={"DD/MM/YYYY"}
-                                            />
-                                            {clientBirthdayDate && (
-                                                <p>{convertDateFormatString(clientBirthdayDate)}</p>
-                                            )}
-                                        </FormControl>
-                                        <FormControl id="clientAnniversary">
-                                            <FormLabel>Client Anniversary</FormLabel>
-                                            <MyDatePicker
-                                                value={clientAnniversaryDate}
-                                                selected={projectData.clientAnniversary}
-                                                onChange={(date) =>
-                                                    setProjectData({
-                                                        ...projectData,
-                                                        clientAnniversary: date,
-                                                    })
-                                                }
-                                                format={"DD/MM/YYYY"}
-                                            />
-                                            {clientAnniversaryDate && (
-                                                <p>{convertDateFormatString(clientAnniversaryDate)}</p>
-                                            )}
-                                        </FormControl>
-                                        <FormControl id="companyAnniversary">
-                                            <FormLabel>Company Anniversary</FormLabel>
-                                            <MyDatePicker
-                                                value={companyAnniversaryDate}
-                                                selected={projectData.companyAnniversary}
-                                                onChange={(date) =>
-                                                    setProjectData({
-                                                        ...projectData,
-                                                        companyAnniversary: date,
-                                                    })
-                                                }
-                                                format={"DD/MM/YYYY"}
-                                            />
-                                            {companyAnniversaryDate && (
-                                                <p>{convertDateFormatString(companyAnniversaryDate)}</p>
-                                            )}
-                                        </FormControl>
-                                    </div>
-                                    <Button type="submit" colorScheme="purple" className="mt-5">
-                                        Update Employee
-                                    </Button>
-                                </TabPanel>
-                                <TabPanel>
-                                    <div className="flex flex-col gap-3">
-                                        <FormControl id="requirement" className="w-1/2">
-                                            <FormLabel>Requirement</FormLabel>
-                                            {/* <Input
-                                          name="requirement"
-                                          onChange={handleChange}
-                                          className="h-16"
-                                      /> */}
-                                            <SelectTag
-                                                selectTagValue={selectedTagValue}
-                                                setSelectTagValue={setSelectedTagValue}
-                                            />
-                                        </FormControl>
-                                        <FormControl id="additionalInformation" className="w-1/2">
-                                            <FormLabel>Additional Information</FormLabel>
+                                        <FormControl id="guardianDetails.relation">
+                                            <FormLabel>Relation</FormLabel>
                                             <Input
-                                                name="additionalInformation"
+                                                name="guardianDetails.relation"
+                                                value={projectData?.guardianDetails?.relation}
                                                 onChange={handleChange}
-                                                className="h-16"
-                                                value={projectData.additionalInformation}
-                                                h="5rem"
+                                            />
+                                        </FormControl>
+                                        <FormControl id="guardianDetails.guardianName" >
+                                            <FormLabel>Guardian Name </FormLabel>
+                                            <Input
+                                                name="guardianDetails.guardianName"
+                                                value={projectData?.guardianDetails?.guardianName}
+                                                onChange={handleChange}
+                                            />
+                                        </FormControl>
+                                        <FormControl id="guardianDetails.guardianContactNo">
+                                            <FormLabel>Guardian Contact Number </FormLabel>
+                                            <Input
+                                                name="guardianDetails.guardianContactNo"
+                                                value={projectData?.guardianDetails?.guardianContactNo}
+                                                onChange={handleChange}
                                             />
                                         </FormControl>
                                     </div>
@@ -566,132 +486,43 @@ const UpdateEmp = () => {
                                         Update Employee
                                     </Button>
                                 </TabPanel>
+
                                 <TabPanel>
-                                    <div>
-                                        <div>
-                                            <h2 className="font-semibold text-lg">Existing Files</h2>
-                                            <div className="flex gap-3">
-                                                {projectData.singleFileView && (
-                                                    <div>
-                                                        <div className="flex gap-1">
-                                                            <p>{projectData.singleFileView}</p>
-                                                            <Button
-                                                                as="a"
-                                                                href={`${import.meta.env.VITE_API_BASE
-                                                                    }/uploads/${projectData.singleFileView}`}
-                                                                target="_blank"
-                                                                rel="noopener noreferrer"
-                                                                textDecoration="none"
-                                                                _hover={{ textDecoration: "none" }}
-                                                                variant="solid"
-                                                                size={"sm"}
-                                                            >
-                                                                View
-                                                            </Button>
-                                                            <Button
-                                                                onClick={() => {
-                                                                    handleAddSingleFileToRemove(
-                                                                        projectData.singleFileView
-                                                                    );
-                                                                }}
-                                                                size={"sm"}
-                                                            >
-                                                                Delete
-                                                            </Button>
-                                                        </div>
-                                                    </div>
-                                                )}
-                                            </div>
-                                            <div className="flex gap-3">
-                                                {projectData?.multipleFilesView?.map((file, index) => (
-                                                    <div key={index}>
-                                                        <p>
-                                                            File {index + 1}: {file}
-                                                        </p>
-                                                        <div className="flex gap-1">
-                                                            <Button
-                                                                as="a"
-                                                                href={`${import.meta.env.VITE_API_BASE
-                                                                    }/uploads/${file}`}
-                                                                target="_blank"
-                                                                rel="noopener noreferrer"
-                                                                textDecoration="none"
-                                                                _hover={{ textDecoration: "none" }}
-                                                                variant="solid"
-                                                            >
-                                                                View
-                                                            </Button>
-                                                            <Button
-                                                                onClick={() => {
-                                                                    handleAddMultipleFilesToRemove(file);
-                                                                }}
-                                                            >
-                                                                Delete
-                                                            </Button>
-                                                        </div>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div className="flex flex-col gap-3 mb-2">
-                                                <div className="flex gap-3">
-                                                    <FormControl>
-                                                        <FormLabel>Single File</FormLabel>
-                                                        <Input
-                                                            type="file"
-                                                            ref={singleFileRef}
-                                                            onChange={handleSingleFileChange}
-                                                        />
-                                                    </FormControl>
-                                                </div>
-                                                {/* Display single file */}
-                                                {projectData.singleFile && (
-                                                    <div className="mb-4 bg-gray-200 rounded-md p-2">
-                                                        <h2 className="font-semibold text-lg">New files</h2>
-                                                        <div className="flex items-center gap-2">
-                                                            <p>{projectData.singleFile.name}</p>
-                                                            <Button onClick={handleDeleteSingleFile} size={"sm"}>
-                                                                Delete
-                                                            </Button>
-                                                        </div>
-                                                    </div>
-                                                )}
-                                            </div>
-                                            <div className="flex flex-col gap-3">
-                                                {/* Display multiple files */}
-                                                <FormControl>
-                                                    <FormLabel>Multiple Files</FormLabel>
-                                                    <Input
-                                                        type="file"
-                                                        multiple
-                                                        ref={multipleFileRef}
-                                                        onChange={handleMultipleFilesChange}
-                                                    />
-                                                </FormControl>
-                                                {projectData?.multipleFiles?.length > 0 && (
-                                                    <div className="mb-4 bg-gray-200 rounded-md p-2">
-                                                        <h2 className="font-semibold text-lg">New files</h2>
-                                                        {projectData?.multipleFiles?.map((file, index) => (
-                                                            <div key={index} className="flex items-center gap-2">
-                                                                <p>
-                                                                    File {index + 1}: {file.name}
-                                                                </p>
-                                                                <Button
-                                                                    onClick={() => handleDeleteMultipleFile(index)}
-                                                                >
-                                                                    Delete
-                                                                </Button>
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </div>
-                                        <Button type="submit" colorScheme="purple" className="mt-5">
-                                            Update Employee
-                                        </Button>
+                                    <div className="flex gap-3 mb-4">
+                                        <FormControl id="bankDetails.bankName" >
+                                            <FormLabel>Bank Name  </FormLabel>
+                                            <Input name="bankDetails.bankName" value={projectData?.bankDetails?.bankName} onChange={handleChange} />
+                                        </FormControl>
+                                        <FormControl id="bankDetails.bankAccountNo">
+                                            <FormLabel>Bank Account Number  </FormLabel>
+                                            <Input
+                                                name="bankDetails.bankAccountNo"
+                                                value={projectData?.bankDetails?.bankAccountNo}
+                                                onChange={handleChange}
+                                            />
+                                        </FormControl>
                                     </div>
+                                    <div className="flex gap-3">
+                                        <FormControl id="bankDetails.bankIfscCode">
+                                            <FormLabel>Bank IFSC Code </FormLabel>
+                                            <Input
+                                                name="bankDetails.bankIfscCode"
+                                                value={projectData?.bankDetails?.bankIfscCode}
+                                                onChange={handleChange}
+                                            />
+                                        </FormControl>
+                                        <FormControl id="bankDetails.type">
+                                            <FormLabel>Bank Type </FormLabel>
+                                            <Input name="bankDetails.type" value={projectData?.bankDetails?.type} onChange={handleChange} />
+                                        </FormControl>
+                                        <FormControl id="bankDetails.branch">
+                                            <FormLabel>Branch Name </FormLabel>
+                                            <Input name="bankDetails.branch" value={projectData?.bankDetails?.branchName} onChange={handleChange} />
+                                        </FormControl>
+                                    </div>
+                                    <Button type="submit" colorScheme="purple" className="mt-5">
+                                        Update Employee
+                                    </Button>
                                 </TabPanel>
                             </TabPanels>
                         </Tabs>
@@ -706,390 +537,182 @@ const UpdateEmp = () => {
 
                             <TabPanels>
                                 <TabPanel>
-                                    <FormControl id="companyAnniversary">
-                                        <FormLabel>Work Start Date</FormLabel>
-                                        <MyDatePicker
-                                            value={workStartDate}
-                                            selected={projectData.workStartDate}
-                                            onChange={(date) =>
-                                                setProjectData({
-                                                    ...projectData,
-                                                    workStartDate: date,
-                                                })
-                                            }
-                                            format={"DD/MM/YYYY"}
-                                        />
-                                        {workStartDate && (
-                                            <p>{convertDateFormatString(workStartDate)}</p>
-                                        )}
-                                    </FormControl>
-                                    <div className="flex gap-2 mb-2">
-                                        <FormControl id="gender">
-                                            <FormLabel>Gender</FormLabel>
+                                    <div className="flex flex-col gap-3 mb-3">
+                                        <FormControl id="title" maxWidth={130}>
+                                            <FormLabel>Titl </FormLabel>
                                             <Select
+                                                placeholder="Select Title"
+                                                onChange={(value) => handleSelectOption("title", value)}
+                                            ></Select>
+                                            <Select.Option name="title" value="Mr.">
+                                                Mr.
+                                            </Select.Option>
+                                            <Select.Option name="title" value="Mrs.">
+                                                Mrs.
+                                            </Select.Option>
+                                        </FormControl>
+
+                                        <FormControl id="employeeName">
+                                            <FormLabel>Employee Nam </FormLabel>
+                                            <Input name="name" onChange={handleChange} />
+                                        </FormControl>
+
+                                        <FormControl id="gender" maxWidth={150}>
+                                            <FormLabel>Gende </FormLabel>
+                                            <Select
+                                                style={{ width: "100%" }}
                                                 name="gender"
-                                                onChange={(value) =>
-                                                    handleSelectOption("gender", value)
-                                                }
+                                                onChange={(value) => handleSelectOption("gender", value)}
                                                 placeholder="Select gender"
-                                                value={projectData.gender}
                                             >
                                                 <Select.Option value="Male">Male</Select.Option>
                                                 <Select.Option value="Female">Female</Select.Option>
                                                 <Select.Option value="Others">Others</Select.Option>
                                             </Select>
                                         </FormControl>
-                                        <FormControl id="title">
-                                            <FormLabel>Title</FormLabel>
-                                            <Select
-                                                placeholder="Select Title"
-                                                onChange={(value) => handleSelectOption("title", value)}
-                                                value={projectData.title}
-                                            >
-                                                <Select.Option value="Mr.">Mr.</Select.Option>
-                                                <Select.Option value="Mrs.">Mrs.</Select.Option>
-                                            </Select>
+
+                                        <FormControl id="contactNo">
+                                            <FormLabel>Contact Numbe </FormLabel>
+                                            <Input name="contactNo" onChange={handleChange} />
+                                        </FormControl>
+                                        <FormControl id="dob" maxWidth={150}>
+                                            <FormLabel>DO </FormLabel>
+                                            <MyDatePicker
+                                                selected={projectData.dob}
+                                                onChange={(date) =>
+                                                    setProjectData({ ...projectData, dob: date })
+                                                }
+                                                format={"DD/MM/YYYY"}
+                                            />
+                                            {projectData?.dob?._d && <>{convertDateFormatString(projectData?.dob?._d)}</>}
                                         </FormControl>
                                     </div>
-                                    <FormControl id="clientName">
-                                        <FormLabel>Client Name</FormLabel>
-                                        <Input
-                                            name="clientName"
-                                            onChange={handleChange}
-                                            value={projectData.clientName}
-                                        />
-                                    </FormControl>
-                                    <FormControl id="brandName">
-                                        <FormLabel>Brand Name</FormLabel>
-                                        <Input
-                                            name="brandName"
-                                            onChange={handleChange}
-                                            value={projectData.brandName}
-                                        />
-                                    </FormControl>
-                                    <FormControl id="tags">
-                                        <FormControl id="companyName">
-                                            <FormLabel>Company Name</FormLabel>
+                                    <div className="flex gap-3 mb-3">
+                                        <FormControl id="position" >
+                                            <FormLabel>Positio </FormLabel>
+                                            <Input name="position" onChange={handleChange} />
+                                        </FormControl>
+                                        <FormControl id="designation">
+                                            <FormLabel>Designatio</FormLabel>
                                             <Input
-                                                name="companyName"
+                                                name="designation"
                                                 onChange={handleChange}
-                                                value={projectData.companyName}
                                             />
                                         </FormControl>
-                                    </FormControl>
+                                    </div>
+                                    \
                                     <div className="flex flex-col gap-3 mb-3">
-                                        <FormControl id="phone1">
-                                            <FormLabel>Phone Number 1</FormLabel>
-                                            <Input
-                                                name="phone1"
-                                                onChange={handleChange}
-                                                value={projectData.phone1}
-                                            />
+                                        <FormControl id="department" maxWidth={500} >
+                                            <FormLabel>Departmen</FormLabel>
+                                            <Input name="department" onChange={handleChange} />
                                         </FormControl>
-                                        <FormControl id="phone2">
-                                            <FormLabel>Phone Number 2</FormLabel>
-                                            <Input
-                                                name="phone2"
-                                                onChange={handleChange}
-                                                value={projectData.phone2}
-                                            />
+                                        <FormControl id="email" maxWidth={350} >
+                                            <FormLabel>Emai</FormLabel>
+                                            <Input name="email" onChange={handleChange} />
+                                        </FormControl>
+                                        <FormControl id="password" maxWidth={350}>
+                                            <FormLabel>Passwor</FormLabel>
+                                            <Input name="password" onChange={handleChange} />
                                         </FormControl>
                                     </div>
 
-                                    <FormControl id="tags">
-                                        <FormLabel>Source</FormLabel>
-                                        <SelectSource
-                                            selectSourceValue={selectSourceValue}
-                                            setSelectSourceValue={setSelectSourceValue}
-                                        />
-                                    </FormControl>
-                                    <FormControl id="brandName">
-                                        <FormLabel>Source Information</FormLabel>
-                                        <Input
-                                            name="sourceInformation"
-                                            onChange={handleChange}
-                                            value={projectData.sourceInformation}
-                                        />
-
-                                    </FormControl>
-
-                                    <FormControl id="email1">
-                                        <FormLabel>Email 1</FormLabel>
-                                        <Input
-                                            name="email1"
-                                            onChange={handleChange}
-                                            value={projectData.email1}
-                                        />
-                                    </FormControl>
-                                    <FormControl id="email2">
-                                        <FormLabel>Email 2</FormLabel>
-                                        <Input
-                                            name="email2"
-                                            onChange={handleChange}
-                                            value={projectData.email2}
-                                        />
-                                    </FormControl>
-                                    <FormControl id="website">
-                                        <FormLabel>Website</FormLabel>
-                                        <Input
-                                            name="website"
-                                            onChange={handleChange}
-                                            value={projectData.website}
-                                        />
-                                    </FormControl>
-                                    <Button type="submit" colorScheme="purple" className="mt-5">
-                                        Update Employee
-                                    </Button>
+                                    <div className="flex gap-3">
+                                        <FormControl id="joiningDate" maxWidth={300}>
+                                            <FormLabel>Joining Dat</FormLabel>
+                                            <MyDatePicker
+                                                selected={projectData.joiningDate}
+                                                onChange={(date) =>
+                                                    setProjectData({ ...projectData, joiningDate: date })
+                                                }
+                                                format={"DD/MM/YYYY"}
+                                            />
+                                            {projectData?.joiningDate?._d && <>{joiningDate}</>}
+                                        </FormControl>
+                                        <FormControl id="manager_id">
+                                            <FormLabel>Assigned Manager</FormLabel>
+                                            <select
+                                                onChange={handleSelectManager}
+                                                value={projectData.manager_id}
+                                            >
+                                                <option value="">Select Manager</option>
+                                                {/* {managers.map((manager, index) => (
+                                                    <option key={`manager-${index}`} value={manager.id}>
+                                                        {manager.name}
+                                                    </option>
+                                                ))} */}
+                                            </select>
+                                        </FormControl>
+                                    </div>
                                 </TabPanel>
                                 <TabPanel>
                                     <div className="flex gap-3 mb-3 flex-col md:flex-row">
-                                        <div className="flex gap-3">
-                                            <FormControl id="clientBirthday">
-                                                <FormLabel>Client Birthday</FormLabel>
-                                                <MyDatePicker
-                                                    value={clientBirthdayDate}
-                                                    selected={projectData.clientBirthday}
-                                                    onChange={(date) =>
-                                                        setProjectData({
-                                                            ...projectData,
-                                                            clientBirthday: date,
-                                                        })
-                                                    }
-                                                    format={"DD/MM/YYYY"}
-                                                />
-                                                {clientBirthdayDate && (
-                                                    <p>{convertDateFormatString(clientBirthdayDate)}</p>
-                                                )}
-                                            </FormControl>
-                                            <FormControl id="clientAnniversary">
-                                                <FormLabel>Client Anniversary</FormLabel>
-                                                <MyDatePicker
-                                                    value={clientAnniversaryDate}
-                                                    selected={projectData.clientAnniversary}
-                                                    onChange={(date) =>
-                                                        setProjectData({
-                                                            ...projectData,
-                                                            clientAnniversary: date,
-                                                        })
-                                                    }
-                                                    format={"DD/MM/YYYY"}
-                                                />
-                                                {clientAnniversaryDate && (
-                                                    <p>
-                                                        {convertDateFormatString(clientAnniversaryDate)}
-                                                    </p>
-                                                )}
-                                            </FormControl>
-                                            <FormControl id="companyAnniversary">
-                                                <FormLabel>Company Anniversary</FormLabel>
-                                                <MyDatePicker
-                                                    value={companyAnniversaryDate}
-                                                    selected={projectData.companyAnniversary}
-                                                    onChange={(date) =>
-                                                        setProjectData({
-                                                            ...projectData,
-                                                            companyAnniversary: date,
-                                                        })
-                                                    }
-                                                    format={"DD/MM/YYYY"}
-                                                />
-                                                {companyAnniversaryDate && (
-                                                    <p>
-                                                        {convertDateFormatString(companyAnniversaryDate)}
-                                                    </p>
-                                                )}
-                                            </FormControl>
-                                        </div>
-                                        <div className="flex gap-3 mb-3 flex-col md:flex-row">
-                                            <FormControl id="country">
-                                                <FormLabel>Country</FormLabel>
-                                                <CountryDropdown
-                                                    name="country"
-                                                    value={selectedCountry}
-                                                    onChange={handleSelectChange(
-                                                        setSelectedCountry,
-                                                        "selectedCountry"
-                                                    )}
-                                                    className="border-[0.375px] rounded-md max-w-[200px] h-[2rem]"
-                                                />
-                                            </FormControl>
-                                            <FormControl id="state">
-                                                <FormLabel>State</FormLabel>
-                                                <RegionDropdown
-                                                    country={selectedCountry}
-                                                    name="state"
-                                                    value={selectedState}
-                                                    onChange={(e) =>
-                                                        handleSelectChange(setSelectedState, "state", e)
-                                                    }
-                                                    className="border-[0.375px] rounded-md h-[2rem] max-w-24"
-                                                />
-                                            </FormControl>
-                                            <FormControl id="city">
-                                                <FormLabel>City</FormLabel>
-                                                <Input
-                                                    name="city"
-                                                    onChange={handleChange}
-                                                    value={projectData.city}
-                                                />
-                                            </FormControl>
-                                            <FormControl id="pincode">
-                                                <FormLabel>Pincode</FormLabel>
-                                                <Input
-                                                    name="pincode"
-                                                    onChange={handleChange}
-                                                    value={projectData.pincode}
-                                                />
-                                            </FormControl>
-                                        </div>
-                                        <FormControl id="businessAddress" className="w-1/2">
-                                            <FormLabel>Business Address</FormLabel>
+                                        <FormControl id="permanentAddress" className="w-1/2">
+                                            <FormLabel>Permanent Addres</FormLabel>
                                             <Input
-                                                name="businessAddress"
+                                                name="permanentAddress"
                                                 onChange={handleChange}
-                                                h="5rem"
-                                                value={projectData.businessAddress}
+                                                className="h-16"
                                             />
+                                        </FormControl>
+                                        <FormControl id="correspondenceAddress" className="w-1/2">
+                                            <FormLabel>Correspondence Addres</FormLabel>
+                                            <Input
+                                                name="correspondenceAddress"
+                                                onChange={handleChange}
+                                                className="h-16"
+                                            />
+                                        </FormControl>
+                                        <FormControl id="guardianDetails.relation">
+                                            <FormLabel>Relatio</FormLabel>
+                                            <Input
+                                                name="guardianDetails.relation"
+                                                onChange={handleChange}
+                                            />
+                                        </FormControl>
+                                        <FormControl id="guardianDetails.guardianName">
+                                            <FormLabel>Guardian Nam</FormLabel>
+                                            <Input
+                                                name="guardianDetails.guardianName"
+                                                onChange={handleChange}
+                                            />
+                                        </FormControl>
+                                        <FormControl id="guardianDetails.guardianContactNo">
+                                            <FormLabel>Guardian Contact Numbe</FormLabel>
+                                            <Input
+                                                name="guardianDetails.guardianContactNo"
+                                                onChange={handleChange}
+                                            />
+                                        </FormControl>
+                                        <FormControl id="bankDetails.bankName">
+                                            <FormLabel>Bank Nam</FormLabel>
+                                            <Input name="bankDetails.bankName" onChange={handleChange} />
+                                        </FormControl>
+                                        <FormControl id="bankDetails.bankAccountNo">
+                                            <FormLabel>Bank Account Numbe </FormLabel>
+                                            <Input
+                                                name="bankDetails.bankAccountNo"
+                                                onChange={handleChange}
+                                            />
+                                        </FormControl>
+                                        <FormControl id="bankDetails.bankIfscCode">
+                                            <FormLabel>Bank IFSC Cod </FormLabel>
+                                            <Input
+                                                name="bankDetails.bankIfscCode"
+                                                onChange={handleChange}
+                                            />
+                                        </FormControl>
+                                        <FormControl id="bankDetails.type">
+                                            <FormLabel>Bank Type</FormLabel>
+                                            <Input name="bankDetails.type" onChange={handleChange} />
+                                        </FormControl>
+                                        <FormControl id="bankDetails.branch">
+                                            <FormLabel>Branch Nam </FormLabel>
+                                            <Input name="bankDetails.branch" onChange={handleChange} />
                                         </FormControl>
                                     </div>
 
-                                    <div className="flex flex-col mt-3 gap-3">
-                                        <FormControl id="requirement" className="w-1/2">
-                                            <FormLabel>Requirement</FormLabel>
-                                            {/* <Input
-                                          name="requirement"
-                                          onChange={handleChange}
-                                          className="h-16"
-                                      /> */}
-                                            <SelectTag
-                                                selectTagValue={selectedTagValue}
-                                                setSelectTagValue={setSelectedTagValue}
-                                            />
-                                        </FormControl>
-                                        <FormControl id="additionalInformation" className="w-1/2">
-                                            <FormLabel>Additional Information</FormLabel>
-                                            <Input
-                                                name="additionalInformation"
-                                                onChange={handleChange}
-                                                className="h-16"
-                                                value={projectData.additionalInformation}
-                                                h="5rem"
-                                            />
-                                        </FormControl>
-                                    </div>
-                                    <div>
-                                        <div>
-                                            <h2>Existing Files</h2>
-                                            <div className="flex gap-3">
-                                                {projectData.singleFileView && (
-                                                    <div>
-                                                        <div className="flex gap-1">
-                                                            <p>File : {projectData.singleFileView}</p>
-                                                            <Button
-                                                                as="a"
-                                                                href={`${import.meta.env.VITE_API_BASE
-                                                                    }/uploads/${projectData.singleFileView}`}
-                                                                target="_blank"
-                                                                rel="noopener noreferrer"
-                                                                textDecoration="none"
-                                                                _hover={{ textDecoration: "none" }}
-                                                                variant="solid"
-                                                            >
-                                                                View
-                                                            </Button>
-                                                            <Button
-                                                                onClick={() => {
-                                                                    handleAddSingleFileToRemove(
-                                                                        projectData.singleFileView
-                                                                    );
-                                                                }}
-                                                            >
-                                                                Delete
-                                                            </Button>
-                                                        </div>
-                                                    </div>
-                                                )}
-                                            </div>
-                                            <div className="flex gap-3">
-                                                {projectData?.multipleFilesView?.map((file, index) => (
-                                                    <div key={index}>
-                                                        <p>
-                                                            File {index + 1}: {file}
-                                                        </p>
-                                                        <div className="flex gap-1">
-                                                            <Button
-                                                                as="a"
-                                                                href={`${import.meta.env.VITE_API_BASE
-                                                                    }/uploads/${file}`}
-                                                                target="_blank"
-                                                                rel="noopener noreferrer"
-                                                                textDecoration="none"
-                                                                _hover={{ textDecoration: "none" }}
-                                                                variant="solid"
-                                                            >
-                                                                View
-                                                            </Button>
-                                                            <Button
-                                                                onClick={() => {
-                                                                    handleAddMultipleFilesToRemove(file);
-                                                                }}
-                                                            >
-                                                                Delete
-                                                            </Button>
-                                                        </div>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <h2>New Files</h2>
-                                            {/* Display single file */}
-                                            {projectData.singleFile && (
-                                                <div>
-                                                    <p>Single File: {projectData.singleFile.name}</p>
-                                                    <Button onClick={handleDeleteSingleFile}>
-                                                        Delete
-                                                    </Button>
-                                                </div>
-                                            )}
-                                            <div className="flex gap-3">
-                                                <FormControl mb="4">
-                                                    <FormLabel>Single File</FormLabel>
-                                                    <Input
-                                                        type="file"
-                                                        ref={singleFileRef}
-                                                        onChange={handleSingleFileChange}
-                                                    />
-                                                </FormControl>
-                                            </div>
-                                            <div className="flex flex-col-reverse gap-3">
-                                                {/* Display multiple files */}
-                                                {projectData?.multipleFiles?.map((file, index) => (
-                                                    <div key={index}>
-                                                        <p>
-                                                            File {index + 1}: {file.name}
-                                                        </p>
-                                                        <Button
-                                                            onClick={() => handleDeleteMultipleFile(index)}
-                                                        >
-                                                            Delete
-                                                        </Button>
-                                                    </div>
-                                                ))}
-                                                <FormControl mb="4">
-                                                    <FormLabel>Multiple Files</FormLabel>
-                                                    <Input
-                                                        type="file"
-                                                        multiple
-                                                        ref={multipleFileRef}
-                                                        onChange={handleMultipleFilesChange}
-                                                    />
-                                                </FormControl>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <Button type="submit" colorScheme="purple" className="mt-5">
-                                        Update Employee
+                                        Create Employee
                                     </Button>
                                 </TabPanel>
                             </TabPanels>

@@ -119,7 +119,7 @@ const GetAllPaidInvoices = () => {
     return (
         <>
             <div className="w-full p-8 md:block flex flex-col items-center">
-                <h1 className="text-3xl font-bold mb-4">Invoice Information</h1>
+                <h1 className="text-3xl font-bold mb-4">Paid Invoices</h1>
                 <div className="flex flex-wrap justify-center md:justify-between md:gap-0 gap-4 items-center mb-5">
                     <div className="flex gap-2">
                         <Link to="/CreateInvoice">
@@ -132,15 +132,15 @@ const GetAllPaidInvoices = () => {
                                 <GoPlus /> Add an Invoice
                             </Button>
                         </Link>
-                        <Button
+                        {/* <Button
                             onClick={() => setGetInvoiceByBrandName(true)}
                             variant={"solid"}
                         >
                             Get Combined Invoices
-                        </Button>
+                        </Button> */}
                     </div>
 
-                    <div className="flex items-center justify-end mb-2">
+                    {/* <div className="flex items-center justify-end mb-2">
                         <select
                             className="px-2 py-1 border mr-1 rounded-lg"
                             value={selectedYear || ""}
@@ -191,7 +191,7 @@ const GetAllPaidInvoices = () => {
                         <Button className="ml-2" size={"sm"} colorScheme="gray" onClick={handleReset}>
                             Reset
                         </Button>
-                    </div>
+                    </div> */}
                 </div>
                 {isLoading ? (
                     <div className="flex items-center justify-center h-screen">
