@@ -1,8 +1,6 @@
-// Dashboard.js
-import React from 'react';
 import { Box, Flex, Heading, Text, Button } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
-import changePassword from './changePassword';
+
 const Settings = () => {
   return (
     <Flex direction="column" align="center" justify="center" p={5}>
