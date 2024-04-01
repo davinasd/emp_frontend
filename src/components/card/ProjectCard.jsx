@@ -186,10 +186,10 @@ const ProjectCard = () => {
               <TfiBarChart />
               In progress
             </div>
-            {convertedLeads}/{totalLeads}
+            {totalLeads === 0 ? 0 : convertedLeads}/{totalLeads}
           </Flex>
           <Progress
-            value={(convertedLeads / totalLeads) * 100}
+            value={totalLeads === 0 ? 0 : (convertedLeads / totalLeads) * 100}
             colorScheme="blue"
             mt={2}
             height={2}
@@ -200,10 +200,10 @@ const ProjectCard = () => {
               <CiWarning />
               Not Started
             </div>
-            {leadsInProgress}/{totalLeads}
+            {totalLeads === 0 ? 0 : leadsInProgress}/{totalLeads}
           </Flex>
           <Progress
-            value={(leadsInProgress / totalLeads) * 100}
+            value={totalLeads === 0 ? 0 : (leadsInProgress / totalLeads) * 100}
             colorScheme="red"
             mt={2}
             height={2}
@@ -214,10 +214,10 @@ const ProjectCard = () => {
               <IoCheckmarkDoneOutline />
               Completed
             </div>
-            {lostLeads}/{totalLeads}
+            {totalLeads === 0 ? 0 : lostLeads}/{totalLeads}
           </Flex>
           <Progress
-            value={(lostLeads / totalLeads) * 100}
+            value={totalLeads === 0 ? 0 : (lostLeads / totalLeads) * 100}
             colorScheme="green"
             mt={2}
             height={2}
