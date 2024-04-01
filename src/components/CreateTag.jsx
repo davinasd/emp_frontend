@@ -3,35 +3,18 @@ import { Box, Input, Button, useToast } from "@chakra-ui/react";
 import axios from "axios";
 import { Tag } from "antd";
 import { FaPlus, FaTrash } from "react-icons/fa6";
-import MyDatePicker from "./common/MyDatePicker";
-import { formatDate } from "@fullcalendar/core";
-import SelectSupply from "./common/SelectSupply";
 
 const CreateTag = () => {
-  const currDate = new Date();
-  const currTime = currDate.getHours() + ":"
-    + currDate.getMinutes() + ":"
-    + currDate.getSeconds();
   const [tags, setTags] = useState([]);
   const [products, setProducts] = useState([]);
   const [sources, setSources] = useState([]);
   const [supplies, setSupplies] = useState([]);
-  const [expenses, setExpenses] = useState([]);
   const [newTag, setNewTag] = useState("");
   const [newProduct, setNewProduct] = useState("");
   const [newSource, setNewSource] = useState("");
   const [years, setYears] = useState(null);
   const [newYear, setNewYear] = useState(null);
   const [newSupply, setNewSupply] = useState(null);
-  const [newExpense, setnewExpense] = useState({
-    description: "",
-    createdAt: `${currDate}`,
-    date1: "",
-    time1: currTime,
-    amountReceived: 0,
-    categories: []
-  });
-  const [selectSupplies, setSelectSupplies] = useState([]);
 
   const toast = useToast();
 
@@ -41,7 +24,6 @@ const CreateTag = () => {
     fetchSources();
     fetchYears();
     fetchSupply();
-    fetchExpense();
   }, []);
 
   const fetchTags = async () => {
@@ -94,17 +76,6 @@ const CreateTag = () => {
         `${import.meta.env.VITE_API_BASE}/api/admin/getAllSupplys`
       );
       setSupplies(response.data);
-    } catch (error) {
-      console.error("Error fetching sources:", error);
-    }
-  };
-
-  const fetchExpense = async () => {
-    try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_BASE}/api/admin/getAllExpenses`
-      );
-      setExpenses(response.data);
     } catch (error) {
       console.error("Error fetching sources:", error);
     }
@@ -222,33 +193,6 @@ const CreateTag = () => {
     }
   };
 
-  const handleAddExpense = async () => {
-    try {
-      if (newExpense.length === 0) {
-        toast({
-          title: "Error",
-          description: "Please fill all the fields",
-          status: "error",
-          duration: 5000,
-          isClosable: true,
-        });
-      } else {
-        await axios.post(`${import.meta.env.VITE_API_BASE}/api/admin/createExpenses`, newExpense);
-        setnewExpense({
-          description: "",
-          createdAt: `${currDate}`,
-          date1: "",
-          time1: currTime,
-          amountReceived: 0,
-          categories: []
-        });
-        fetchExpense();
-      }
-    } catch (error) {
-      console.error("Error adding source:", error);
-    }
-  };
-
   const handleDeleteTag = async (tagId) => {
     try {
       await axios.delete(
@@ -322,13 +266,6 @@ const CreateTag = () => {
     } catch (error) {
       console.error("Error deleting source:", error);
     }
-  };
-
-  const handleExpenseChange = (field, value) => {
-    let updatedService = { ...newExpense };
-    const selectedProduct = products.find((product) => product._id === value);
-    updatedService["product"] = selectedProduct;
-    setnewExpense(updatedService);
   };
 
   // const handleTagChange = (e) => {
@@ -509,76 +446,6 @@ const CreateTag = () => {
               <div
                 className="p-[7px] transition-all bg-green-500 hover:bg-green-400 rounded-full cursor-pointer"
                 onClick={() => handleDeleteSupply(supply?.supply_id)}
-              >
-                <FaTrash size={12} />
-              </div>
-            </div>
-          </Tag>
-        ))}
-      </Box>
-      <h1 className="text-lg font-semibold mt-10 mb-4">Expenses</h1>
-      <div className="flex justify-start items-start gap-2 max-w-[400px]">
-        <div className="flex flex-col gap-3 max-w-[400px]">
-          <Input
-            placeholder="Enter description"
-            value={newExpense.description}
-            onChange={(e) => handleExpenseChange("description", e.target.value)}
-          />
-          {/* <div>
-          <MyDatePicker
-            className="h-[40px]"
-            selected={newExpense.createdAt}
-            onChange={(date) =>
-              handleExpenseChange("createdAt", date)
-            } // Corrected to use 'date' instead of 'startDate'
-          // disabledDate={(current) => {
-          //   return newSupply.endDate && current > newSupply.endDate;
-          // }}
-          />
-          <div>{formatDate(newExpense?.createdAt)}</div>
-          </div> */}
-          <div>
-            <MyDatePicker
-              className="h-[40px]"
-              selected={newExpense.date1}
-              onChange={(date) =>
-                handleExpenseChange("date1", date)
-              } // Corrected to use 'date' instead of 'startDate'
-            // disabledDate={(current) => {
-            //   return newSupply.endDate && current > newSupply.endDate;
-            // }}
-            />
-            <div>{formatDate(newExpense?.date1)}</div>
-          </div>
-          <Input
-            placeholder="Amount"
-            value={newExpense?.amountReceived}
-            onChange={(e) => handleExpenseChange("amountReceived", e.target.value)}
-          />
-          <SelectSupply
-          selectSourceValue={selectSupplies}
-          setSelectSourceValue={setSelectSupplies}
-          />
-        </div>
-        <Button
-          colorScheme="green"
-          variant={"outline"}
-          onClick={handleAddExpense}
-        >
-          <FaPlus />
-        </Button>
-      </div>
-      <Box mt={6} p={4} boxShadow={"md"} rounded={"lg"} width={"full"}>
-        {expenses?.map((expense) => (
-          <Tag
-            key={expense._id}
-            className="px-2 py-1 mb-2 bg-gray-400 border-gray-600 text-[16px] font-semibold text-white"
-          >
-            <div className="flex gap-5 items-center">
-              {console.log(expense)}
-              <div
-                className="p-[7px] transition-all bg-gray-500 hover:bg-gray-400 rounded-full cursor-pointer"
-                onClick={() => handleDeleteSupply(expense?.supply_id)}
               >
                 <FaTrash size={12} />
               </div>
