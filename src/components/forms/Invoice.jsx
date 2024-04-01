@@ -274,8 +274,8 @@ const Invoice = () => {
       </FormControl>
 
       {services.length > 0 && (
-        <div className="flex items-center max-w-[600px] w-full overflow-x-scroll pb-10 hide-scroll-bar">
-          <div className="flex flex-col flex-nowrap w-full">
+        <div className="flex items-center w-full pb-10 hide-scroll-bar">
+          <div className="flex flex-col gap-3 flex-nowrap w-full">
             {services.map((service, index) => (
               <div key={`card-${index}`} className="w-[calc(100%-40px)] mx-4 p-4 shadow-lg rounded-xl">
                 <div
@@ -285,33 +285,68 @@ const Invoice = () => {
                   <FaTrashCan />
                 </div>
 
-                <FormControl maxWidth={300} >
-                  <FormLabel>Select Product <RequiredIndicator /></FormLabel>
-                  <Select
-                    placeholder="Select product"
-                    onChange={(e) =>
-                      handleServiceChange(index, "productId", e.target.value)
-                    }
-                    value={service.productId}
-                  >
-                    {products.map((product) => (
-                      <option key={product._id} value={product._id}>
-                        {product.product}
-                      </option>
-                    ))}
-                  </Select>
-                  {/* <SelectProduct width={"100%"} selectSourceValue={productValue} setSelectSourceValue={setProductValue} /> */}
-                </FormControl>
+                <div className="flex gap-4 items-center mt-4">
+                  <FormControl maxWidth={200} >
+                    <FormLabel>Select Product <RequiredIndicator /></FormLabel>
+                    <Select
+                      placeholder="Select product"
+                      onChange={(e) =>
+                        handleServiceChange(index, "productId", e.target.value)
+                      }
+                      value={service.productId}
+                    >
+                      {products.map((product) => (
+                        <option key={product._id} value={product._id}>
+                          {product.product}
+                        </option>
+                      ))}
+                    </Select>
+                    {/* <SelectProduct width={"100%"} selectSourceValue={productValue} setSelectSourceValue={setProductValue} /> */}
+                  </FormControl>
+                  <FormControl>
+                    <FormLabel>Service Description<RequiredIndicator /></FormLabel>
+                    <Input
+                      value={service.serviceDescription}
+                      onChange={(e) =>
+                        handleServiceChange(
+                          index,
+                          "serviceDescription",
+                          e.target.value
+                        )
+                      }
+                    />
+                  </FormControl>
+                </div>
 
-                <div className="flex gap-4 items-center mt-4 max-w-[350px]">
-                  <FormControl maxWidth={100}>
+                <div className="flex gap-4 items-center mt-4">
+                  <FormControl>
+                    <FormLabel>Duration<RequiredIndicator /></FormLabel>
+                    <Input
+                      type="text"
+                      value={service.duration}
+                      onChange={(e) =>
+                        handleServiceChange(index, "duration", e.target.value)
+                      }
+                    />
+                  </FormControl>
+                  <FormControl>
+                    <FormLabel>Quantity<RequiredIndicator /></FormLabel>
+                    <Input
+                      type="number"
+                      value={service?.quantity}
+                      onChange={(e) =>
+                        handleServiceChange(index, "quantity", e.target.value)
+                      }
+                    />
+                  </FormControl>
+                  <FormControl>
                     <FormLabel>Unit Price<RequiredIndicator /></FormLabel>
                     <Input
                       value={service?.unitPrice}
                       onChange={(e) => handleServiceChange(index, "unitPrice", e.target.value)}
                     />
                   </FormControl>
-                  <FormControl maxWidth={100}>
+                  <FormControl>
                     <FormLabel>Sub Total<RequiredIndicator /></FormLabel>
                     <Input
                       value={
@@ -324,30 +359,7 @@ const Invoice = () => {
                   </FormControl>
                 </div>
 
-                <div className="flex gap-4 items-center mt-4">
-                  <FormControl maxWidth={100}>
-                    <FormLabel>Quantity<RequiredIndicator /></FormLabel>
-                    <Input
-                      type="number"
-                      value={service?.quantity}
-                      onChange={(e) =>
-                        handleServiceChange(index, "quantity", e.target.value)
-                      }
-                    />
-                  </FormControl>
-                  <FormControl maxWidth={100}>
-                    <FormLabel>Duration<RequiredIndicator /></FormLabel>
-                    <Input
-                      type="text"
-                      value={service.duration}
-                      onChange={(e) =>
-                        handleServiceChange(index, "duration", e.target.value)
-                      }
-                    />
-                  </FormControl>
-                </div>
-
-                <div className="flex gap-4 items-center mt-4">
+                <div className="flex gap-4 items-center my-4">
                   <FormControl maxWidth={100}>
                     <FormLabel>Start Date<RequiredIndicator /></FormLabel>
                     <MyDatePicker
@@ -378,26 +390,12 @@ const Invoice = () => {
                     <div>{formatDate(service.endDate)}</div>
                   </FormControl>
                 </div>
-
-                <FormControl mt={4}>
-                  <FormLabel>Service Description<RequiredIndicator /></FormLabel>
-                  <Input
-                    value={service.serviceDescription}
-                    onChange={(e) =>
-                      handleServiceChange(
-                        index,
-                        "serviceDescription",
-                        e.target.value
-                      )
-                    }
-                  />
-                </FormControl>
               </div>
             ))}
             <div
               onClick={handleAddService}
               ref={addServiceRef}
-              className="border-[1px] w-[calc(100%-40px)] max-w-[600px] h-[150px] mx-4 p-4 shadow-lg my-4 transition-all hover:shadow-lg bg-purple-200 hover:bg-purple-300 rounded-lg border-gray-100 text-purple-900 flex flex-col gap-4 items-center justify-center cursor-pointer"
+              className="border-[1px] w-[calc(100%-40px)] h-[150px] mx-4 p-4 shadow-lg my-4 transition-all hover:shadow-lg bg-purple-200 hover:bg-purple-300 rounded-lg border-gray-100 text-purple-900 flex flex-col gap-4 items-center justify-center cursor-pointer"
             >
               <FaPlus size={40} />
               Add Service

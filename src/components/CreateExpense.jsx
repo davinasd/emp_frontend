@@ -1,4 +1,4 @@
-import { Box, Button, Input, useToast } from "@chakra-ui/react"
+import { Box, Button, FormControl, FormLabel, Input, Text, useToast } from "@chakra-ui/react"
 import MyDatePicker from "./common/MyDatePicker"
 import { formatDate } from "@fullcalendar/core"
 import SelectSupply from "./common/SelectSupply"
@@ -21,6 +21,10 @@ const CreateExpense = () => {
         categories: []
     });
     const [selectSupplies, setSelectSupplies] = useState([]);
+
+    const RequiredIndicator = () => {
+        return <Text as="span" color="red.500" ml={1}>*</Text>;
+    };
 
     const fetchExpense = async () => {
         try {
@@ -69,6 +73,18 @@ const CreateExpense = () => {
         setNewExpense(updatedService);
     };
 
+    // const handleExpenseSelectChange = (e) => {
+    //     const selectedIds = Array.from(
+    //         e.target.selectedOptions,
+    //         (option) => option.value
+    //     );
+    //     setNewExpense({
+    //         ...newExpense,
+    //         employees: [...newExpense.categories, ...selectedIds],
+    //     });
+    //     document.getElementById("employees").value = "";
+    // }
+
     console.log(selectSupplies)
 
     return (
@@ -83,33 +99,84 @@ const CreateExpense = () => {
             <h1 className="text-2xl font-semibold">Add Expense</h1>
             <p className="font-light mb-4">Fill the below form to add a new invoice</p>
             <div className="flex flex-col gap-3 max-w-[400px]">
-                <Input
-                    placeholder="Enter description"
-                    value={newExpense.description}
-                    onChange={(e) => setNewExpense({ ...newExpense, description: e.target.value })}
-                />
-                <div>
-                    <MyDatePicker
-                        className="h-[40px]"
-                        selected={newExpense.date1}
-                        onChange={(date) =>
-                            handleExpenseChange("date1", date)
-                        } // Corrected to use 'date' instead of 'startDate'
-                    // disabledDate={(current) => {
-                    //   return newSupply.endDate && current > newSupply.endDate;
-                    // }}
+                <FormControl>
+                    <FormLabel>
+                        Description
+                        <RequiredIndicator />{" "}
+                    </FormLabel>
+                    <Input
+                        placeholder="Enter description"
+                        value={newExpense.description}
+                        onChange={(e) => setNewExpense({ ...newExpense, description: e.target.value })}
                     />
-                    <div>{formatDate(newExpense?.date1)}</div>
-                </div>
-                <Input
-                    placeholder="Amount"
-                    value={newExpense?.amountReceived}
-                    onChange={(e) => setNewExpense({ ...newExpense, amountReceived: e.target.value })}
-                />
-                <SelectSupply
-                    selectSourceValue={selectSupplies}
-                    setSelectSourceValue={setSelectSupplies}
-                />
+                </FormControl>
+                <FormControl>
+                    <FormLabel>
+                        Date
+                        <RequiredIndicator />{" "}
+                    </FormLabel>
+                    <div>
+                        <MyDatePicker
+                            className="h-[40px]"
+                            selected={newExpense.date1}
+                            onChange={(date) =>
+                                handleExpenseChange("date1", date)
+                            } // Corrected to use 'date' instead of 'startDate'
+                        // disabledDate={(current) => {
+                        //   return newSupply.endDate && current > newSupply.endDate;
+                        // }}
+                        />
+                        <div>{formatDate(newExpense?.date1)}</div>
+                    </div>
+                </FormControl>
+                <FormControl>
+                    <FormLabel>
+                        Amount Received
+                        <RequiredIndicator />{" "}
+                    </FormLabel>
+                    <Input
+                        placeholder="Amount"
+                        value={newExpense?.amountReceived}
+                        onChange={(e) => setNewExpense({ ...newExpense, amountReceived: e.target.value })}
+                        maxWidth={100}
+                    />
+                </FormControl>
+                <FormControl>
+                    <FormLabel>
+                        Categories
+                        <RequiredIndicator />{" "}
+                    </FormLabel>
+                    <SelectSupply
+                        selectSourceValue={selectSupplies}
+                        setSelectSourceValue={setSelectSupplies}
+                    />
+                </FormControl>
+                {/* <Select onChange={handleExpenseSelectChange} size="md" value="">
+                    <option value="" disabled>
+                        Select employees
+                    </option>
+                    {employees.map((employee) => (
+                        <option key={employee._id} disabled={projectData.employees.includes(employee.employee_id)} value={employee.employee_id}>
+                            {employee.name}
+                        </option>
+                    ))}
+                </Select>
+                {projectData?.employees?.length > 0 && (
+                    <Box className="my-4 p-4 rounded-lg bg-slate-100 shadow-lg flex gap-2">
+                        {projectData.employees.map((tag) => (
+                            <Tag
+                                key={tag.employee_id}
+                                size="lg"
+                                borderRadius="full"
+                                variant="outline"
+                                colorScheme="purple"
+                            >
+                                <TagLabel>{getEmployeeNameById(tag)}</TagLabel>
+                                <TagCloseButton onClick={() => removeEmployeeById(tag)} />
+                            </Tag>
+                        ))}
+                    </Box>
+                )} */}
             </div>
             <Button
                 mt={4}
