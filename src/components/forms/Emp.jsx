@@ -16,9 +16,7 @@ import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import MyDatePicker from "../common/MyDatePicker";
 import { convertDateFormatString, converDateStringFormat } from "../../helpers";
-const RequiredIndicator = () => {
-  return <Text as="span" color="red.500" ml={1}>*</Text>;
-};
+
 const Emp = () => {
   const [projectData, setProjectData] = useState({
     type: "",

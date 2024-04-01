@@ -10,24 +10,29 @@ import { PiCardholderThin } from "react-icons/pi";
 import { allMonths } from "../../helpers";
 
 const ProjectCard = () => {
+  const currentYear = new Date().getFullYear();
   const [totalLeads, setTotalLeads] = useState(0);
   const [leadsInProgress, setLeadsInProgress] = useState(0);
   const [convertedLeads, setConvertedLeads] = useState(0);
   const [lostLeads, setLostLeads] = useState(0);
   const [rawLeads, setRawLeads] = useState(0);
-  const [selectedYear, setSelectedYear] = useState(null);
+  const [selectedYear, setSelectedYear] = useState(currentYear-1);
   const [selectedMonth, setSelectedMonth] = useState(null);
   const [financialYears, setFinancialYears] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState(null);
   const [selectedQuarter, setSelectedQuarter] = useState(null);
 
   useEffect(() => {
-    fetchDataDefault();
+    fetchData();
     fetchFinancialYears();
   }, []);
 
   useEffect(() => {
-    // Fetch total lead count
+    fetchData();
+  }, [selectedYear, selectedMonth, selectedQuarter]);
+
+  useEffect(() => {
+    // Fetch total project count
     axios
       .get(`${import.meta.env.VITE_API_BASE}/api/admin/getTotalProjects`)
       .then((response) => {
@@ -37,8 +42,8 @@ const ProjectCard = () => {
         console.error("Error fetching total lead count:", error);
       });
 
-    fetchData(selectedYear);
-  }, [selectedYear, selectedMonth])
+    fetchData();
+  }, [selectedYear, selectedMonth, selectedQuarter])
 
   const fetchFinancialYears = () => {
     try {
@@ -51,10 +56,21 @@ const ProjectCard = () => {
     }
   }
 
-  const fetchDataDefault = () => {
+  const fetchData = () => {
+    let firstQuarterMonth = selectedQuarter === 1 ? 1 : (
+      selectedQuarter === 2 ? 4 : (
+        selectedQuarter === 3 ? 7 : (
+          selectedQuarter === 4 ? 10 : null
+        )
+      )
+    )
     // Fetch leads by status
-    axios
-      .get(`${import.meta.env.VITE_API_BASE}/api/admin/getProjectCountByStatus`)
+    axios.post(`${import.meta.env.VITE_API_BASE}/api/admin/getProjectCountByStatus`, {
+      financialYear: selectedYear,
+      month: selectedMonth || "",
+      quarter: selectedQuarter || "",
+      firstQuarterMonth: firstQuarterMonth || ""
+    })
       .then((response) => {
         const leads = response.data;
         const inProgressLead = leads.find((lead) => lead._id === "Not Started");
@@ -80,54 +96,34 @@ const ProjectCard = () => {
       });
   }
 
-  const fetchData = (year) => {
-    if (year) {
-    axios
-      .get(`${import.meta.env.VITE_API_BASE}/api/admin/getAllProjects`)
-      .then((response) => {
-        let leads = response.data.filter((i) => i.deadline?.split('-')[0].slice(2,4) === year.slice(2,4));
-        if (selectedMonth) leads = leads.filter((i) => i.deadline?.split('-')[1] === `${selectedMonth.length === 1 ? "0" + selectedMonth : selectedMonth}`);
-        const inProgressLead = leads.filter((i) => i.status === "Not Started");
-        const convertedLead = leads.filter((i) => i.status === "In Progress");
-        const lostLead = leads.filter((i) => i.status === "Completed");
-        const rawLeadData = leads.filter((i) => i.status === "On Hold");
-
-        if (inProgressLead) {
-          setLeadsInProgress(inProgressLead?.length);
-        }
-        if (convertedLead) {
-          setConvertedLeads(convertedLead?.length);
-        }
-        if (lostLead) {
-          setLostLeads(lostLead?.length);
-        }
-        if (rawLeadData) {
-          setRawLeads(rawLeadData?.length);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching leads by status:", error);
-      });
-    }
-  }
-
   const handleYearClear = () => {
-    setSelectedYear(null);
+    setSelectedYear(currentYear-1);
     setSelectedMonth(null);
-    fetchDataDefault();
+    setSelectedQuarter(null);
   }
 
   return (
     <>
       <Card className="w-full md:w-1/3 p-4 pb-8">
-      <div className="flex items-center justify-between text-gray-600">
+        <div className="flex items-center justify-between text-gray-600">
           <h1 className="flex text-xl gap-2 items-center">
-          <LiaProjectDiagramSolid /> Projects
+            <LiaProjectDiagramSolid /> Projects
           </h1>
           <div className="bg-blue-500 rounded-full h-[25px] min-w-[25px] flex items-center justify-center text-white text-[10px]">{totalLeads}</div>
         </div>
-        
+
         <div className="flex gap-2 items-center mt-4">
+          <Select
+            placeholder='Select Year'
+            value={selectedYear || ""}
+            onChange={(e) => setSelectedYear(e.target.value)}
+            size={"sm"}
+            rounded={"lg"}
+          >
+            {financialYears.map((year) => (
+              <option key={`fy-${year._id}`} value={year.financial_year.split('-')[0]}>{year.financial_year}</option>
+            ))}
+          </Select>
           <Select
             placeholder='Filter by'
             value={selectedFilter || ""}
@@ -136,23 +132,9 @@ const ProjectCard = () => {
             rounded={"lg"}
           >
             <option value={"month"}>Month</option>
-            <option value={"financial year"}>Financial year</option>
             <option value={"quarter"}>Quarter</option>
           </Select>
-          {selectedFilter === "financial year" && (
-            <Select
-              placeholder='Select Year'
-              value={selectedYear || ""}
-              onChange={(e) => setSelectedYear(e.target.value)}
-              size={"sm"}
-              rounded={"lg"}
-            >
-              {financialYears.map((year) => (
-                <option key={`fy-${year._id}`} value={year.financial_year.split('-')[0]}>{year.financial_year}</option>
-              ))}
-            </Select>
-          )}
-          {(selectedFilter === "month" || selectedYear) && (
+          {selectedFilter === "month" && (
             <Select
               placeholder='Select Month'
               value={selectedMonth || ""}
@@ -173,9 +155,10 @@ const ProjectCard = () => {
               size={"sm"}
               rounded={"lg"}
             >
-              {allMonths.map((month, index) => (
-                <option key={`quarter-${month}`} value={index + 1}>{month}</option>
-              ))}
+              <option key={`quarter-1`} value={1}>1</option>
+              <option key={`quarter-2`} value={2}>2</option>
+              <option key={`quarter-3`} value={3}>3</option>
+              <option key={`quarter-4`} value={4}>4</option>
             </Select>
           )}
           {selectedFilter && <Button width={100} size={"sm"} onClick={handleYearClear}>Clear</Button>}

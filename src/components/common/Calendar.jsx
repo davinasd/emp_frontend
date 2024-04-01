@@ -52,7 +52,7 @@ const CalendarComponent = () => {
       );
     });
 
-    console.log(empSpecialDates)
+    // console.log(empSpecialDates)
 
     const empEvents = empSpecialDates.filter((date) => {
       return (
@@ -98,7 +98,7 @@ const CalendarComponent = () => {
 
   const dateCellRender = (value) => {
     const { clientListData, empListData } = getListData(value);
-    console.log(`emp: ${empListData}`)
+    // console.log(`emp: ${empListData}`)
     return (
       <>
         <ul className="events">

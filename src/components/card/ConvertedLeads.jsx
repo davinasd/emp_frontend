@@ -11,45 +11,68 @@ import { allMonths } from "../../helpers";
 
 const ConvertedLeads = () => {
   const currentYear = new Date().getFullYear();
-
   const [totalLeads, setTotalLeads] = useState(0);
   const [leadsInProgress, setLeadsInProgress] = useState(0);
   const [convertedLeads, setConvertedLeads] = useState(0);
   const [lostLeads, setLostLeads] = useState(0);
   const [rawLeads, setRawLeads] = useState(0);
-  const [selectedYear, setSelectedYear] = useState(currentYear-1);
+  const [selectedYear, setSelectedYear] = useState(currentYear - 1);
   const [selectedMonth, setSelectedMonth] = useState(null);
   const [financialYears, setFinancialYears] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState(null);
   const [selectedQuarter, setSelectedQuarter] = useState(null);
 
   useEffect(() => {
-    fetchDataDefault();
+    fetchData();
     fetchFinancialYears();
   }, []);
 
-  const fetchDataDefault = () => {
+  useEffect(() => {
+    fetchData();
+  }, [selectedYear, selectedMonth, selectedQuarter])
+
+  const fetchFinancialYears = () => {
+    try {
+      axios.get(`${import.meta.env.VITE_API_BASE}/api/admin/getAllYears`)
+        .then((res) => {
+          setFinancialYears(res.data);
+        });
+    } catch (error) {
+      console.log(`Error fetching financial years: ${error}`);
+    }
+  }
+
+  const fetchData = () => {
+    let firstQuarterMonth = selectedQuarter === 1 ? 1 : (
+      selectedQuarter === 2 ? 4 : (
+        selectedQuarter === 3 ? 7 : (
+          selectedQuarter === 4 ? 10 : null
+        )
+      )
+    )
     // Fetch total lead count
-    axios
-      .post(`${import.meta.env.VITE_API_BASE}/api/admin/getTotalLeadCount`, {
-        financialYear: selectedYear,
-        month: selectedMonth || "",
-        quarter: selectedQuarter || "",
-        firstQuarterMonth: selectedQuarter || ""
-      })
+    axios.post(`${import.meta.env.VITE_API_BASE}/api/admin/getTotalLeadCount`, {
+      financialYear: selectedYear,
+      month: selectedMonth || "",
+      quarter: selectedQuarter || "",
+      firstQuarterMonth: firstQuarterMonth || ""
+    })
       .then((response) => {
-        console.log(response.data)
+        // console.log(response.data)
         setTotalLeads(response.data.totalLeadCount);
+        fetchLeadsByStatus();
       })
       .catch((error) => {
         console.error("Error fetching total lead count:", error);
       });
+  }
 
+  const fetchLeadsByStatus = () => {
     // Fetch leads by status
-    axios
-      .get(`${import.meta.env.VITE_API_BASE}/api/admin/getLeadsByStatus`)
+    axios.get(`${import.meta.env.VITE_API_BASE}/api/admin/getLeadsByStatus`)
       .then((response) => {
         const leads = response.data;
+        console.log(leads)
         const inProgressLead = leads.find((lead) => lead._id === "In-Progress");
         const convertedLead = leads.find((lead) => lead._id === "Client");
         const lostLead = leads.find((lead) => lead._id === "Lost");
@@ -73,58 +96,10 @@ const ConvertedLeads = () => {
       });
   }
 
-  console.log(totalLeads);
-
-  const fetchFinancialYears = () => {
-    try {
-      axios.get(`${import.meta.env.VITE_API_BASE}/api/admin/getAllYears`)
-        .then((res) => {
-          setFinancialYears(res.data);
-        });
-    } catch (error) {
-      console.log(`Error fetching financial years: ${error}`);
-    }
-  }
-
-  const fetchData = (year, month) => {
-    axios
-      .get(`${import.meta.env.VITE_API_BASE}/api/admin/getAllLeads`)
-      .then((response) => {
-        let leads = response.data.filter((i) => i.enquiryDate?.split('-')[2] === year.slice(2, 4));
-        if (month) leads = leads.filter((i) => i.enquiryDate?.split('-')[1] === `${month.length === 1 ? "0" + month : month}`);
-        // console.log(leads);
-        const inProgressLead = leads.filter((i) => i.status === "In-Progress");
-        const convertedLead = leads.filter((i) => i.status === "Client");
-        const lostLead = leads.filter((i) => i.status === "Lost");
-        const rawLead = leads.filter((i) => i.status === "Raw");
-
-        if (inProgressLead) {
-          setLeadsInProgress(inProgressLead.length);
-        }
-        if (convertedLead) {
-          setConvertedLeads(convertedLead.length);
-        }
-        if (lostLead) {
-          setLostLeads(lostLead.length);
-        }
-        if (rawLead) {
-          setRawLeads(rawLead.length);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching leads by status:", error);
-      });
-  }
-
-  useEffect(() => {
-    fetchData(selectedYear, selectedMonth);
-  }, [selectedYear, selectedMonth])
-
   const handleYearClear = () => {
+    setSelectedYear(currentYear - 1);
     setSelectedFilter(null);
-    setSelectedYear(currentYear);
     setSelectedMonth(null);
-    fetchDataDefault();
   }
 
   return (
@@ -156,7 +131,6 @@ const ConvertedLeads = () => {
             rounded={"lg"}
           >
             <option value={"month"}>Month</option>
-            <option value={"financial year"}>Financial year</option>
             <option value={"quarter"}>Quarter</option>
           </Select>
           {selectedFilter === "month" && (
@@ -180,9 +154,10 @@ const ConvertedLeads = () => {
               size={"sm"}
               rounded={"lg"}
             >
-              {allMonths.map((month, index) => (
-                <option key={`quarter-${month}`} value={index + 1}>{month}</option>
-              ))}
+              <option key={`quarter-1`} value={1}>1</option>
+              <option key={`quarter-2`} value={2}>2</option>
+              <option key={`quarter-3`} value={3}>3</option>
+              <option key={`quarter-4`} value={4}>4</option>
             </Select>
           )}
           {selectedFilter && <Button width={100} size={"sm"} onClick={handleYearClear}>Clear</Button>}

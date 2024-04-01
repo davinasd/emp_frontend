@@ -6,28 +6,48 @@ import { Divider } from "antd";
 import { IoBanOutline } from "react-icons/io5";
 import { FiCheckSquare } from "react-icons/fi";
 import { CgSandClock } from "react-icons/cg";
+import { allMonths } from "../../helpers";
 
 const LeaveCard = () => {
+  const currentYear = new Date().getFullYear();
+  const currenMonth = new Date().getMonth();
   const [totalLeads, setTotalLeads] = useState(0);
   const [leadsInProgress, setLeadsInProgress] = useState(0);
   const [convertedLeads, setConvertedLeads] = useState(0);
   const [lostLeads, setLostLeads] = useState(0);
   const [rawLeads, setRawLeads] = useState(0);
-  const [selectedYear, setSelectedYear] = useState(null);
-
-  const handleYearClear = () => {
-    setSelectedYear(null);
-  }
+  const [selectedYear, setSelectedYear] = useState(currentYear);
+  const [selectedMonth, setSelectedMonth] = useState(currenMonth+1);
+  const [financialYears, setFinancialYears] = useState([]);
+  const [selectedFilter, setSelectedFilter] = useState("month");
+  const [selectedQuarter, setSelectedQuarter] = useState(null);
 
   useEffect(() => {
-    fetchDataDefault();
+    fetchFinancialYears();
+    fetchData();
   }, []);
 
-  const fetchDataDefault = () => {
+  useEffect(() => {
+    fetchData();
+  }, [selectedYear, selectedMonth, selectedQuarter])
+
+  const fetchData = () => {
+    let firstQuarterMonth = selectedQuarter === 1 ? 1 : (
+      selectedQuarter === 2 ? 4 : (
+        selectedQuarter === 3 ? 7 : (
+          selectedQuarter === 4 ? 10 : null
+        )
+      )
+    )
     // Fetch total lead count
-    axios
-      .get(`${import.meta.env.VITE_API_BASE}/api/admin/getTotalLeaves`)
+    axios.post(`${import.meta.env.VITE_API_BASE}/api/admin/getTotalLeaves`, {
+      financialYear: selectedYear,
+      month: selectedMonth || "",
+      quarter: selectedQuarter || "",
+      firstQuarterMonth: firstQuarterMonth || ""
+    })
       .then((response) => {
+        console.log(response.data)
         setTotalLeads(response.data.totalLeaveCount);
       })
       .catch((error) => {
@@ -35,10 +55,10 @@ const LeaveCard = () => {
       });
 
     // Fetch leads by status
-    axios
-      .get(`${import.meta.env.VITE_API_BASE}/api/admin/getLeavesByStatus`)
+    axios.post(`${import.meta.env.VITE_API_BASE}/api/admin/getLeavesByStatus/${selectedYear}/${selectedMonth}`)
       .then((response) => {
         const leads = response.data;
+        console.log(response.data)
         const inProgressLead = leads.find((lead) => lead._id === "Approved");
         const convertedLead = leads.find((lead) => lead._id === "Pending");
         const lostLead = leads.find((lead) => lead._id === "Rejected");
@@ -57,24 +77,26 @@ const LeaveCard = () => {
         }
       })
       .catch((error) => {
-        console.error("Error fetching leads by status:", error);
+        console.error("Error fetching leaves by status:", error);
       });
   }
 
-  useEffect(() => {
-    fetchData(selectedYear);
-  }, [selectedYear])
-
-  const fetchData = (year) => {
-    axios
-      .get(`${import.meta.env.VITE_API_BASE}/api/admin/getTotalLeaves`)
-      .then((response) => {
-        const leaves = response.data;
-        console.log(leaves);
-      })
+  const fetchFinancialYears = () => {
+    try {
+      axios.get(`${import.meta.env.VITE_API_BASE}/api/admin/getAllYears`)
+        .then((res) => {
+          setFinancialYears(res.data);
+        });
+    } catch (error) {
+      console.log(`Error fetching financial years: ${error}`);
+    }
   }
-
-  console.log(totalLeads)
+  
+  const handleYearClear = () => {
+    setSelectedYear(currentYear-1);
+    setSelectedMonth(null);
+    setSelectedQuarter(null);
+  }
 
   return (
     <>
@@ -86,30 +108,57 @@ const LeaveCard = () => {
           <div className="bg-blue-500 rounded-full h-[25px] min-w-[25px] flex items-center justify-center text-white text-[10px]">{totalLeads}</div>
         </div>
         
-        {/* <div className="flex gap-2 items-center mt-4">
+        <div className="flex gap-2 items-center mt-4">
           <Select
             placeholder='Select Year'
             value={selectedYear || ""}
             onChange={(e) => setSelectedYear(e.target.value)}
+            size={"sm"}
+            rounded={"lg"}
           >
-            <option value="2025">2025-2026</option>
-            <option value="2024">2024-2025</option>
-            <option value="2023">2023-2024</option>
-            <option value="2022">2022-2023</option>
-            <option value="2021">2021-2022</option>
-            <option value="2020">2020-2021</option>
-            <option value="2020">2019-2020</option>
-            <option value="2019">2018-2019</option>
-            <option value="2018">2017-2018</option>
-            <option value="2017">2016-2017</option>
-            <option value="2015">2015-2016</option>
-            <option value="2014">2014-2015</option>
-            <option value="2013">2013-2014</option>
-            <option value="2012">2012-2013</option>
-            <option value="2011">2011-2012</option>
+            {financialYears.map((year) => (
+              <option key={`fy-${year._id}`} value={year.financial_year.split('-')[0]}>{year.financial_year}</option>
+            ))}
           </Select>
-          {selectedYear && <Button onClick={handleYearClear}>Clear</Button>}
-        </div> */}
+          <Select
+            placeholder='Filter by'
+            value={selectedFilter || ""}
+            onChange={(e) => setSelectedFilter(e.target.value)}
+            size={"sm"}
+            rounded={"lg"}
+          >
+            <option value={"month"}>Month</option>
+            <option value={"quarter"}>Quarter</option>
+          </Select>
+          {selectedFilter === "month" && (
+            <Select
+              placeholder='Select Month'
+              value={selectedMonth || ""}
+              onChange={(e) => setSelectedMonth(e.target.value)}
+              size={"sm"}
+              rounded={"lg"}
+            >
+              {allMonths.map((month, index) => (
+                <option key={`m-${month}`} value={index + 1}>{month}</option>
+              ))}
+            </Select>
+          )}
+          {selectedFilter === "quarter" && (
+            <Select
+              placeholder='Select Quarter'
+              value={selectedQuarter || ""}
+              onChange={(e) => setSelectedQuarter(e.target.value)}
+              size={"sm"}
+              rounded={"lg"}
+            >
+              <option key={`quarter-1`} value={1}>1</option>
+              <option key={`quarter-2`} value={2}>2</option>
+              <option key={`quarter-3`} value={3}>3</option>
+              <option key={`quarter-4`} value={4}>4</option>
+            </Select>
+          )}
+          {selectedFilter && <Button width={100} size={"sm"} onClick={handleYearClear}>Clear</Button>}
+        </div>
         <Divider />
         <CardBody m={0} p={0} className="flex flex-col gap-6">
           <div>

@@ -6,7 +6,7 @@ export const employeeSlice = createSlice({
     employeeIds: [],
   },
   reducers: {
-   
+
     addEmployeeId: (state, action) => {
       state.employeeIds.push(action.payload);
     },
@@ -16,7 +16,7 @@ export const employeeSlice = createSlice({
   },
 });
 
-export const { addEmployeeId,clearEmployeeIds,setEmployeeId,clearEmployeeId } = employeeSlice.actions;
+export const { addEmployeeId, clearEmployeeIds, setEmployeeId, clearEmployeeId } = employeeSlice.actions;
 export const selectEmployeeIds = (state) => state.employee.employeeIds;
 export const selectEmployeeId = (state) => state.employee.employeeId;
 

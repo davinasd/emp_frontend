@@ -28,6 +28,7 @@ import { toast } from "react-toastify";
 import { DeleteIcon } from "@chakra-ui/icons";
 import { priorityArray } from "../helpers";
 import { IoMdEye } from "react-icons/io";
+import GetTaskByEmp from "./common/GetTaskByEmp";
 
 const GetAllTask = () => {
   const [tasks, setTasks] = useState([]);
@@ -114,6 +115,8 @@ const GetAllTask = () => {
     setIsDeleteAlertOpen(false);
   };
 
+  const [getTaskByEmp, setGetTaskByEmp] = useState(false);
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -122,22 +125,32 @@ const GetAllTask = () => {
     );
   }
 
-  console.log(tasks)
+  // console.log(tasks)
 
   return (
     <>
       <div className="w-full p-8 md:block flex flex-col items-center">
         <h1 className="text-3xl font-bold mb-4">Task Information</h1>
-        <Link to="/CreateTask">
+        <div className="flex gap-2">
+          <Link to="/CreateTask">
+            <Button
+              colorScheme="blue"
+              _hover={{ bg: "blue.600" }}
+              mb="6"
+              className="flex gap-2 items-center"
+            >
+              <GoPlus /> Add a Task
+            </Button>
+          </Link>
           <Button
-            colorScheme="blue"
-            _hover={{ bg: "blue.600" }}
-            mb="6"
-            className="flex gap-2 items-center"
+            onClick={() => setGetTaskByEmp(true)}
+            variant={"solid"}
           >
-            <GoPlus /> Add a Task
+            Get Task By Employee
           </Button>
-        </Link>
+        </div>
+
+        <GetTaskByEmp open={getTaskByEmp} setOpen={setGetTaskByEmp} />
 
         {tasks.length === 0 ? (
           <Empty

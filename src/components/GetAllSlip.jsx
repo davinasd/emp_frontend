@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Thead,
   Tbody,
@@ -159,7 +159,7 @@ const GetAllSlip = () => {
             setFilteredData={setFilteredProjects}
             data={projects}
           >
-            <Thead position="sticky" top={0} bg={"#F1F5F9"}>
+            <Thead position="sticky" top={0} zIndex={10} bg={"#F1F5F9"}>
               <Tr>
                 <Th fontWeight="bold" className="md:table-cell hidden">
                   S. No.
