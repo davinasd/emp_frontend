@@ -21,6 +21,7 @@ const ConvertedLeads = () => {
   const [financialYears, setFinancialYears] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState(null);
   const [selectedQuarter, setSelectedQuarter] = useState(null);
+  const [selectQuarterFirstMonth, setSelectQuarterFirstMonth] = useState(null);
 
   useEffect(() => {
     fetchData();
@@ -43,19 +44,12 @@ const ConvertedLeads = () => {
   }
 
   const fetchData = () => {
-    let firstQuarterMonth = selectedQuarter === 1 ? 1 : (
-      selectedQuarter === 2 ? 4 : (
-        selectedQuarter === 3 ? 7 : (
-          selectedQuarter === 4 ? 10 : null
-        )
-      )
-    )
     // Fetch total lead count
     axios.post(`${import.meta.env.VITE_API_BASE}/api/admin/getTotalLeadCount`, {
       financialYear: selectedYear,
       month: selectedMonth || "",
       quarter: selectedQuarter || "",
-      firstQuarterMonth: firstQuarterMonth || ""
+      firstQuarterMonth: selectQuarterFirstMonth || ""
     })
       .then((response) => {
         // console.log(response.data)
@@ -158,6 +152,28 @@ const ConvertedLeads = () => {
               <option key={`quarter-2`} value={2}>2</option>
               <option key={`quarter-3`} value={3}>3</option>
               <option key={`quarter-4`} value={4}>4</option>
+            </Select>
+          )}
+          {selectedQuarter && (
+            <Select
+              placeholder='Select Quarter'
+              value={selectQuarterFirstMonth || ""}
+              onChange={(e) => setSelectQuarterFirstMonth(e.target.value)}
+              size={"sm"}
+              rounded={"lg"}
+            >
+              <option key={`quarter-1`} value={1}>1</option>
+              <option key={`quarter-2`} value={2}>2</option>
+              <option key={`quarter-3`} value={3}>3</option>
+              <option key={`quarter-4`} value={4}>4</option>
+              <option key={`quarter-1`} value={5}>5</option>
+              <option key={`quarter-2`} value={6}>6</option>
+              <option key={`quarter-3`} value={7}>7</option>
+              <option key={`quarter-4`} value={8}>8</option>
+              <option key={`quarter-1`} value={9}>9</option>
+              <option key={`quarter-2`} value={10}>10</option>
+              <option key={`quarter-3`} value={11}>10</option>
+              <option key={`quarter-4`} value={12}>12</option>
             </Select>
           )}
           {selectedFilter && <Button width={100} size={"sm"} onClick={handleYearClear}>Clear</Button>}

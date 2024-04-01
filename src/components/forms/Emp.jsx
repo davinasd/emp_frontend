@@ -12,12 +12,13 @@ import {
 } from "@chakra-ui/react";
 import { Input, Select } from "antd";
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
 import MyDatePicker from "../common/MyDatePicker";
 import { convertDateFormatString, converDateStringFormat } from "../../helpers";
 
 const Emp = () => {
+  const singleFileRef = useRef();
   const [projectData, setProjectData] = useState({
     type: "",
     name: "",
@@ -38,6 +39,8 @@ const Emp = () => {
     panNumber: "",
     permanentAddress: "",
     correspondenceAddress: "",
+    singleFile: null,
+    multipleFiles: [],
     guardianDetails: {
       guardianName: "",
       guardianContactNo: "",
@@ -50,7 +53,7 @@ const Emp = () => {
     },
   });
 
-  const [tags, setTags] = useState([]);
+  // const [tags, setTags] = useState([]);
   const [managers, setManagers] = useState([]);
 
   const joiningDate = `${projectData?.joiningDate?._d}`.slice(4, 15);
@@ -70,10 +73,10 @@ const Emp = () => {
   const handleSelectOption = (name, value) => {
     setProjectData({ ...projectData, [name]: value });
   };
-  const getTagNameById = (id) => {
-    const tag = tags.find((tag) => tag.source_tag_id === id);
-    return tag ? tag.sourceTagName : "Unknown Tag";
-  };
+  // const getTagNameById = (id) => {
+  //   const tag = tags.find((tag) => tag.source_tag_id === id);
+  //   return tag ? tag.sourceTagName : "Unknown Tag";
+  // };
   useEffect(() => {
     axios
       .get(`${import.meta.env.VITE_API_BASE}/api/admin/getManagersAllDetails`)
@@ -84,6 +87,11 @@ const Emp = () => {
         console.error("Error fetching clients:", error);
       });
   }, []);
+
+  const handleSingleFileChange = () => { }
+  const handleMultipleFilesChange = () => { }
+  const handleDeleteSingleFile = () => { }
+  const handleDeleteMultipleFile = () => { }
 
   // const handleTagChange = (e) => {
   //   const selectedTags = Array.from(
@@ -213,6 +221,7 @@ const Emp = () => {
             <Tab>Address Information</Tab>
             <Tab>Guardian Information</Tab>
             <Tab>Bank Information</Tab>
+            <Tab>Files Information</Tab>
           </TabList>
 
           <TabPanels>
@@ -444,6 +453,45 @@ const Emp = () => {
                   <Input name="bankDetails.branch" onChange={handleChange} />
                 </FormControl>
               </div>
+            </TabPanel>
+
+            <TabPanel>
+              <div className="flex gap-3">
+                {projectData.singleFile && (
+                  <div>
+                    <p>Single File: {projectData.singleFile.name}</p>
+                    <Button onClick={handleDeleteSingleFile}>Delete</Button>
+                  </div>
+                )}
+                <FormControl mb="4">
+                  <FormLabel>Single File</FormLabel>
+                  <Input
+                    type="file"
+                    ref={singleFileRef}
+                    onChange={handleSingleFileChange}
+                  />
+                </FormControl>
+              </div>
+              <div className="flex gap-3">
+                {projectData?.multipleFiles?.map((file, index) => (
+                  <div key={index}>
+                    <p>
+                      File {index + 1}: {file.name}
+                    </p>
+                    <Button onClick={() => handleDeleteMultipleFile(index)}>
+                      Delete
+                    </Button>
+                  </div>
+                ))}
+                <FormControl mb="4">
+                  <FormLabel>Multiple Files</FormLabel>
+                  <Input
+                    type="file"
+                    multiple
+                    onChange={handleMultipleFilesChange}
+                  />
+                </FormControl>
+              </div>
               <Button type="submit" colorScheme="purple" className="mt-5">
                 Create Employee
               </Button>
@@ -633,6 +681,42 @@ const Emp = () => {
                   <FormLabel>Branch Name<RequiredIndicator /> </FormLabel>
                   <Input name="bankDetails.branch" onChange={handleChange} />
                 </FormControl>
+                <div className="flex gap-3">
+                  {projectData.singleFile && (
+                    <div>
+                      <p>Single File: {projectData.singleFile.name}</p>
+                      <Button onClick={handleDeleteSingleFile}>Delete</Button>
+                    </div>
+                  )}
+                  <FormControl mb="4">
+                    <FormLabel>Single File</FormLabel>
+                    <Input
+                      type="file"
+                      ref={singleFileRef}
+                      onChange={handleSingleFileChange}
+                    />
+                  </FormControl>
+                </div>
+                <div className="flex gap-3">
+                  {projectData?.multipleFiles?.map((file, index) => (
+                    <div key={index}>
+                      <p>
+                        File {index + 1}: {file.name}
+                      </p>
+                      <Button onClick={() => handleDeleteMultipleFile(index)}>
+                        Delete
+                      </Button>
+                    </div>
+                  ))}
+                  <FormControl mb="4">
+                    <FormLabel>Multiple Files</FormLabel>
+                    <Input
+                      type="file"
+                      multiple
+                      onChange={handleMultipleFilesChange}
+                    />
+                  </FormControl>
+                </div>
               </div>
 
               <Button type="submit" colorScheme="purple" className="mt-5">

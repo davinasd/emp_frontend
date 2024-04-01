@@ -48,6 +48,7 @@ import TagsById from "./components/TagsById";
 import GetAllPaidInvoices from "./components/GetAllPaidInvoices";
 import AddSupply from "./components/AddSupply";
 import UpdateEmp from "./components/forms/UpdateEmp";
+import CreateExpense from "./components/CreateExpense";
 
 function App() {
   const isLoggedIn = useSelector(selectIsLoggedIn);
@@ -291,6 +292,17 @@ function App() {
                 setActiveSideabarLink={setActiveSideabarLink}
               >
                 <CreateEmp />
+              </AppLayout>
+            }
+          />
+          <Route
+            path="/createExpense"
+            element={
+              <AppLayout
+                activeSideabarLink={"createExpense"}
+                setActiveSideabarLink={setActiveSideabarLink}
+              >
+                <CreateExpense />
               </AppLayout>
             }
           />
