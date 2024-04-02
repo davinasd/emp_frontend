@@ -1,9 +1,11 @@
 import { Box, Button, FormControl, FormLabel, Input, Select, Text, useToast } from "@chakra-ui/react"
-import MyDatePicker from "./common/MyDatePicker"
 import { formatDate } from "@fullcalendar/core"
-import SelectSupply from "./common/SelectSupply"
 import { useEffect, useState } from "react"
 import axios from "axios"
+import { useSelector } from "react-redux"
+import MyDatePicker from "../common/MyDatePicker"
+import SelectSupply from "../common/SelectSupply"
+import { selectExpenseId } from "../../store/slice/ExpenseSlice"
 
 const CreateExpense = () => {
     const toast = useToast();
@@ -24,11 +26,33 @@ const CreateExpense = () => {
         // date1: "",
         // time1: currTime,
     });
+    const [client, setClient] = useState("");
     const [selectSupplies, setSelectSupplies] = useState([]);
+    const [projectData, setProjectData] = useState({});
+    const expId = useSelector(selectExpenseId);
 
-    const RequiredIndicator = () => {
-        return <Text as="span" color="red.500" ml={1}>*</Text>;
-    };
+    useEffect(() => {
+        // axios
+        //     .get(
+        //         `${import.meta.env.VITE_API_BASE}/api/admin/getLeadDetails/${expId}`
+        //     )
+        //     .then((response) => {
+        //         const clientData = response.data;
+        //         setClient(response.data);
+        //         setProjectData((projectData) => ({
+        //             ...projectData,
+        //             enquiryDate: clientData?.enquiryDate || projectData.enquiryDate,
+        //         }));
+        //     })
+
+        //     .catch((error) => {
+        //         console.error("Error fetching client details:", error);
+        //         toast.error("Failed to fetch client details");
+        //     });
+    }, [expId]);
+
+    // console.log(projectData);
+    console.log(expId);
 
     useEffect(() => {
         axios.get(`${import.meta.env.VITE_API_BASE}/api/admin/getAllEmployees`)
@@ -36,6 +60,10 @@ const CreateExpense = () => {
                 setEmployees(response.data);
             })
     }, [])
+
+    const RequiredIndicator = () => {
+        return <Text as="span" color="red.500" ml={1}>*</Text>;
+    };
 
     const fetchExpense = async () => {
         try {
@@ -50,31 +78,18 @@ const CreateExpense = () => {
 
     // console.log(expenses)
 
-    const handleAddExpense = async () => {
+    const handleUpdateExpense = async () => {
         try {
-            if (newExpense.length === 0) {
+            await axios.patch(`${import.meta.env.VITE_API_BASE}/api/admin/updateExpense/${expId}`, newExpense)
+            .then(() => {
                 toast({
-                    title: "Error",
-                    description: "Please fill all the fields",
-                    status: "error",
+                    title: "Success",
+                    description: "Expense updated",
+                    status: "success",
                     duration: 5000,
                     isClosable: true,
                 });
-            } else {
-                await axios.post(`${import.meta.env.VITE_API_BASE}/api/admin/createExpenses`, {
-                    ...newExpense,
-                    employee_id: selectedEmployee
-                });
-                setNewExpense({
-                    description: "",
-                    createdAt: `${currDate}`,
-                    date1: "",
-                    time1: currTime,
-                    amountReceived: 0,
-                    categories: [],
-                });
-                fetchExpense();
-            }
+            });
         } catch (error) {
             console.error("Error adding source:", error);
         }
@@ -87,20 +102,6 @@ const CreateExpense = () => {
         setNewExpense(updatedService);
     };
 
-    // const handleExpenseSelectChange = (e) => {
-    //     const selectedIds = Array.from(
-    //         e.target.selectedOptions,
-    //         (option) => option.value
-    //     );
-    //     setNewExpense({
-    //         ...newExpense,
-    //         employees: [...newExpense.categories, ...selectedIds],
-    //     });
-    //     document.getElementById("employees").value = "";
-    // }
-
-    // console.log(selectSupplies)
-
     return (
         <Box
             mx="auto"
@@ -110,7 +111,7 @@ const CreateExpense = () => {
             boxShadow="lg"
             m="4"
         >
-            <h1 className="text-2xl font-semibold">Add Expense</h1>
+            <h1 className="text-2xl font-semibold">Update Expense</h1>
             <p className="font-light mb-4">Fill the below form to add a new invoice</p>
             <div className="flex flex-col gap-3 max-w-[400px]">
                 <FormControl>
@@ -220,9 +221,9 @@ const CreateExpense = () => {
             <Button
                 mt={4}
                 colorScheme="purple"
-                onClick={handleAddExpense}
+                onClick={handleUpdateExpense}
             >
-                Craete Expense
+                Update Expense
             </Button>
         </Box>
     )

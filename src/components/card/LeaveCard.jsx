@@ -17,10 +17,11 @@ const LeaveCard = () => {
   const [lostLeads, setLostLeads] = useState(0);
   const [rawLeads, setRawLeads] = useState(0);
   const [selectedYear, setSelectedYear] = useState(currentYear);
-  const [selectedMonth, setSelectedMonth] = useState(currenMonth+1);
+  const [selectedMonth, setSelectedMonth] = useState(currenMonth + 1);
   const [financialYears, setFinancialYears] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState("month");
   const [selectedQuarter, setSelectedQuarter] = useState(null);
+  const [selectQuarterFirstMonth, setSelectQuarterFirstMonth] = useState(null);
 
   useEffect(() => {
     fetchFinancialYears();
@@ -91,11 +92,13 @@ const LeaveCard = () => {
       console.log(`Error fetching financial years: ${error}`);
     }
   }
-  
+
   const handleYearClear = () => {
-    setSelectedYear(currentYear-1);
+    setSelectedYear(currentYear - 1);
     setSelectedMonth(null);
     setSelectedQuarter(null);
+    setSelectedQuarter(null);
+    setSelectQuarterFirstMonth(null);
   }
 
   return (
@@ -107,7 +110,7 @@ const LeaveCard = () => {
           </h1>
           <div className="bg-blue-500 rounded-full h-[25px] min-w-[25px] flex items-center justify-center text-white text-[10px]">{totalLeads}</div>
         </div>
-        
+
         <div className="flex gap-2 items-center mt-4">
           <Select
             placeholder='Select Year'
@@ -155,6 +158,28 @@ const LeaveCard = () => {
               <option key={`quarter-2`} value={2}>2</option>
               <option key={`quarter-3`} value={3}>3</option>
               <option key={`quarter-4`} value={4}>4</option>
+            </Select>
+          )}
+          {selectedQuarter && (
+            <Select
+              placeholder='Select Quarter'
+              value={selectQuarterFirstMonth || ""}
+              onChange={(e) => setSelectQuarterFirstMonth(e.target.value)}
+              size={"sm"}
+              rounded={"lg"}
+            >
+              <option key={`quarter-1`} value={1}>1</option>
+              <option key={`quarter-2`} value={2}>2</option>
+              <option key={`quarter-3`} value={3}>3</option>
+              <option key={`quarter-4`} value={4}>4</option>
+              <option key={`quarter-1`} value={5}>5</option>
+              <option key={`quarter-2`} value={6}>6</option>
+              <option key={`quarter-3`} value={7}>7</option>
+              <option key={`quarter-4`} value={8}>8</option>
+              <option key={`quarter-1`} value={9}>9</option>
+              <option key={`quarter-2`} value={10}>10</option>
+              <option key={`quarter-3`} value={11}>10</option>
+              <option key={`quarter-4`} value={12}>12</option>
             </Select>
           )}
           {selectedFilter && <Button width={100} size={"sm"} onClick={handleYearClear}>Clear</Button>}

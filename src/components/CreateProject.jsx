@@ -17,7 +17,6 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import MyDatePicker from "./common/MyDatePicker";
 import axios from "axios";
-import SelectTag from "./common/SelectTag";
 import { useNavigate } from "react-router-dom";
 import { convertDateFormatString } from "../helpers";
 
@@ -38,7 +37,6 @@ const CreateProject = () => {
   const [employees, setEmployees] = useState([]);
   const [clients, setClients] = useState([]);
   const [selectedClient, setSelectedClient] = useState(null);
-  const [selctedTagValue, setSelctedTagValue] = useState([]);
   const navigate = useNavigate();
   const getEmployeeNameById = (id) => {
     const employee = employees.find((employee) => employee.employee_id === id);

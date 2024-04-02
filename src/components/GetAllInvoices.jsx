@@ -20,12 +20,13 @@ import {
 import axios from "axios";
 import InfoModal from "./common/InfoModal";
 import TableContainer from "./common/TableContainer";
-import { Empty } from "antd";
+import { Empty, InputNumber, Modal } from "antd";
 import { Link } from "react-router-dom";
 import { DownloadIcon, DeleteIcon } from "@chakra-ui/icons";
 import { GoPlus } from "react-icons/go";
 import GetInvoiceByBrandName from "./common/GetInvoiceByBrandName";
 import { IoMdEye } from "react-icons/io";
+import { CgDollar } from "react-icons/cg";
 
 const GetAllInvoices = () => {
   const [invoices, setInvoices] = useState([]);
@@ -40,6 +41,9 @@ const GetAllInvoices = () => {
   const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
   const [downloading, setDownloading] = useState(null);
   const [getInvoiceByBrandName, setGetInvoiceByBrandName] = useState(false);
+  const [collectedModalOpen, setCollectedModalOpen] = useState(false);
+  const [amountCollected, setAmountCollected] = useState(0);
+  const [selectedInovoiceHistory, setSelectedInovoiceHistory] = useState();
 
   const toast = useToast();
 
@@ -132,6 +136,54 @@ const GetAllInvoices = () => {
         setDownloading(false);
       });
   }
+
+  const handleCollectedModalOpen = (invoice_id) => {
+    setSelectedInovoiceHistory(invoice_id);
+    setCollectedModalOpen(true);
+  }
+
+  const handleUpdateCollected = async () => {
+    if (amountCollected === 0) {
+      toast({
+        description: "Collected amount must be greater than 0",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+      });
+      return;
+    }
+    try {
+      await axios.patch(`${import.meta.env.VITE_API_BASE}/api/admin/invoice/${selectedInovoiceHistory}`, {
+        amountCollected: amountCollected
+      }).then(() => {
+        toast({
+          title: "Success",
+          description: "Added collection history",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        });
+        setAmountCollected(0);
+        setSelectedInovoiceHistory(null);
+        setCollectedModalOpen(false);
+      })
+    } catch (error) {
+      console.log(`Error updating collection history ${error}`);
+      toast({
+        title: "Error",
+        description: "Error adding collection history",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      setAmountCollected(0);
+      setSelectedInovoiceHistory(null);
+    }
+  };
+
+  const handleCancelCallection = () => {
+    setCollectedModalOpen(false);
+  };
 
   return (
     <>
@@ -273,6 +325,28 @@ const GetAllInvoices = () => {
                           >
                             <DownloadIcon />
                           </Button>
+                          <Button
+                            size={"sm"}
+                            variant={"outline"}
+                            isLoading={downloading === index}
+                            colorScheme="purple"
+                            onClick={() =>
+                              handleDownload(invoice.invoice_id, index)
+                            }
+                          >
+                            Hey
+                          </Button>
+                          <Button
+                            size={"sm"}
+                            variant={"outline"}
+                            isLoading={downloading === index}
+                            colorScheme="purple"
+                            onClick={() =>
+                              handleDownload(invoice.invoice_id, index)
+                            }
+                          >
+                            <DownloadIcon />
+                          </Button>
                         </Td>
                         <Td>
                           <Button
@@ -314,6 +388,15 @@ const GetAllInvoices = () => {
                           >
                             <DownloadIcon />
                           </Button>
+                          <Button
+                            size={"sm"}
+                            variant={"outline"}
+                            isLoading={downloading === index}
+                            colorScheme="purple"
+                            onClick={() => handleCollectedModalOpen(invoice.invoice_id)}
+                          >
+                            <CgDollar />
+                          </Button>
                         </Td>
                         <Td>
                           <Button
@@ -335,6 +418,28 @@ const GetAllInvoices = () => {
           </>
         )}
       </div>
+
+      <Modal
+        title="Add Collection History"
+        open={collectedModalOpen}
+        // confirmLoading={confirmLoading}
+        onCancel={handleCancelCallection}
+        footer={
+          <Button
+            colorScheme="purple"
+            // loading={loading}
+            onClick={handleUpdateCollected}
+          >
+            Add Collected
+          </Button>
+        }
+      >
+        <InputNumber
+          placeholder="Amount"
+          value={amountCollected}
+          onChange={setAmountCollected}
+        />
+      </Modal>
 
       <GetInvoiceByBrandName open={getInvoiceByBrandName} setOpen={setGetInvoiceByBrandName} />
 
