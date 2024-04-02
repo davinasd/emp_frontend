@@ -94,6 +94,8 @@ const ProjectCard = () => {
     setSelectedYear(currentYear - 1);
     setSelectedMonth(null);
     setSelectedQuarter(null);
+    setSelectQuarterFirstMonth(null);
+    setSelectedFilter(null);
   }
 
   return (

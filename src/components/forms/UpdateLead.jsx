@@ -7,9 +7,6 @@ import {
   Tab,
   TabPanels,
   TabPanel,
-  Tag,
-  TagLabel,
-  TagCloseButton,
   Flex,
   Input,
   Box,
@@ -22,7 +19,7 @@ import { toast } from "react-toastify";
 import SelectSource from "../common/SelectSource";
 import MyDatePicker from "../common/MyDatePicker";
 import SelectTag from "../common/SelectTag";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { selectLeadId, clearLeadId } from "../../store/slice/LeadSlice";
 import moment from "moment";
 import { convertDateFormatString } from "../../helpers";
@@ -34,7 +31,6 @@ const UpdateLead = () => {
   const leadId = useSelector(selectLeadId);
   console.log(leadId);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const [client, setClient] = useState("");
   const [projectData, setProjectData] = useState({
     title: "",

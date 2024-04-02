@@ -26,6 +26,7 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
   const dispatch = useDispatch();
   const priorityArray = ["low", "medium", "high", "urgent"];
   const [collectedInvoices, setCollectedInvoices] = useState([]);
+  const [expEmployee, setExpEmployee] = useState(null);
 
   const handleTaskDelete = () => {
     // LOGIC TO BE WRITTEN
@@ -64,6 +65,11 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
     if (modalFor === "project" && data && data.client_id) {
       const clientId = data.client_id;
       dispatch(setClientId(clientId));
+    }
+
+    if (modalFor === "expense" && data && data.employee_id) {
+      const employeeId = data.employee_id;
+      dispatch(addEmployeeId(employeeId));
     }
   }, [modalFor, data, dispatch]);
 
@@ -1304,6 +1310,89 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                     <Text className="text-lg">{data.startDate}</Text>
                     <Text className="text-sm font-bold text-gray-500 mt-2">Deadline: </Text>
                     <Text className="text-lg">{data.deadline}</Text>
+                  </div>
+                </div>
+                <div className="w-full mt-4">
+                  <Text className="text-md font-bold text-gray-500 mt-2">Description: </Text>
+                  <Text className="text-lg">{data.description}</Text>
+                </div>
+              </>
+            )}
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme="purple" onClick={onClose}>
+              Close
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    );
+  if (modalFor === "expense")
+    return (
+      <Modal
+        size={"4xl"}
+        scrollBehavior="inside"
+        onClose={onClose}
+        isOpen={isOpen}
+        motionPreset="slideInBottom"
+        isCentered
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader textTransform={"capitalize"}>{data?.name || "Expense"}</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            {data && (
+              <>
+                <div className="flex flex-col md:flex-row gap-2 items-end md:items-center justify-end">
+                  <h2 className="text-lg mr-2">Get:</h2>
+                  <Link to={`/GetEmp`}>
+                    <Button colorScheme="green">Employee</Button>
+                  </Link>
+                  <Divider type="vertical" />
+                  {/* <Menu>
+                    <MenuButton as={Button} variant={"outline"} rightIcon={<ChevronDownIcon />}>
+                      Actions
+                    </MenuButton>
+                    <MenuList>
+                      <MenuItem>
+                        <div className="w-full flex items-center" onClick={() => handleTaskDelete()}>
+                          <DeleteIcon mr={2} /> Delete
+                        </div>
+                      </MenuItem>
+                      <MenuItem>
+                        <div className="w-full flex items-center" onClick={() => handleChangeTaskStatus()}>
+                          <CheckCircleIcon mr={2} /> Change Status
+                        </div>
+                      </MenuItem>
+                    </MenuList>
+                  </Menu> */}
+                </div>
+                <Divider />
+                <div className="flex gap-10">
+                  <div className="max-w-[200px] md:max-w-[300px]">
+                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">General Information</h1>
+                    <Text className="text-sm font-bold text-gray-500 mt-3">Amount </Text>
+                    <Text className="text-lg capitalize">{data?.amountReceived}</Text>
+                    <Text className="text-sm font-bold text-gray-500 mt-2">Created At: </Text>
+                    <Text className="text-lg">{data?.createdAt}</Text>
+                    <Text className="text-sm font-bold text-gray-500 mt-2">Date: </Text>
+                    <Text className="text-lg capitalize">{data?.date1}</Text>
+                    <Text className="text-sm font-bold text-gray-500 mt-2">Time: </Text>
+                    <Text className="text-lg capitalize">{data?.time1}</Text>
+                    <Text className="text-sm font-bold text-gray-500 mt-2">Total Spent: </Text>
+                    <Text className="text-lg capitalize">{data?.totalSpent}</Text>
+                    <Text className="text-sm font-bold text-gray-500 mt-2">Employee: </Text>
+                    <Text className="text-lg capitalize">{data?.totalSpent}</Text>
+                  </div>
+                  <div className="max-w-[200px] md:max-w-[300px]">
+                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">Other Information</h1>
+                    {data?.categories?.map((cat, index) => (
+                      <>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">Category {index+1}: </Text>
+                        <Text className="text-lg">{cat.supplyTagName}</Text>
+                      </>
+                    ))}
                   </div>
                 </div>
                 <div className="w-full mt-4">

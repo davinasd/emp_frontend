@@ -9,6 +9,18 @@ const GetInvoiceByBrandName = ({ open, setOpen }) => {
     const [selectedBrand, setSelectedBrand] = useState(null);
     const [fetchedItems, setFetchedItems] = useState([]);
     const [selectedInvoiceIds, setSelectedInvoiceIds] = useState([]);
+    const [clients, setClients] = useState([]);
+
+    useEffect(() => {
+        axios
+            .get(`${import.meta.env.VITE_API_BASE}/api/admin/getAllClients`)
+            .then((response) => {
+                setClients(response.data);
+            })
+            .catch((error) => {
+                console.error("Error fetching clients:", error);
+            });
+    }, [])
 
     useEffect(() => {
         try {
@@ -53,6 +65,7 @@ const GetInvoiceByBrandName = ({ open, setOpen }) => {
         setSelectedBrand(null);
         setFetchedItems(null);
     }
+    console.log(clients)
 
     return (
         <Drawer
@@ -95,10 +108,12 @@ const GetInvoiceByBrandName = ({ open, setOpen }) => {
                             placeholder="Choose a brand"
                             className="w-full"
                         >
-                            {/* {allMonths.map((month) => (
-                            <option key={month} value={month}>{month}</option>
-                        ))} */}
-                            <option value="test brac">test brac</option>
+                            {/* <option value="test brac">test brac</option> */}
+                            {clients.map((client) => (
+                                <option key={client.client_id} value={client.brandName}>
+                                    {client.brandName}
+                                </option>
+                            ))}
                         </Select>
                     </div>
                     {selectedBrand &&

@@ -10,7 +10,6 @@ const GetTaskByEmp = ({ open, setOpen }) => {
     const [employees, setEmployees] = useState(null);
     const [selectedBrand, setSelectedBrand] = useState(null);
     const [fetchedItems, setFetchedItems] = useState([]);
-    const [selectedInvoiceIds, setSelectedInvoiceIds] = useState([]);
 
     useEffect(() => {
         try {

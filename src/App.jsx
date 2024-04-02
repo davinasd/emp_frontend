@@ -36,6 +36,7 @@ import UpdateClient from "./components/forms/UpdateClient";
 import UpdateLead from "./components/forms/UpdateLead";
 import UpdateLeave from "./components/forms/UpdateLeave";
 import UpdateLetter from "./components/forms/UpdateLetter";
+import UpdateExpense from "./components/forms/UpdateExpense";
 import GetAllLeaves from "./components/GetAllLeaves";
 import GetAllLetters from "./components/GetAllLetters";
 import CreateLeave from "./components/CreateLeave";
@@ -49,6 +50,7 @@ import GetAllPaidInvoices from "./components/GetAllPaidInvoices";
 import AddSupply from "./components/AddSupply";
 import UpdateEmp from "./components/forms/UpdateEmp";
 import CreateExpense from "./components/CreateExpense";
+import GetAllExpense from "./components/GetAllExpense";
 
 function App() {
   const isLoggedIn = useSelector(selectIsLoggedIn);
@@ -103,6 +105,17 @@ function App() {
                 setActiveSideabarLink={setActiveSideabarLink}
               >
                 <GetAllManager />
+              </AppLayout>
+            }
+          />
+          <Route
+            path="/getAllExpense"
+            element={
+              <AppLayout
+                activeSideabarLink={"getAllExpense"}
+                setActiveSideabarLink={setActiveSideabarLink}
+              >
+                <GetAllExpense />
               </AppLayout>
             }
           />
@@ -358,6 +371,17 @@ function App() {
                 setActiveSideabarLink={setActiveSideabarLink}
               >
                 <UpdateClient></UpdateClient>
+              </AppLayout>
+            }
+          />
+          <Route
+            path="/UpdateExpense"
+            element={
+              <AppLayout
+                activeSideabarLink={"CreateExpense"}
+                setActiveSideabarLink={setActiveSideabarLink}
+              >
+                <UpdateExpense />
               </AppLayout>
             }
           />
