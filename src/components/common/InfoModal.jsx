@@ -18,12 +18,14 @@ import { useDispatch } from "react-redux";
 import { addEmployeeId } from "../../store/slice/EmployeeSlice";
 import { setClientId } from "../../store/slice/ClientSlice";
 import { setProjectId } from "../../store/slice/ProjectSlice";
-import { useEffect } from "react";
-import { Divider, Tag } from "antd";
+import { useEffect, useState } from "react";
+import { Divider, Empty, Tag } from "antd";
+import axios from "axios";
 
 const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
   const dispatch = useDispatch();
   const priorityArray = ["low", "medium", "high", "urgent"];
+  const [collectedInvoices, setCollectedInvoices] = useState([]);
 
   const handleTaskDelete = () => {
     // LOGIC TO BE WRITTEN
@@ -31,6 +33,7 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
   const handleChangeTaskStatus = () => {
     // LOGIC TO BE WRITTEN
   }
+
 
   useEffect(() => {
     if (modalFor === "project" && data?.employees) {
@@ -63,6 +66,24 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
       dispatch(setClientId(clientId));
     }
   }, [modalFor, data, dispatch]);
+
+  useEffect(() => {
+    const getCollectionHistory = async (invoice_id) => {
+      console.log(data)
+      try {
+        await axios.get(`${import.meta.env.VITE_API_BASE}/api/admin/invoice/${invoice_id}`)
+          .then((res) => {
+            setCollectedInvoices(res.data);
+          })
+      } catch (error) {
+        console.log(`Error getting collection history: ${error}`)
+      }
+    }
+
+    if (modalFor === "invoice") {
+      getCollectionHistory(data?.invoice_id);
+    }
+  }, [])
 
   if (modalFor === "manager")
     return (
@@ -842,6 +863,17 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                         <Text className="text-sm font-bold text-gray-500 mt-3">Time </Text>
                         <Text className="text-lg capitalize">{data.time1}</Text>
                       </>
+                    )}
+                  </div>
+                  <div className="max-w-[200px] md:max-w-[300px]">
+                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">Collection History</h1>
+                    {collectedInvoices.length > 0 ? (
+                      <>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">Date </Text>
+                        <Text className="text-lg capitalize">{data.date1}</Text>
+                      </>
+                    ) : (
+                      <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
                     )}
                   </div>
                 </div>

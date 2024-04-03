@@ -7,10 +7,6 @@ import {
   Tab,
   TabPanels,
   TabPanel,
-  // Select,
-  Tag,
-  TagLabel,
-  TagCloseButton,
   Flex,
   Input,
   Text,
@@ -20,11 +16,10 @@ import axios from "axios";
 import { useState, useEffect, useRef } from "react";
 import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
 import { toast } from "react-toastify";
-import moment from "moment";
 import SelectSource from "../common/SelectSource";
 import MyDatePicker from "../common/MyDatePicker";
 import SelectTag from "../common/SelectTag";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 const Client = () => {
   const singleFileRef = useRef();
   const [projectData, setProjectData] = useState({
@@ -58,7 +53,7 @@ const Client = () => {
   const navigate = useNavigate();
   const [selectedCountry, setSelectedCountry] = useState("");
   const [selectedState, setSelectedState] = useState("");
-  const [tags, setTags] = useState([]);
+  // const [tags, setTags] = useState([]);
   const [selectSourceValue, setSelectSourceValue] = useState([]);
   const [selectedTagValue, setSelectedTagValue] = useState([]);
 
@@ -80,35 +75,35 @@ const Client = () => {
     }));
   }, [selectSourceValue, selectedTagValue]);
 
-  const removeTagById = (tagToRemove) => {
-    setProjectData({
-      ...projectData,
-      source: projectData.source.filter((tag) => tag !== tagToRemove),
-    });
-  };
+  // const removeTagById = (tagToRemove) => {
+  //   setProjectData({
+  //     ...projectData,
+  //     source: projectData.source.filter((tag) => tag !== tagToRemove),
+  //   });
+  // };
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProjectData({ ...projectData, [name]: value });
   };
-  const getTagNameById = (id) => {
-    const tag = tags.find((tag) => tag.source_tag_id === id);
-    return tag ? tag.sourceTagName : "Unknown Tag";
-  };
+  // const getTagNameById = (id) => {
+  //   const tag = tags.find((tag) => tag.source_tag_id === id);
+  //   return tag ? tag.sourceTagName : "Unknown Tag";
+  // };
 
-  const handleTagChange = (e) => {
-    const selectedTags = Array.from(
-      e.target.selectedOptions,
-      (option) => option.value
-    );
+  // const handleTagChange = (e) => {
+  //   const selectedTags = Array.from(
+  //     e.target.selectedOptions,
+  //     (option) => option.value
+  //   );
 
-    const selectedTagNames = selectedTags.map((tagId) => getTagNameById(tagId));
-    console.log(selectedTagNames);
+  //   const selectedTagNames = selectedTags.map((tagId) => getTagNameById(tagId));
+  //   console.log(selectedTagNames);
 
-    setProjectData({
-      ...projectData,
-      source: [...projectData.source, ...selectedTagNames],
-    });
-  };
+  //   setProjectData({
+  //     ...projectData,
+  //     source: [...projectData.source, ...selectedTagNames],
+  //   });
+  // };
   const handleSelectChange = (setSelected, name, value) => {
     setSelected(value);
     setProjectData({ ...projectData, [name]: value });

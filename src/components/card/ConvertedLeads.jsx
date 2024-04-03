@@ -21,6 +21,7 @@ const ConvertedLeads = () => {
   const [financialYears, setFinancialYears] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState(null);
   const [selectedQuarter, setSelectedQuarter] = useState(null);
+  const [selectQuarterFirstMonth, setSelectQuarterFirstMonth] = useState(null);
 
   useEffect(() => {
     fetchData();
@@ -43,19 +44,12 @@ const ConvertedLeads = () => {
   }
 
   const fetchData = () => {
-    let firstQuarterMonth = selectedQuarter === 1 ? 1 : (
-      selectedQuarter === 2 ? 4 : (
-        selectedQuarter === 3 ? 7 : (
-          selectedQuarter === 4 ? 10 : null
-        )
-      )
-    )
     // Fetch total lead count
     axios.post(`${import.meta.env.VITE_API_BASE}/api/admin/getTotalLeadCount`, {
       financialYear: selectedYear,
       month: selectedMonth || "",
       quarter: selectedQuarter || "",
-      firstQuarterMonth: firstQuarterMonth || ""
+      firstQuarterMonth: selectQuarterFirstMonth || ""
     })
       .then((response) => {
         // console.log(response.data)
@@ -160,6 +154,28 @@ const ConvertedLeads = () => {
               <option key={`quarter-4`} value={4}>4</option>
             </Select>
           )}
+          {selectedQuarter && (
+            <Select
+              placeholder='Select Quarter'
+              value={selectQuarterFirstMonth || ""}
+              onChange={(e) => setSelectQuarterFirstMonth(e.target.value)}
+              size={"sm"}
+              rounded={"lg"}
+            >
+              <option key={`quarter-1`} value={1}>1</option>
+              <option key={`quarter-2`} value={2}>2</option>
+              <option key={`quarter-3`} value={3}>3</option>
+              <option key={`quarter-4`} value={4}>4</option>
+              <option key={`quarter-1`} value={5}>5</option>
+              <option key={`quarter-2`} value={6}>6</option>
+              <option key={`quarter-3`} value={7}>7</option>
+              <option key={`quarter-4`} value={8}>8</option>
+              <option key={`quarter-1`} value={9}>9</option>
+              <option key={`quarter-2`} value={10}>10</option>
+              <option key={`quarter-3`} value={11}>10</option>
+              <option key={`quarter-4`} value={12}>12</option>
+            </Select>
+          )}
           {selectedFilter && <Button width={100} size={"sm"} onClick={handleYearClear}>Clear</Button>}
         </div>
         <Divider />
@@ -169,10 +185,10 @@ const ConvertedLeads = () => {
               <HiArrowTrendingUp />
               Converted
             </div>
-            {convertedLeads}/{totalLeads}
+            {totalLeads === 0 ? 0 : convertedLeads}/{totalLeads}
           </Flex>
           <Progress
-            value={(convertedLeads / totalLeads) * 100}
+            value={totalLeads === 0 ? 0 : (convertedLeads / totalLeads) * 100}
             colorScheme="green"
             mt={2}
             height={2}
@@ -183,10 +199,10 @@ const ConvertedLeads = () => {
               <TfiBarChart />
               In Progress
             </div>
-            {leadsInProgress}/{totalLeads}
+            {totalLeads === 0 ? 0 : leadsInProgress}/{totalLeads}
           </Flex>
           <Progress
-            value={(leadsInProgress / totalLeads) * 100}
+            value={totalLeads === 0 ? 0 : (leadsInProgress / totalLeads) * 100}
             colorScheme="blue"
             mt={2}
             height={2}
@@ -197,10 +213,10 @@ const ConvertedLeads = () => {
               <IoAlertCircleOutline />
               Lost
             </div>
-            {lostLeads}/{totalLeads}
+            {totalLeads === 0 ? 0 : lostLeads}/{totalLeads}
           </Flex>
           <Progress
-            value={(lostLeads / totalLeads) * 100}
+            value={totalLeads === 0 ? 0 : (lostLeads / totalLeads) * 100}
             colorScheme="red"
             mt={2}
             height={2}
@@ -211,10 +227,10 @@ const ConvertedLeads = () => {
               <SlDrawer />
               Raw
             </div>
-            {rawLeads}/{totalLeads}
+            {totalLeads === 0 ? 0 : rawLeads}/{totalLeads}
           </Flex>
           <Progress
-            value={(rawLeads / totalLeads) * 100}
+            value={totalLeads === 0 ? 0 : (rawLeads / totalLeads) * 100}
             colorScheme="yellow"
             mt={2}
             height={2}
