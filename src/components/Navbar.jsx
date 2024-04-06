@@ -99,6 +99,9 @@ const Navbar = ({ showSidebar, setShowSidebar }) => {
                 <MenuItem p={0}>
                   <Link to={"/createExpense"} className='w-full py-2 px-4 flex items-center gap-3'><SlEnvolopeLetter /> Expense</Link>
                 </MenuItem>
+                <MenuItem p={0}>
+                  <Link to={"/createLedger"} className='w-full py-2 px-4 flex items-center gap-3'><SlEnvolopeLetter /> Ledger</Link>
+                </MenuItem>
               </MenuGroup>
             </MenuList>
           </Menu>

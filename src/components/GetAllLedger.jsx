@@ -30,7 +30,7 @@ import { setLetterId } from "../store/slice/LetterSlice";
 import { IoMdEye } from "react-icons/io";
 import { MdModeEditOutline } from "react-icons/md";
 
-const GetAllLetters = () => {
+const GetAllLedgers = () => {
     const [letters, setLetters] = useState([]);
     const dispatch = useDispatch();
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -45,7 +45,7 @@ const GetAllLetters = () => {
         async function fetchData() {
             try {
                 const response = await axios.get(
-                    `${import.meta.env.VITE_API_BASE}/api/admin/getAllLetters`
+                    `${import.meta.env.VITE_API_BASE}/api/admin/getAllLedgers`
                 );
                 console.log(response.data); // Check the structure of the response
                 setLetters(response.data); // Assuming response.data.data is the array of letters
@@ -57,6 +57,8 @@ const GetAllLetters = () => {
         }
         fetchData();
     }, []);
+
+    console.log(letters);
 
 
     const handleMoreInfo = (letter) => {
@@ -132,12 +134,16 @@ const GetAllLetters = () => {
                     >
                         <Thead position="sticky" top={0} bg={"#F1F5F9"}>
                             <Tr>
-                                <Th fontWeight="bold">Name</Th>
+                                <Th fontWeight="bold">Brand Name</Th>
+                                <Th fontWeight="bold">Client Name</Th>
                                 <Th fontWeight="bold" className="md:table-cell hidden">
                                     Created At
                                 </Th>
                                 <Th fontWeight="bold" className="md:table-cell hidden">
-                                    File
+                                    Paid
+                                </Th>
+                                <Th fontWeight="bold" className="md:table-cell hidden">
+                                    Received
                                 </Th>
                                 <Th fontWeight="bold">
                                     Actions
@@ -209,27 +215,18 @@ const GetAllLetters = () => {
                                 ))
                                 : letters?.map((letter) => (
                                     <Tr key={letter._id}>
-                                        <Td>{letter.name}</Td>
+                                        <Td>{letter.brandName}</Td>
+                                        <Td>
+                                            {letter.clientName}
+                                        </Td>
                                         <Td className="md:table-cell hidden">
                                             {format(new Date(letter.createdAt), "dd/MM/yyyy")}
                                         </Td>
                                         <Td className="md:table-cell hidden">
-                                            {letter.singleFile && (
-                                                <div>
-                                                    <Button
-                                                        as="a"
-                                                        href={`${import.meta.env.VITE_API_BASE}/uploads/${letter.singleFile}`}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        textDecoration="none"
-                                                        _hover={{ textDecoration: "none" }}
-                                                        mb={2}
-                                                        variant="solid"
-                                                    >
-                                                        View
-                                                    </Button>
-                                                </div>
-                                            )}
+                                            {letter.paid}
+                                        </Td>
+                                        <Td className="md:table-cell hidden">
+                                            {letter.received}
                                         </Td>
                                         <Td>
                                             <Button
@@ -273,7 +270,7 @@ const GetAllLetters = () => {
             </div>
 
             <InfoModal
-                modalFor="letter"
+                modalFor="ledger"
                 data={selectedLetter}
                 onClose={onClose}
                 isOpen={isOpen}
@@ -305,4 +302,4 @@ const GetAllLetters = () => {
     );
 };
 
-export default GetAllLetters;
+export default GetAllLedgers;

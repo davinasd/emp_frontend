@@ -51,6 +51,7 @@ import AddSupply from "./components/AddSupply";
 import UpdateEmp from "./components/forms/UpdateEmp";
 import CreateExpense from "./components/CreateExpense";
 import GetAllExpense from "./components/GetAllExpense";
+import GetAllLedgers from "./components/GetAllLedger";
 
 function App() {
   const isLoggedIn = useSelector(selectIsLoggedIn);
@@ -448,6 +449,17 @@ function App() {
                 setActiveSideabarLink={setActiveSideabarLink}
               >
                 <GetAllLead />
+              </AppLayout>
+            }
+          />
+          <Route
+            path="/getAllLedgers"
+            element={
+              <AppLayout
+                activeSideabarLink={"getAllLedgers"}
+                setActiveSideabarLink={setActiveSideabarLink}
+              >
+                <GetAllLedgers />
               </AppLayout>
             }
           />
