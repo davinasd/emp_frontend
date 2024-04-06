@@ -10,6 +10,7 @@ const InvoiceDashboardStatsCard = () => {
   const [totalLifetimeSales, setTotalLifetimeSales] = useState(0);
   const [averageInvoiceAmount, setAverageInvoiceAmount] = useState(0);
   const [monthlySalesReport, setMonthlySalesReport] = useState([]);
+  const [ledgersReport, setLedgersReport] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,6 +20,7 @@ const InvoiceDashboardStatsCard = () => {
         '/getLifetimeSales',
         '/getAverageInvoiceAmount',
         '/getMonthlySalesReport',
+        '/ledgerStatistics',
       ];
       const apiBaseUrl = import.meta.env.VITE_API_BASE || '';
       const requests = endpoints.map((endpoint) =>
@@ -34,6 +36,7 @@ const InvoiceDashboardStatsCard = () => {
         setTotalLifetimeSales(responses[2].data.totalLifetimeSales);
         setAverageInvoiceAmount(responses[3].data.averageInvoiceAmount);
         setMonthlySalesReport(responses[4].data);
+        setLedgersReport(responses[5].data);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -42,6 +45,8 @@ const InvoiceDashboardStatsCard = () => {
     fetchData();
   }, []);
 
+  console.log(ledgersReport)
+
 
   const totalInvoices = totalPaidInvoices + totalUnpaidInvoices;
   const paidPercentage = totalInvoices ? (totalPaidInvoices / totalInvoices) * 100 : 0;
@@ -49,22 +54,42 @@ const InvoiceDashboardStatsCard = () => {
 
   return (
     <div className='p-6'>
-      <div className="grid gap-8">
-        <div className="flex gap-3 items-center text-xl text-gray-600">
-          <LiaFileInvoiceSolid fontSize={20} />
-          Invoice overview
+      <div className="grid md:grid-cols-2 gap-8">
+        <div>
+          <div className="flex gap-3 items-center text-xl text-gray-600 mb-4">
+            <LiaFileInvoiceSolid fontSize={20} />
+            Invoice overview
+          </div>
+          <div className="text-gray-500 max-w-[400px]">
+            <div className="flex justify-between">
+              <span>{totalUnpaidInvoices} Unpaid</span>
+              <span>{unpaidPercentage.toFixed(2)}%</span>
+            </div>
+            <Progress value={unpaidPercentage} colorScheme="red" mt={4} height={2} rounded={"lg"} />
+            <div className="flex justify-between mt-6">
+              <span>{totalPaidInvoices} Paid</span>
+              <span>{paidPercentage.toFixed(2)}%</span>
+            </div>
+            <Progress value={paidPercentage} colorScheme="green" mt={2} height={2} rounded={"lg"} />
+          </div>
         </div>
-        <div className="text-gray-500 max-w-[400px]">
-          <div className="flex justify-between">
-            <span>{totalUnpaidInvoices} Unpaid</span>
-            <span>{unpaidPercentage.toFixed(2)}%</span>
+        <div>
+          <div className="flex gap-3 items-center text-xl text-gray-600 mb-4">
+            <LiaFileInvoiceSolid fontSize={20} />
+            Ledger overview
           </div>
-          <Progress value={unpaidPercentage} colorScheme="red" mt={4} height={2} rounded={"lg"} />
-          <div className="flex justify-between mt-6">
-            <span>{totalPaidInvoices} Paid</span>
-            <span>{paidPercentage.toFixed(2)}%</span>
+          <div className="text-gray-500 max-w-[400px]">
+            <div className="flex justify-between">
+              <span>{ledgersReport.totalReceived} Unpaid</span>
+              <span>{((ledgersReport.net / ledgersReport.totalReceived)*100).toFixed(2)}%</span>
+            </div>
+            <Progress value={unpaidPercentage} colorScheme="red" mt={4} height={2} rounded={"lg"} />
+            <div className="flex justify-between mt-6">
+              <span>{ledgersReport.totalPaid} Paid</span>
+              <span>{((ledgersReport.totalPaid / ledgersReport.totalReceived)*100).toFixed(2)}%</span>
+            </div>
+            <Progress value={paidPercentage} colorScheme="green" mt={2} height={2} rounded={"lg"} />
           </div>
-          <Progress value={paidPercentage} colorScheme="green" mt={2} height={2} rounded={"lg"} />
         </div>
       </div>
       <Divider />
