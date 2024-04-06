@@ -66,8 +66,7 @@ const GetAllExpense = () => {
     const handleDeleteEmployee = async () => {
         try {
             await axios.delete(
-                `${import.meta.env.VITE_API_BASE
-                }/api/admin/deleteExpense/${deleteProjectId}`
+                `${import.meta.env.VITE_API_BASE}/api/admin/deleteExpense/${deleteProjectId}`
             );
             toast.success("Successfully deleted expense")
             const response = await axios.get(
@@ -100,6 +99,7 @@ const GetAllExpense = () => {
     const handleUpdateEmp = (expenseId) => {
         // console.log(id)
         dispatch(setExpenseId(expenseId));
+        console.log(expenseId)
     }
 
     return (

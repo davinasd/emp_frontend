@@ -1,9 +1,5 @@
 import {
   Button,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -13,6 +9,7 @@ import {
   ModalOverlay,
   Text,
 } from "@chakra-ui/react";
+import { format } from 'date-fns';
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addEmployeeId } from "../../store/slice/EmployeeSlice";
@@ -68,6 +65,10 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
     }
 
     if (modalFor === "expense" && data && data.employee_id) {
+      const employeeId = data.employee_id;
+      dispatch(addEmployeeId(employeeId));
+    }
+    if (modalFor === "ledger" && data && data.employee_id) {
       const employeeId = data.employee_id;
       dispatch(addEmployeeId(employeeId));
     }
@@ -1389,7 +1390,7 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                     <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">Other Information</h1>
                     {data?.categories?.map((cat, index) => (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Category {index+1}: </Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">Category {index + 1}: </Text>
                         <Text className="text-lg">{cat.supplyTagName}</Text>
                       </>
                     ))}
@@ -1529,6 +1530,117 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                   <Text>{data.netSalary}</Text>
                   <Text fontWeight="bold">Slip ID: </Text>
                   <Text>{data.slip_id}</Text>
+                </div>
+              </>
+            )}
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme="purple" onClick={onClose}>
+              Close
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    );
+  }
+
+
+  if (modalFor === "ledger") {
+    return (
+      <Modal
+        size={"6xl"}
+        scrollBehavior="inside"
+        onClose={onClose}
+        isOpen={isOpen}
+        motionPreset="slideInBottom"
+        isCentered
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Ledger Information</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            {data && (
+              <>
+                <div className="flex flex-col md:flex-row gap-2 items-end md:items-center justify-end">
+                  <h2 className="text-lg mr-2">Get:</h2>
+                  <Link to={`/GetEmp`}>
+                    <Button colorScheme="green">Employee</Button>
+                  </Link>
+                  {/* <Divider type="vertical" />
+                  <Menu>
+                    <MenuButton as={Button} variant={"outline"} rightIcon={<ChevronDownIcon />}>
+                      Actions
+                    </MenuButton>
+                    <MenuList>
+                      <MenuItem>
+                        <div className="w-full flex items-center" onClick={() => handleTaskDelete()}>
+                          <DeleteIcon mr={2} /> Delete
+                        </div>
+                      </MenuItem>
+                      <MenuItem>
+                        <div className="w-full flex items-center" onClick={() => handleChangeTaskStatus()}>
+                          <CheckCircleIcon mr={2} /> Change Status
+                        </div>
+                      </MenuItem>
+                    </MenuList>
+                  </Menu> */}
+                </div>
+                <Divider />
+                <div className="flex gap-10">
+                  <div className="max-w-[200px] md:max-w-[300px]">
+                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">General Information</h1>
+                    {data.brandName && (
+                      <>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">Brand Name </Text>
+                        <Text className="text-lg capitalize">{data.brandName}</Text>
+                      </>
+                    )}
+                    {data.clientName && (
+                      <>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">Client Name </Text>
+                        <Text className="text-lg capitalize">{data.clientName}</Text>
+                      </>
+                    )}
+                    {data.companyName && (
+                      <>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">Company Name </Text>
+                        <Text className="text-lg capitalize">{data.companyName}</Text>
+                      </>
+                    )}
+                    {data.createdAt && (
+                      <>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">Created At </Text>
+                        <Text className="text-lg capitalize">{format(new Date(data.createdAt), "dd/MM/yyyy")}</Text>
+                      </>
+                    )}
+                  </div>
+                  <div className="max-w-[200px] md:max-w-[300px]">
+                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">Finance Information</h1>
+                    <Text className="text-sm font-bold text-gray-500 mt-3">Paid </Text>
+                    <Text className="text-lg capitalize">{data?.paid}</Text>
+                    <Text className="text-sm font-bold text-gray-500 mt-3">Received </Text>
+                    <Text className="text-lg capitalize">{data?.received}</Text>
+                  </div>
+                </div>
+                <div className="w-full mt-4">
+                  <Text className="text-md font-bold text-gray-500 mt-2">Additional Information: </Text>
+                  <div className="w-full flex items-center justify-between gap-2 mt-2 max-w-[450px]">
+                    <div className="flex items-center gap-2">
+                    <Text className="font-bold">Date: </Text>
+                    <Text className="text-lg capitalize">{data?.date1}</Text>
+                    </div>
+                    <div className="flex items-center gap-2">
+                    <Text className="font-bold">Time: </Text>
+                    <Text className="text-lg capitalize">{data?.time1}</Text>
+                    </div>
+                  </div>
+                  <div className="w-full flex items-center gap-2 mt-2">
+                    <Text className="font-bold">Description: </Text>
+                    <Text className="text-lg capitalize">{data?.description}</Text>
+                  </div>
+                </div>
+                <div>
                 </div>
               </>
             )}

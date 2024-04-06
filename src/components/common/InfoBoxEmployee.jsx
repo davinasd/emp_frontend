@@ -163,7 +163,7 @@ const InfoBoxEmployee = () => {
                         </Text>
                       </>
                     )}
-                    {employee.permissions.length > 0 && (
+                    {employee?.permissions?.length > 0 && (
                       <>
                         <Text className="text-sm font-bold text-gray-500 mt-3">
                           Permissions{" "}
@@ -289,7 +289,7 @@ const InfoBoxEmployee = () => {
           ))}
         </>
       ) : (
-        <Text>No client details available</Text>
+        <Text>No employee details available</Text>
       )}
     </Box>
   );

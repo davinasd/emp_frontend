@@ -25,14 +25,12 @@ import { Link } from "react-router-dom";
 import { Empty } from "antd";
 import { DeleteIcon } from "@chakra-ui/icons";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
-import { setLetterId } from "../store/slice/LetterSlice";
 import { IoMdEye } from "react-icons/io";
-import { MdModeEditOutline } from "react-icons/md";
+import GetLedgersByEmp from "./common/GetLedgersByEmp";
+import GetLedgersByClient from "./common/GetLedgersByClient";
 
-const GetAllLetters = () => {
+const GetAllLedgers = () => {
     const [letters, setLetters] = useState([]);
-    const dispatch = useDispatch();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [selectedLetter, setSelectedLetter] = useState(null);
     const [searchText, setSearchText] = useState("");
@@ -40,12 +38,14 @@ const GetAllLetters = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [deleteLetterId, setDeleteLetterId] = useState(null);
     const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
+    const [getLedgersByEmp, setGetLedgersByEmp] = useState(false);
+    const [getLedgersByClient, setGetLedgersByClient] = useState(false);
 
     useEffect(() => {
         async function fetchData() {
             try {
                 const response = await axios.get(
-                    `${import.meta.env.VITE_API_BASE}/api/admin/getAllLetters`
+                    `${import.meta.env.VITE_API_BASE}/api/admin/getAllLedgers`
                 );
                 console.log(response.data); // Check the structure of the response
                 setLetters(response.data); // Assuming response.data.data is the array of letters
@@ -58,6 +58,8 @@ const GetAllLetters = () => {
         fetchData();
     }, []);
 
+    console.log(letters);
+
 
     const handleMoreInfo = (letter) => {
         setSelectedLetter(letter);
@@ -67,7 +69,7 @@ const GetAllLetters = () => {
     const handleDeleteLeave = async () => {
         try {
             await axios.delete(
-                `${import.meta.env.VITE_API_BASE}/api/admin/deleteLetterById/${deleteLetterId}`
+                `${import.meta.env.VITE_API_BASE}/api/admin/deleteLedger/${deleteLetterId}`
             );
             toast.success("Successfully deleted leave");
             const response = await axios.get(
@@ -88,9 +90,6 @@ const GetAllLetters = () => {
     const handleDeleteCancel = () => {
         setIsDeleteAlertOpen(false);
     };
-    const handleUpdateLetter = (letterId) => {
-        dispatch(setLetterId(letterId));
-    };
 
     if (isLoading) {
         return (
@@ -103,19 +102,34 @@ const GetAllLetters = () => {
     return (
         <>
             <div className="w-full p-8 md:block flex flex-col items-center">
-                <h1 className="text-3xl font-bold mb-4">Letter Information</h1>
+                <h1 className="text-3xl font-bold mb-4">Ledger Information</h1>
 
-                <Link to="/createLetter">
+                <div className="flex gap-2">
+                    <Link to="/createLetter">
+                        <Button
+                            colorScheme="blue"
+                            onClick={onOpen}
+                            _hover={{ bg: "blue.600" }}
+                            mb="2"
+                            className="flex gap-2 items-center"
+                        >
+                            <GoPlus /> Create Ledger
+                        </Button>
+                    </Link>
+
                     <Button
-                        colorScheme="blue"
-                        onClick={onOpen}
-                        _hover={{ bg: "blue.600" }}
-                        mb="2"
-                        className="flex gap-2 items-center"
+                        onClick={() => setGetLedgersByEmp(true)}
+                        variant={"solid"}
                     >
-                        <GoPlus /> Create Letter
+                        Get By Emp
                     </Button>
-                </Link>
+                    <Button
+                        onClick={() => setGetLedgersByClient(true)}
+                        variant={"solid"}
+                    >
+                        Get By Client
+                    </Button>
+                </div>
 
                 {letters?.length === 0 ? (
                     <Empty
@@ -124,20 +138,24 @@ const GetAllLetters = () => {
                     />
                 ) : (
                     <TableContainer
-                        formFor="letters"
+                        formFor="ledgers"
                         searchText={searchText}
                         setSearchText={setSearchText}
                         setFilteredData={setFilteredLetter}
                         data={letters}
                     >
-                        <Thead position="sticky" top={0} bg={"#F1F5F9"}>
+                        <Thead position="sticky" zIndex={10} top={0} bg={"#F1F5F9"}>
                             <Tr>
-                                <Th fontWeight="bold">Name</Th>
+                                <Th fontWeight="bold">Brand Name</Th>
+                                <Th fontWeight="bold">Client Name</Th>
                                 <Th fontWeight="bold" className="md:table-cell hidden">
                                     Created At
                                 </Th>
                                 <Th fontWeight="bold" className="md:table-cell hidden">
-                                    File
+                                    Paid
+                                </Th>
+                                <Th fontWeight="bold" className="md:table-cell hidden">
+                                    Received
                                 </Th>
                                 <Th fontWeight="bold">
                                     Actions
@@ -149,27 +167,18 @@ const GetAllLetters = () => {
                             {searchText !== ""
                                 ? filteredLetters.map((letter) => (
                                     <Tr key={letter._id}>
-                                        <Td>{letter.name}</Td>
+                                        <Td>{letter.brandName}</Td>
+                                        <Td>
+                                            {letter.clientName}
+                                        </Td>
                                         <Td className="md:table-cell hidden">
                                             {format(new Date(letter.createdAt), "dd/MM/yyyy")}
                                         </Td>
                                         <Td className="md:table-cell hidden">
-                                            {letter.singleFile && (
-                                                <div>
-                                                    <Button
-                                                        as="a"
-                                                        href={`${import.meta.env.VITE_API_BASE}/uploads/${letter.singleFile}`}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        textDecoration="none"
-                                                        _hover={{ textDecoration: "none" }}
-                                                        mb={2}
-                                                        variant="solid"
-                                                    >
-                                                        View
-                                                    </Button>
-                                                </div>
-                                            )}
+                                            {letter.paid}
+                                        </Td>
+                                        <Td className="md:table-cell hidden">
+                                            {letter.received}
                                         </Td>
                                         <Td>
                                             <Button
@@ -179,18 +188,6 @@ const GetAllLetters = () => {
                                             >
                                                 <IoMdEye />
                                             </Button>
-                                            <Link to="/UpdateLetter">
-                                                <Button
-                                                    size={"sm"}
-                                                    variant={"outline"}
-                                                    colorScheme="blue"
-                                                    ml={2}
-                                                    p={0}
-                                                    onClick={() => handleUpdateLetter(letter.letter_id)}
-                                                >
-                                                <MdModeEditOutline size={18} />
-                                                </Button>
-                                            </Link>
                                         </Td>
                                         <Td>
                                             {" "}
@@ -199,37 +196,27 @@ const GetAllLetters = () => {
                                                 variant={"outline"}
                                                 colorScheme="red"
                                                 onClick={() =>
-                                                    handleDeleteConfirmation(letter.letter_id)
+                                                    handleDeleteConfirmation(letter.ledger_id)
                                                 }
                                             >
                                                 <DeleteIcon />
                                             </Button>
                                         </Td>
-                                    </Tr>
-                                ))
+                                    </Tr>))
                                 : letters?.map((letter) => (
                                     <Tr key={letter._id}>
-                                        <Td>{letter.name}</Td>
+                                        <Td>{letter.brandName}</Td>
+                                        <Td>
+                                            {letter.clientName}
+                                        </Td>
                                         <Td className="md:table-cell hidden">
                                             {format(new Date(letter.createdAt), "dd/MM/yyyy")}
                                         </Td>
                                         <Td className="md:table-cell hidden">
-                                            {letter.singleFile && (
-                                                <div>
-                                                    <Button
-                                                        as="a"
-                                                        href={`${import.meta.env.VITE_API_BASE}/uploads/${letter.singleFile}`}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        textDecoration="none"
-                                                        _hover={{ textDecoration: "none" }}
-                                                        mb={2}
-                                                        variant="solid"
-                                                    >
-                                                        View
-                                                    </Button>
-                                                </div>
-                                            )}
+                                            {letter.paid}
+                                        </Td>
+                                        <Td className="md:table-cell hidden">
+                                            {letter.received}
                                         </Td>
                                         <Td>
                                             <Button
@@ -239,18 +226,6 @@ const GetAllLetters = () => {
                                             >
                                                 <IoMdEye />
                                             </Button>
-                                            <Link to="/UpdateLetter">
-                                                <Button
-                                                    size={"sm"}
-                                                    variant={"outline"}
-                                                    colorScheme="blue"
-                                                    ml={2}
-                                                    p={0}
-                                                    onClick={() => handleUpdateLetter(letter.letter_id)}
-                                                >
-                                                <MdModeEditOutline size={18} />
-                                                </Button>
-                                            </Link>
                                         </Td>
                                         <Td>
                                             {" "}
@@ -259,7 +234,7 @@ const GetAllLetters = () => {
                                                 variant={"outline"}
                                                 colorScheme="red"
                                                 onClick={() =>
-                                                    handleDeleteConfirmation(letter.letter_id)
+                                                    handleDeleteConfirmation(letter.ledger_id)
                                                 }
                                             >
                                                 <DeleteIcon />
@@ -272,8 +247,11 @@ const GetAllLetters = () => {
                 )}
             </div>
 
+            <GetLedgersByEmp open={getLedgersByEmp} setOpen={setGetLedgersByEmp} />
+            <GetLedgersByClient open={getLedgersByClient} setOpen={setGetLedgersByClient} />
+
             <InfoModal
-                modalFor="letter"
+                modalFor="ledger"
                 data={selectedLetter}
                 onClose={onClose}
                 isOpen={isOpen}
@@ -305,4 +283,4 @@ const GetAllLetters = () => {
     );
 };
 
-export default GetAllLetters;
+export default GetAllLedgers;

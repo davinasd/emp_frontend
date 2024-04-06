@@ -130,7 +130,7 @@ const GetAllProject = () => {
     );
   }
 
-  console.log(projects);
+  // console.log(projects);
 
   return (
     <>

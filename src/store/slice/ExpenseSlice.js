@@ -16,6 +16,6 @@ export const expenseSlice = createSlice({
 });
 
 export const { setExpenseId, clearExpenseId } = expenseSlice.actions;
-export const selectExpenseId = (state) => state.client.expenseId;
+export const selectExpenseId = (state) => state.expense.expenseId;
 
 export default expenseSlice.reducer;

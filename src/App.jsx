@@ -51,6 +51,8 @@ import AddSupply from "./components/AddSupply";
 import UpdateEmp from "./components/forms/UpdateEmp";
 import CreateExpense from "./components/CreateExpense";
 import GetAllExpense from "./components/GetAllExpense";
+import GetAllLedgers from "./components/GetAllLedger";
+import CreateLedger from "./components/CreateLedger";
 
 function App() {
   const isLoggedIn = useSelector(selectIsLoggedIn);
@@ -452,6 +454,17 @@ function App() {
             }
           />
           <Route
+            path="/getAllLedgers"
+            element={
+              <AppLayout
+                activeSideabarLink={"getAllLedgers"}
+                setActiveSideabarLink={setActiveSideabarLink}
+              >
+                <GetAllLedgers />
+              </AppLayout>
+            }
+          />
+          <Route
             path="/getAllTask"
             element={
               <AppLayout
@@ -482,6 +495,17 @@ function App() {
                 setActiveSideabarLink={setActiveSideabarLink}
               >
                 <CreateProject />
+              </AppLayout>
+            }
+          />
+          <Route
+            path="/createLedger"
+            element={
+              <AppLayout
+                activeSideabarLink={"CreateLedger"}
+                setActiveSideabarLink={setActiveSideabarLink}
+              >
+                <CreateLedger />
               </AppLayout>
             }
           />

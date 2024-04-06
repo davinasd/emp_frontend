@@ -1,13 +1,5 @@
-import { ChakraProvider, Flex, Card, CardBody, Progress, Grid, GridItem, Divider, Stat, StatLabel, StatNumber } from "@chakra-ui/react";
+import { ChakraProvider, Card, CardBody, Divider, } from "@chakra-ui/react";
 import { extendTheme } from "@chakra-ui/react";
-import { selectUser } from "../store/slice/UserSlice";
-import { useSelector } from "react-redux";
-import { FaMoneyBills } from "react-icons/fa6";
-import { HiMiniArrowTrendingUp } from "react-icons/hi2";
-import { GrTask } from "react-icons/gr";
-import { GiProgression } from "react-icons/gi";
-import { LiaFileInvoiceSolid } from "react-icons/lia";
-import { PiNewspaperClipping, PiNewspaperLight } from "react-icons/pi";
 import CalendarComponent from "./common/Calendar";
 import TodoCheckbox from "./common/TodoCheckbox";
 import { CheckIcon, WarningTwoIcon } from "@chakra-ui/icons";
@@ -33,7 +25,7 @@ const theme = extendTheme({
 
 
 function Home() {
-  const user = useSelector(selectUser);
+  // const user = useSelector(selectUser);
 
   const todoDone = [
     { title: "Login to the dashboard" },
@@ -51,7 +43,7 @@ function Home() {
         <div className="flex flex-col md:flex-row gap-4">
           <ConvertedLeads />
           <ProjectCard />
-          <LeaveCard></LeaveCard>
+          <LeaveCard />
         </div>
         <div className="flex gap-4 flex-col md:flex-row">
           <Card className="w-full md:w-[65%]">
