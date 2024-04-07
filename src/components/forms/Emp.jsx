@@ -159,24 +159,26 @@ const Emp = () => {
       { key: 'department', label: 'Department' },
       { key: 'email', label: 'Email' },
       { key: 'password', label: 'Password' },
-      { key: 'companyName', label: 'Joining Date' },
+      { key: 'joiningDate', label: 'Joining Date' },
       { key: 'type', label: 'Employment Type' },
       { key: 'aadharNumber', label: 'Aadhar Number' },
       { key: 'panNumber', label: 'Pan Number' },
-      { key: 'companyName', label: 'Probation Period' },
+      { key: 'probationPeriod', label: 'Probation Period' },
       { key: 'permanentAddress', label: 'Permanent Address' },
       { key: 'correspondenceAddress', label: 'Correspondence Address' },
-      { key: 'relation', label: 'Relation' },
-      { key: 'guardianName', label: 'Guardian Name' },
-      { key: 'guardianContactNo', label: 'Guardian Contact Number' },
-      { key: 'bankName', label: 'Bank Name' },
-      { key: 'bankAccountNo', label: 'Bank Account Number' },
-      { key: 'bankIfscCode', label: 'Bank IFSC Code' },
-      { key: 'type', label: 'Bank Type' },
-      { key: 'branch', label: 'Branch Name' },
+      // { key: 'guardianDetails.relation', label: 'Relation' },
+      // { key: 'guardianDetails.guardianName', label: 'Guardian Name' },
+      // { key: 'guardianDetails.guardianContactNo', label: 'Guardian Contact Number' },
+      // { key: 'bankName', label: 'Bank Name' },
+      // { key: 'bankAccountNo', label: 'Bank Account Number' },
+      // { key: 'bankIfscCode', label: 'Bank IFSC Code' },
+      // { key: 'type', label: 'Bank Type' },
+      // { key: 'branch', label: 'Branch Name' },
 
 
     ];
+
+    console.log(formData)
 
     for (let { key, label, isArray } of requiredFields) {
       if (isArray ? !projectData[key] || projectData[key].length === 0 : !projectData[key]) {
@@ -184,6 +186,8 @@ const Emp = () => {
         return;
       }
     }
+    const data = formData.singleFile;
+    console.log(data)
     axios
       .post(
         `${import.meta.env.VITE_API_BASE}/api/admin/createEmployee`,
@@ -459,7 +463,7 @@ const Emp = () => {
               <div className="flex gap-3">
                 {projectData.singleFile && (
                   <div>
-                    <p>Single File: {projectData.singleFile.name}</p>
+                    <p>Single File: {projectData.singleFile}</p>
                     <Button onClick={handleDeleteSingleFile}>Delete</Button>
                   </div>
                 )}
@@ -684,7 +688,7 @@ const Emp = () => {
                 <div className="flex gap-3">
                   {projectData.singleFile && (
                     <div>
-                      <p>Single File: {projectData.singleFile.name}</p>
+                      <p>Single File: {projectData.singleFile}</p>
                       <Button onClick={handleDeleteSingleFile}>Delete</Button>
                     </div>
                   )}

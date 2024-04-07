@@ -94,6 +94,8 @@ const ConvertedLeads = () => {
     setSelectedYear(currentYear - 1);
     setSelectedFilter(null);
     setSelectedMonth(null);
+    setSelectQuarterFirstMonth(null);
+    setSelectedQuarter(null);
   }
 
   return (

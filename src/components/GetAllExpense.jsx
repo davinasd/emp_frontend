@@ -16,39 +16,37 @@ import {
     AlertDialogFooter,
     AlertDialogCloseButton,
 } from "@chakra-ui/react";
-import { format } from 'date-fns';
 import axios from "axios";
 import InfoModal from "./common/InfoModal";
-import { GoPlus } from "react-icons/go";
 import TableContainer from "./common/TableContainer";
-import { Link } from "react-router-dom";
 import { Empty } from "antd";
-import { DeleteIcon } from "@chakra-ui/icons";
+import { Link } from "react-router-dom";
+import { GoPlus } from "react-icons/go";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
-import { setLetterId } from "../store/slice/LetterSlice";
+import { DeleteIcon } from "@chakra-ui/icons";
 import { IoMdEye } from "react-icons/io";
 import { MdModeEditOutline } from "react-icons/md";
+import { setExpenseId } from "../store/slice/ExpenseSlice";
+import { useDispatch } from "react-redux";
 
-const GetAllLetters = () => {
-    const [letters, setLetters] = useState([]);
+const GetAllExpense = () => {
     const dispatch = useDispatch();
+    const [employees, setEmployees] = useState([]);
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [selectedLetter, setSelectedLetter] = useState(null);
+    const [selectedEmployee, setSelectedEmployee] = useState(null);
     const [searchText, setSearchText] = useState("");
-    const [filteredLetters, setFilteredLetter] = useState([]);
+    const [filteredEmployees, setFilteredEmployees] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [deleteLetterId, setDeleteLetterId] = useState(null);
+    const [deleteProjectId, setDeleteProjectId] = useState(null);
     const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
 
     useEffect(() => {
         async function fetchData() {
             try {
                 const response = await axios.get(
-                    `${import.meta.env.VITE_API_BASE}/api/admin/getAllLetters`
+                    `${import.meta.env.VITE_API_BASE}/api/admin/getAllExpenses`
                 );
-                console.log(response.data); // Check the structure of the response
-                setLetters(response.data); // Assuming response.data.data is the array of letters
+                setEmployees(response.data);
                 setIsLoading(false);
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -58,38 +56,27 @@ const GetAllLetters = () => {
         fetchData();
     }, []);
 
+    // console.log(employees)
 
-    const handleMoreInfo = (letter) => {
-        setSelectedLetter(letter);
+    const handleMoreInfo = (employee) => {
+        setSelectedEmployee(employee);
         onOpen();
     };
 
-    const handleDeleteLeave = async () => {
+    const handleDeleteEmployee = async () => {
         try {
             await axios.delete(
-                `${import.meta.env.VITE_API_BASE}/api/admin/deleteLetterById/${deleteLetterId}`
+                `${import.meta.env.VITE_API_BASE}/api/admin/deleteExpense/${deleteProjectId}`
             );
-            toast.success("Successfully deleted leave");
+            toast.success("Successfully deleted expense")
             const response = await axios.get(
-                `${import.meta.env.VITE_API_BASE}/api/admin/getAllLetters`
+                `${import.meta.env.VITE_API_BASE}/api/admin/getAllExpenses`
             );
-            setLetters(response.data);
+            setEmployees(response.data);
             setIsDeleteAlertOpen(false);
         } catch (error) {
-            console.error("Error deleting leave:", error);
+            console.error("Error deleting employee:", error);
         }
-    };
-
-    const handleDeleteConfirmation = (letterId) => {
-        setDeleteLetterId(letterId);
-        setIsDeleteAlertOpen(true);
-    };
-
-    const handleDeleteCancel = () => {
-        setIsDeleteAlertOpen(false);
-    };
-    const handleUpdateLetter = (letterId) => {
-        dispatch(setLetterId(letterId));
     };
 
     if (isLoading) {
@@ -100,106 +87,102 @@ const GetAllLetters = () => {
         );
     }
 
+    const handleDeleteConfirmation = (id) => {
+        setDeleteProjectId(id);
+        setIsDeleteAlertOpen(true);
+    };
+
+    const handleDeleteCancel = () => {
+        setIsDeleteAlertOpen(false);
+    };
+
+    const handleUpdateEmp = (expenseId) => {
+        // console.log(id)
+        dispatch(setExpenseId(expenseId));
+        console.log(expenseId)
+    }
+
     return (
         <>
             <div className="w-full p-8 md:block flex flex-col items-center">
-                <h1 className="text-3xl font-bold mb-4">Letter Information</h1>
-
-                <Link to="/createLetter">
+                <h1 className="text-3xl font-bold mb-4">Expense Information</h1>
+                <Link to="/CreateExpense">
                     <Button
                         colorScheme="blue"
-                        onClick={onOpen}
                         _hover={{ bg: "blue.600" }}
-                        mb="2"
+                        mb="6"
                         className="flex gap-2 items-center"
                     >
-                        <GoPlus /> Create Letter
+                        <GoPlus /> Add an Expense
                     </Button>
                 </Link>
 
-                {letters?.length === 0 ? (
+                {employees.length === 0 ? (
                     <Empty
                         image={Empty.PRESENTED_IMAGE_SIMPLE}
-                        description={<span>No Letters</span>}
+                        description={<span>No Employee Data</span>}
                     />
                 ) : (
                     <TableContainer
-                        formFor="letters"
                         searchText={searchText}
                         setSearchText={setSearchText}
-                        setFilteredData={setFilteredLetter}
-                        data={letters}
+                        setFilteredData={setFilteredEmployees}
+                        data={employees}
+                        searchFor="expense"
                     >
-                        <Thead position="sticky" top={0} bg={"#F1F5F9"}>
+                        <Thead position="sticky" top={0} bg={"#F1F5F9"} zIndex={10}>
                             <Tr>
+                                <Th fontWeight="bold">S. No.</Th>
                                 <Th fontWeight="bold">Name</Th>
+                                <Th fontWeight="bold">Amount</Th>
+                                <Th fontWeight="bold" className="md:table-cell hidden">Date</Th>
+                                <Th fontWeight="bold" className="md:table-cell hidden">Time</Th>
                                 <Th fontWeight="bold" className="md:table-cell hidden">
-                                    Created At
+                                    Total Spent
                                 </Th>
-                                <Th fontWeight="bold" className="md:table-cell hidden">
-                                    File
-                                </Th>
-                                <Th fontWeight="bold">
-                                    Actions
-                                </Th>
+                                <Th fontWeight="bold">Action</Th>
                                 <Th fontWeight="bold"></Th>
                             </Tr>
                         </Thead>
                         <Tbody>
                             {searchText !== ""
-                                ? filteredLetters.map((letter) => (
-                                    <Tr key={letter._id}>
-                                        <Td>{letter.name}</Td>
-                                        <Td className="md:table-cell hidden">
-                                            {format(new Date(letter.createdAt), "dd/MM/yyyy")}
-                                        </Td>
-                                        <Td className="md:table-cell hidden">
-                                            {letter.singleFile && (
-                                                <div>
-                                                    <Button
-                                                        as="a"
-                                                        href={`${import.meta.env.VITE_API_BASE}/uploads/${letter.singleFile}`}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        textDecoration="none"
-                                                        _hover={{ textDecoration: "none" }}
-                                                        mb={2}
-                                                        variant="solid"
-                                                    >
-                                                        View
-                                                    </Button>
-                                                </div>
-                                            )}
-                                        </Td>
+                                ? filteredEmployees.map((emp, index) => (
+                                    <Tr key={emp._id}>
+                                        <Td>{index + 1}</Td>
+                                        <Td>{emp.name}</Td>
+                                        <Td>{emp.amountReceived}</Td>
+                                        <Td className="md:table-cell hidden">{emp.date1}</Td>
+                                        <Td className="md:table-cell hidden">{emp.time1}</Td>
+                                        <Td className="md:table-cell hidden">{emp.totalSpent}</Td>
                                         <Td>
                                             <Button
                                                 size={"sm"}
                                                 colorScheme="purple"
-                                                onClick={() => handleMoreInfo(letter)}
+                                                onClick={() => handleMoreInfo(emp)}
                                             >
                                                 <IoMdEye />
                                             </Button>
-                                            <Link to="/UpdateLetter">
+                                            <Link to="/UpdateEmp">
                                                 <Button
                                                     size={"sm"}
                                                     variant={"outline"}
                                                     colorScheme="blue"
                                                     ml={2}
                                                     p={0}
-                                                    onClick={() => handleUpdateLetter(letter.letter_id)}
+                                                    onClick={() => handleUpdateEmp(emp.expense_id)}
                                                 >
-                                                <MdModeEditOutline size={18} />
+                                                    <MdModeEditOutline size={18} />
                                                 </Button>
                                             </Link>
                                         </Td>
                                         <Td>
-                                            {" "}
                                             <Button
                                                 size={"sm"}
                                                 variant={"outline"}
                                                 colorScheme="red"
+                                                ml={2}
                                                 onClick={() =>
-                                                    handleDeleteConfirmation(letter.letter_id)
+                                                    handleDeleteConfirmation(emp.expense_id)
                                                 }
                                             >
                                                 <DeleteIcon />
@@ -207,59 +190,43 @@ const GetAllLetters = () => {
                                         </Td>
                                     </Tr>
                                 ))
-                                : letters?.map((letter) => (
-                                    <Tr key={letter._id}>
-                                        <Td>{letter.name}</Td>
-                                        <Td className="md:table-cell hidden">
-                                            {format(new Date(letter.createdAt), "dd/MM/yyyy")}
-                                        </Td>
-                                        <Td className="md:table-cell hidden">
-                                            {letter.singleFile && (
-                                                <div>
-                                                    <Button
-                                                        as="a"
-                                                        href={`${import.meta.env.VITE_API_BASE}/uploads/${letter.singleFile}`}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        textDecoration="none"
-                                                        _hover={{ textDecoration: "none" }}
-                                                        mb={2}
-                                                        variant="solid"
-                                                    >
-                                                        View
-                                                    </Button>
-                                                </div>
-                                            )}
-                                        </Td>
+                                : employees.map((emp, index) => (
+                                    <Tr key={emp._id}>
+                                        <Td>{index + 1}</Td>
+                                        <Td>{emp.name}</Td>
+                                        <Td>{emp.amountReceived}</Td>
+                                        <Td className="md:table-cell hidden">{emp.date1}</Td>
+                                        <Td className="md:table-cell hidden">{emp.time1}</Td>
+                                        <Td className="md:table-cell hidden">{emp.totalSpent}</Td>
                                         <Td>
                                             <Button
                                                 size={"sm"}
                                                 colorScheme="purple"
-                                                onClick={() => handleMoreInfo(letter)}
+                                                onClick={() => handleMoreInfo(emp)}
                                             >
                                                 <IoMdEye />
                                             </Button>
-                                            <Link to="/UpdateLetter">
+                                            <Link to="/UpdateExpense">
                                                 <Button
                                                     size={"sm"}
                                                     variant={"outline"}
                                                     colorScheme="blue"
                                                     ml={2}
                                                     p={0}
-                                                    onClick={() => handleUpdateLetter(letter.letter_id)}
+                                                    onClick={() => handleUpdateEmp(emp.expense_id)}
                                                 >
-                                                <MdModeEditOutline size={18} />
+                                                    <MdModeEditOutline size={18} />
                                                 </Button>
                                             </Link>
                                         </Td>
                                         <Td>
-                                            {" "}
                                             <Button
                                                 size={"sm"}
                                                 variant={"outline"}
                                                 colorScheme="red"
+                                                ml={2}
                                                 onClick={() =>
-                                                    handleDeleteConfirmation(letter.letter_id)
+                                                    handleDeleteConfirmation(emp.expense_id)
                                                 }
                                             >
                                                 <DeleteIcon />
@@ -273,8 +240,8 @@ const GetAllLetters = () => {
             </div>
 
             <InfoModal
-                modalFor="letter"
-                data={selectedLetter}
+                modalFor="expense"
+                data={selectedEmployee}
                 onClose={onClose}
                 isOpen={isOpen}
             />
@@ -286,15 +253,15 @@ const GetAllLetters = () => {
                 <AlertDialogOverlay>
                     <AlertDialogContent>
                         <AlertDialogHeader fontSize="lg" fontWeight="bold">
-                            Delete Leave
+                            Delete Employee
                         </AlertDialogHeader>
                         <AlertDialogCloseButton />
                         <AlertDialogBody>
-                            Are you sure you want to delete this Leave?
+                            Are you sure you want to delete this employee information?
                         </AlertDialogBody>
                         <AlertDialogFooter>
                             <Button onClick={handleDeleteCancel}>Cancel</Button>
-                            <Button colorScheme="red" onClick={handleDeleteLeave} ml={3}>
+                            <Button colorScheme="red" onClick={handleDeleteEmployee} ml={3}>
                                 Delete
                             </Button>
                         </AlertDialogFooter>
@@ -303,6 +270,6 @@ const GetAllLetters = () => {
             </AlertDialog>
         </>
     );
-};
+}
 
-export default GetAllLetters;
+export default GetAllExpense

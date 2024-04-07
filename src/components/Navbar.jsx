@@ -22,8 +22,6 @@ import { MdOutlineAddTask } from 'react-icons/md';
 import { LuNewspaper } from 'react-icons/lu';
 import { HiOutlineDocumentDuplicate } from 'react-icons/hi2';
 import { SlEnvolopeLetter } from "react-icons/sl";
-import { GiExpense } from "react-icons/gi";
-
 
 const Navbar = ({ showSidebar, setShowSidebar }) => {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -99,7 +97,10 @@ const Navbar = ({ showSidebar, setShowSidebar }) => {
                   <Link to={"/createLetter"} className='w-full py-2 px-4 flex items-center gap-3'><SlEnvolopeLetter /> Letter</Link>
                 </MenuItem>
                 <MenuItem p={0}>
-                  <Link to={"/createExpense"} className='w-full py-2 px-4 flex items-center gap-3'><GiExpense /> Expense</Link>
+                  <Link to={"/createExpense"} className='w-full py-2 px-4 flex items-center gap-3'><SlEnvolopeLetter /> Expense</Link>
+                </MenuItem>
+                <MenuItem p={0}>
+                  <Link to={"/createLedger"} className='w-full py-2 px-4 flex items-center gap-3'><SlEnvolopeLetter /> Ledger</Link>
                 </MenuItem>
               </MenuGroup>
             </MenuList>

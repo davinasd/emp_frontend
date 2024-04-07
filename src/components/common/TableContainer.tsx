@@ -42,6 +42,10 @@ const TableContainer = ({ children, searchText, setSearchText, setFilteredData, 
                 if (formFor === "leaves") {
                     return elem.employee_name.toLowerCase().includes(searchText.toLowerCase());
                 }
+                if (formFor === "ledgers") {
+                    return (elem.brandName.toLowerCase().includes(searchText.toLowerCase())
+                        || elem.clientName.toLowerCase().includes(searchText.toLowerCase()));
+                }
                 return elem.name.toLowerCase().includes(searchText.toLowerCase());
             }));
         }

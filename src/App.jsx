@@ -36,6 +36,7 @@ import UpdateClient from "./components/forms/UpdateClient";
 import UpdateLead from "./components/forms/UpdateLead";
 import UpdateLeave from "./components/forms/UpdateLeave";
 import UpdateLetter from "./components/forms/UpdateLetter";
+import UpdateExpense from "./components/forms/UpdateExpense";
 import GetAllLeaves from "./components/GetAllLeaves";
 import GetAllLetters from "./components/GetAllLetters";
 import CreateLeave from "./components/CreateLeave";
@@ -49,8 +50,9 @@ import GetAllPaidInvoices from "./components/GetAllPaidInvoices";
 import AddSupply from "./components/AddSupply";
 import UpdateEmp from "./components/forms/UpdateEmp";
 import CreateExpense from "./components/CreateExpense";
-import AddReceivable from "./components/AddReceivable";
-import GetAllReceivable from "./components/GetAllReceivable";
+import GetAllExpense from "./components/GetAllExpense";
+import GetAllLedgers from "./components/GetAllLedger";
+import CreateLedger from "./components/CreateLedger";
 
 function App() {
   const isLoggedIn = useSelector(selectIsLoggedIn);
@@ -105,6 +107,17 @@ function App() {
                 setActiveSideabarLink={setActiveSideabarLink}
               >
                 <GetAllManager />
+              </AppLayout>
+            }
+          />
+          <Route
+            path="/getAllExpense"
+            element={
+              <AppLayout
+                activeSideabarLink={"getAllExpense"}
+                setActiveSideabarLink={setActiveSideabarLink}
+              >
+                <GetAllExpense />
               </AppLayout>
             }
           />
@@ -204,18 +217,6 @@ function App() {
                 setActiveSideabarLink={setActiveSideabarLink}
               >
                 <GetAllClient />
-              </AppLayout>
-            }
-          />
-
-          <Route
-            path="/getAllReceivable"
-            element={
-              <AppLayout
-                activeSideabarLink={"getAllReceivable"}
-                setActiveSideabarLink={setActiveSideabarLink}
-              >
-                <GetAllReceivable />
               </AppLayout>
             }
           />
@@ -321,17 +322,6 @@ function App() {
             }
           />
           <Route
-            path="/addReceivable"
-            element={
-              <AppLayout
-                activeSideabarLink={"addReceivable"}
-                setActiveSideabarLink={setActiveSideabarLink}
-              >
-                <AddReceivable />
-              </AppLayout>
-            }
-          />
-          <Route
             path="/createSlip"
             element={
               <AppLayout
@@ -383,6 +373,17 @@ function App() {
                 setActiveSideabarLink={setActiveSideabarLink}
               >
                 <UpdateClient></UpdateClient>
+              </AppLayout>
+            }
+          />
+          <Route
+            path="/UpdateExpense"
+            element={
+              <AppLayout
+                activeSideabarLink={"CreateExpense"}
+                setActiveSideabarLink={setActiveSideabarLink}
+              >
+                <UpdateExpense />
               </AppLayout>
             }
           />
@@ -453,6 +454,17 @@ function App() {
             }
           />
           <Route
+            path="/getAllLedgers"
+            element={
+              <AppLayout
+                activeSideabarLink={"getAllLedgers"}
+                setActiveSideabarLink={setActiveSideabarLink}
+              >
+                <GetAllLedgers />
+              </AppLayout>
+            }
+          />
+          <Route
             path="/getAllTask"
             element={
               <AppLayout
@@ -483,6 +495,17 @@ function App() {
                 setActiveSideabarLink={setActiveSideabarLink}
               >
                 <CreateProject />
+              </AppLayout>
+            }
+          />
+          <Route
+            path="/createLedger"
+            element={
+              <AppLayout
+                activeSideabarLink={"CreateLedger"}
+                setActiveSideabarLink={setActiveSideabarLink}
+              >
+                <CreateLedger />
               </AppLayout>
             }
           />
