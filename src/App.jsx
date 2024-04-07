@@ -49,6 +49,8 @@ import GetAllPaidInvoices from "./components/GetAllPaidInvoices";
 import AddSupply from "./components/AddSupply";
 import UpdateEmp from "./components/forms/UpdateEmp";
 import CreateExpense from "./components/CreateExpense";
+import AddReceivable from "./components/AddReceivable";
+import GetAllReceivable from "./components/GetAllReceivable";
 
 function App() {
   const isLoggedIn = useSelector(selectIsLoggedIn);
@@ -207,6 +209,18 @@ function App() {
           />
 
           <Route
+            path="/getAllReceivable"
+            element={
+              <AppLayout
+                activeSideabarLink={"getAllReceivable"}
+                setActiveSideabarLink={setActiveSideabarLink}
+              >
+                <GetAllReceivable />
+              </AppLayout>
+            }
+          />
+
+          <Route
             path="/getAllCompletedProject"
             element={
               <AppLayout
@@ -303,6 +317,17 @@ function App() {
                 setActiveSideabarLink={setActiveSideabarLink}
               >
                 <CreateExpense />
+              </AppLayout>
+            }
+          />
+          <Route
+            path="/addReceivable"
+            element={
+              <AppLayout
+                activeSideabarLink={"addReceivable"}
+                setActiveSideabarLink={setActiveSideabarLink}
+              >
+                <AddReceivable />
               </AppLayout>
             }
           />
