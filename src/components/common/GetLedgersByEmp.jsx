@@ -1,5 +1,5 @@
 import { CloseIcon } from "@chakra-ui/icons";
-import { Button, Drawer, Flex, Select } from "antd";
+import { Button, Drawer, Flex, Select, Empty } from "antd";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
@@ -91,16 +91,25 @@ const GetLedgersByEmp = ({ open, setOpen }) => {
                         </Select>
                     </div>
                     {selectedBrand &&
-                        fetchedItems?.invoices?.map((item, index) => (
+                        fetchedItems.length === 0 ?
+                        <Empty
+                            image={Empty.PRESENTED_IMAGE_SIMPLE}
+                            description={<span>No ledgers available for selected employee</span>}
+                        />
+                        : fetchedItems?.map((item, index) => (
                             <div key={`item-${index}`} className="flex flex-col gap-2 mt-5">
-                                <div className="w-full p-3 flex items-start gap-6 bg-gray-50 rounded-md">
-                                    <div className="text-sm font-semibold text-gray-500">Date: {item?.date1}</div>
-                                    <div className="grid grid-cols-2 w-full">
-                                        <div>Bill Type: {item?.billtype}</div>
-                                        <div>Discount: {item?.discount}</div>
-                                        <div>Gst: {item?.gst}</div>
-                                        <div>Subtotal: {item?.subtotal}</div>
+                                <div className="w-full p-3 gap-6 bg-gray-50 rounded-md">
+                                    <div className="flex flex-col md:flex-row md:justify-between mb-4">
+                                        <div className="font-semibold text-md text-gray-700">Brand: {item?.brandName}</div>
+                                        <div className="font-semibold text-md text-gray-700">Company: {item?.companyName}</div>
+                                        <div className="font-semibold text-md text-gray-700">Client: {item?.clientName}</div>
                                     </div>
+                                    <div className="font-semibold text-md text-gray-700">Description: {item?.description}</div>
+                                    <div className="font-semibold text-md text-gray-500">Date: {item?.date1}</div>
+                                    <div className="flex flex-col">
+                                        <div className="font-semibold text-md text-gray-700">Employee ID: {item?.employee_id}</div>
+                                    </div>
+                                    <div className="font-semibold text-md text-gray-500">Created at: {item?.createdAt}</div>
                                 </div>
                             </div>
                         ))}

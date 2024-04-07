@@ -23,15 +23,6 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
   const dispatch = useDispatch();
   const priorityArray = ["low", "medium", "high", "urgent"];
   const [collectedInvoices, setCollectedInvoices] = useState([]);
-  const [expEmployee, setExpEmployee] = useState(null);
-
-  const handleTaskDelete = () => {
-    // LOGIC TO BE WRITTEN
-  }
-  const handleChangeTaskStatus = () => {
-    // LOGIC TO BE WRITTEN
-  }
-
 
   useEffect(() => {
     if (modalFor === "project" && data?.employees) {
@@ -76,11 +67,15 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
 
   useEffect(() => {
     const getCollectionHistory = async (invoice_id) => {
-      console.log(data)
+      // console.log(data)
       try {
-        await axios.get(`${import.meta.env.VITE_API_BASE}/api/admin/invoice/${invoice_id}`)
+        await axios.get(`${import.meta.env.VITE_API_BASE}/api/admin/getAllInvoices`)
           .then((res) => {
-            setCollectedInvoices(res.data);
+            let data = res.data.filter((el) => {
+              return el.invoice_id === invoice_id;
+            })[0]
+            console.log(data);
+            setCollectedInvoices(data);
           })
       } catch (error) {
         console.log(`Error getting collection history: ${error}`)
@@ -874,12 +869,13 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                   </div>
                   <div className="max-w-[200px] md:max-w-[300px]">
                     <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">Collection History</h1>
-                    {collectedInvoices.length > 0 ? (
-                      <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Date </Text>
-                        <Text className="text-lg capitalize">{data.date1}</Text>
-                      </>
-                    ) : (
+                    {collectedInvoices.collectionHistory.length > 0 ? 
+                    collectedInvoices.collectionHistory.map((item, idx) => (
+                      <div key={`his-${idx}`}>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">Collection {idx+1} </Text>
+                        <Text className="text-lg capitalize">{item.amountCollected}</Text>
+                      </div>
+                    )) : (
                       <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
                     )}
                   </div>

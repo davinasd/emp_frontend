@@ -10,13 +10,12 @@ import { PiCardholderThin } from "react-icons/pi";
 import { allMonths } from "../../helpers";
 
 const ProjectCard = () => {
-  const currentYear = new Date().getFullYear();
   const [totalLeads, setTotalLeads] = useState(0);
   const [leadsInProgress, setLeadsInProgress] = useState(0);
   const [convertedLeads, setConvertedLeads] = useState(0);
   const [lostLeads, setLostLeads] = useState(0);
   const [rawLeads, setRawLeads] = useState(0);
-  const [selectedYear, setSelectedYear] = useState(currentYear - 1);
+  const [selectedYear, setSelectedYear] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(null);
   const [financialYears, setFinancialYears] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState(null);
@@ -91,7 +90,7 @@ const ProjectCard = () => {
   }
 
   const handleYearClear = () => {
-    setSelectedYear(currentYear - 1);
+    setSelectedYear(null);
     setSelectedMonth(null);
     setSelectedQuarter(null);
     setSelectQuarterFirstMonth(null);
@@ -108,7 +107,7 @@ const ProjectCard = () => {
           <div className="bg-blue-500 rounded-full h-[25px] min-w-[25px] flex items-center justify-center text-white text-[10px]">{totalLeads}</div>
         </div>
 
-        <div className="flex gap-2 items-center mt-4">
+        <div className="flex flex-col gap-2 mt-4">
           <Select
             placeholder='Select Year'
             value={selectedYear || ""}
@@ -120,66 +119,59 @@ const ProjectCard = () => {
               <option key={`fy-${year._id}`} value={year.financial_year.split('-')[0]}>{year.financial_year}</option>
             ))}
           </Select>
-          <Select
-            placeholder='Filter by'
-            value={selectedFilter || ""}
-            onChange={(e) => setSelectedFilter(e.target.value)}
-            size={"sm"}
-            rounded={"lg"}
-          >
-            <option value={"month"}>Month</option>
-            <option value={"quarter"}>Quarter</option>
-          </Select>
-          {selectedFilter === "month" && (
+          <div className="flex gap-2 items-center">
             <Select
-              placeholder='Select Month'
-              value={selectedMonth || ""}
-              onChange={(e) => setSelectedMonth(e.target.value)}
+              placeholder='Filter by'
+              value={selectedFilter || ""}
+              onChange={(e) => setSelectedFilter(e.target.value)}
               size={"sm"}
               rounded={"lg"}
             >
-              {allMonths.map((month, index) => (
-                <option key={`m-${month}`} value={index + 1}>{month}</option>
+              <option value={"month"}>Month</option>
+              <option value={"quarter"}>Quarter</option>
+            </Select>
+            {selectedFilter === "month" && (
+              <Select
+                placeholder='Select Month'
+                value={selectedMonth || ""}
+                onChange={(e) => setSelectedMonth(e.target.value)}
+                size={"sm"}
+                rounded={"lg"}
+              >
+                {selectedYear && allMonths.map((month, index) => (
+                  <option key={`m-${month}`} value={index + 1}>{selectedYear}-{month}</option>
+                ))}
+              </Select>
+            )}
+            {selectedYear && selectedFilter === "quarter" && (
+              <Select
+                placeholder='Select Quarter'
+                value={selectedQuarter || ""}
+                onChange={(e) => setSelectedQuarter(e.target.value)}
+                size={"sm"}
+                rounded={"lg"}
+              >
+                <option key={`quarter-1`} value={1}>1 - {selectedYear}</option>
+                <option key={`quarter-2`} value={2}>2 - {selectedYear}</option>
+                <option key={`quarter-3`} value={3}>3 - {selectedYear}</option>
+                <option key={`quarter-4`} value={4}>4 - {selectedYear}</option>
+              </Select>
+            )}
+            {selectedQuarter && (
+              <Select
+                placeholder='Select Quarter'
+                value={selectQuarterFirstMonth || ""}
+                onChange={(e) => setSelectQuarterFirstMonth(e.target.value)}
+                size={"sm"}
+                rounded={"lg"}
+              >
+              {selectedYear && allMonths.map((month, index) => (
+                <option key={`m-${month}`} value={index + 1}>{selectedYear}-{month}</option>
               ))}
-            </Select>
-          )}
-          {selectedFilter === "quarter" && (
-            <Select
-              placeholder='Select Quarter'
-              value={selectedQuarter || ""}
-              onChange={(e) => setSelectedQuarter(e.target.value)}
-              size={"sm"}
-              rounded={"lg"}
-            >
-              <option key={`quarter-1`} value={1}>1</option>
-              <option key={`quarter-2`} value={2}>2</option>
-              <option key={`quarter-3`} value={3}>3</option>
-              <option key={`quarter-4`} value={4}>4</option>
-            </Select>
-          )}
-          {selectedQuarter && (
-            <Select
-              placeholder='Select Quarter'
-              value={selectQuarterFirstMonth || ""}
-              onChange={(e) => setSelectQuarterFirstMonth(e.target.value)}
-              size={"sm"}
-              rounded={"lg"}
-            >
-              <option key={`quarter-1`} value={1}>1</option>
-              <option key={`quarter-2`} value={2}>2</option>
-              <option key={`quarter-3`} value={3}>3</option>
-              <option key={`quarter-4`} value={4}>4</option>
-              <option key={`quarter-1`} value={5}>5</option>
-              <option key={`quarter-2`} value={6}>6</option>
-              <option key={`quarter-3`} value={7}>7</option>
-              <option key={`quarter-4`} value={8}>8</option>
-              <option key={`quarter-1`} value={9}>9</option>
-              <option key={`quarter-2`} value={10}>10</option>
-              <option key={`quarter-3`} value={11}>10</option>
-              <option key={`quarter-4`} value={12}>12</option>
-            </Select>
-          )}
-          {selectedFilter && <Button width={100} size={"sm"} onClick={handleYearClear}>Clear</Button>}
+              </Select>
+            )}
+          {selectedFilter && <Button width={100} size={"sm"} onClick={handleYearClear} className="self-end">Clear</Button>}
+          </div>
         </div>
         <Divider />
         <CardBody m={0} p={0}>

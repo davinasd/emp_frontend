@@ -140,7 +140,7 @@ const Emp = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const formData = new FormData();
+    let formData = new FormData();
 
     // Filter out entries with empty string values
     Object.entries(projectData).forEach(([key, value]) => {
@@ -166,6 +166,7 @@ const Emp = () => {
       { key: 'probationPeriod', label: 'Probation Period' },
       { key: 'permanentAddress', label: 'Permanent Address' },
       { key: 'correspondenceAddress', label: 'Correspondence Address' },
+      // { key: 'singleFile', label: 'Single File' },
       // { key: 'guardianDetails.relation', label: 'Relation' },
       // { key: 'guardianDetails.guardianName', label: 'Guardian Name' },
       // { key: 'guardianDetails.guardianContactNo', label: 'Guardian Contact Number' },
@@ -178,16 +179,16 @@ const Emp = () => {
 
     ];
 
-    console.log(formData)
-
     for (let { key, label, isArray } of requiredFields) {
       if (isArray ? !projectData[key] || projectData[key].length === 0 : !projectData[key]) {
         toast.error(`${label} is required.`);
         return;
       }
     }
-    const data = formData.singleFile;
-    console.log(data)
+    // const data = formData.singleFile;
+    // console.log(data)
+    formData = { ...formData, singleFile: singleFileRef }
+    console.log(formData);
     axios
       .post(
         `${import.meta.env.VITE_API_BASE}/api/admin/createEmployee`,
@@ -467,7 +468,7 @@ const Emp = () => {
                     <Button onClick={handleDeleteSingleFile}>Delete</Button>
                   </div>
                 )}
-                <FormControl mb="4">
+                <FormControl mb="4" id="singleFile">
                   <FormLabel>Single File</FormLabel>
                   <Input
                     type="file"
@@ -487,7 +488,7 @@ const Emp = () => {
                     </Button>
                   </div>
                 ))}
-                <FormControl mb="4">
+                <FormControl mb="4" id="multipleFiles">
                   <FormLabel>Multiple Files</FormLabel>
                   <Input
                     type="file"

@@ -34,7 +34,7 @@ const GetInvoiceByBrandName = ({ open, setOpen }) => {
         }
     }, [selectedBrand])
 
-    console.log(selectedInvoiceIds);
+    // console.log(selectedInvoiceIds);
 
     const handleCumulativeInvoices = () => {
         const url = `${import.meta.env.VITE_API_BASE}/api/admin/getAllInvoiceByBrand`;
@@ -65,7 +65,7 @@ const GetInvoiceByBrandName = ({ open, setOpen }) => {
         setSelectedBrand(null);
         setFetchedItems(null);
     }
-    console.log(clients)
+    // console.log(clients)
 
     return (
         <Drawer
