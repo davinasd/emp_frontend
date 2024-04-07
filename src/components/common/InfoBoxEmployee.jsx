@@ -41,9 +41,6 @@ const InfoBoxEmployee = () => {
               key={`${employee._id}-${index}`}
               className="w-full flex flex-col gap-3 mt-6 rounded-xl shadow-md p-4"
             >
-              <div className="w-[40px] h-[40px] flex items-center justify-center bg-purple-500 rounded-full text-white">
-                {index + 1}
-              </div>
               <div className="flex flex-col md:flex-row gap-3 w-full">
                 <Card bg={"purple.100"} className="md:w-1/3 w-full">
                   <CardBody>
