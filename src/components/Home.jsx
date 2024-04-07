@@ -47,9 +47,9 @@ function Home() {
         </div>
         <div className="flex gap-4 flex-col md:flex-row">
           <Card className="w-full md:w-[65%]">
-          <InvoiceDashboardStatsCard/>
+            <InvoiceDashboardStatsCard />
           </Card>
-          
+
 
           <div className="overflow-auto w-full md:w-[35%]">
             <Card>
@@ -98,7 +98,7 @@ function Home() {
         <div className="mt-4">
           <UpcomingEmployeeEventsCard />
         </div>
-        
+
         <CalendarComponent />
       </div>
     </ChakraProvider>
