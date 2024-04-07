@@ -80,13 +80,13 @@ const InvoiceDashboardStatsCard = () => {
           </div>
           <div className="text-gray-500 max-w-[400px]">
             <div className="flex justify-between">
-              <span>{ledgersReport.totalReceived} Unpaid</span>
-              <span>{((ledgersReport.net / ledgersReport.totalReceived)*100).toFixed(2)}%</span>
+              <span>{ledgersReport?.totalReceived} Unpaid</span>
+              <span>{((ledgersReport?.net / ledgersReport?.totalReceived)*100).toFixed(2)}%</span>
             </div>
             <Progress value={unpaidPercentage} colorScheme="red" mt={4} height={2} rounded={"lg"} />
             <div className="flex justify-between mt-6">
-              <span>{ledgersReport.totalPaid} Paid</span>
-              <span>{((ledgersReport.totalPaid / ledgersReport.totalReceived)*100).toFixed(2)}%</span>
+              <span>{ledgersReport?.totalPaid} Paid</span>
+              <span>{((ledgersReport?.totalPaid / ledgersReport?.totalReceived)*100).toFixed(2)}%</span>
             </div>
             <Progress value={paidPercentage} colorScheme="green" mt={2} height={2} rounded={"lg"} />
           </div>
