@@ -53,6 +53,8 @@ import CreateExpense from "./components/CreateExpense";
 import GetAllExpense from "./components/GetAllExpense";
 import GetAllLedgers from "./components/GetAllLedger";
 import CreateLedger from "./components/CreateLedger";
+import AddReceivable from "./components/AddReceivable";
+import GetAllReceivable from "./components/GetAllReceivable";
 
 function App() {
   const isLoggedIn = useSelector(selectIsLoggedIn);
@@ -366,6 +368,17 @@ function App() {
             }
           />
           <Route
+            path="/addReceivable"
+            element={
+              <AppLayout
+                activeSideabarLink={"AddReceivable"}
+                setActiveSideabarLink={setActiveSideabarLink}
+              >
+                <AddReceivable />
+              </AppLayout>
+            }
+          />
+          <Route
             path="/UpdateClient"
             element={
               <AppLayout
@@ -550,6 +563,17 @@ function App() {
                 setActiveSideabarLink={setActiveSideabarLink}
               >
                 <InfoBoxEmployee></InfoBoxEmployee>
+              </AppLayout>
+            }
+          />
+          <Route
+            path="/getAllReceivable"
+            element={
+              <AppLayout
+                activeSideabarLink={""}
+                setActiveSideabarLink={setActiveSideabarLink}
+              >
+                <GetAllReceivable></GetAllReceivable>
               </AppLayout>
             }
           />
