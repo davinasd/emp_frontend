@@ -869,15 +869,16 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                   </div>
                   <div className="max-w-[200px] md:max-w-[300px]">
                     <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">Collection History</h1>
-                    {collectedInvoices.collectionHistory.length > 0 ? 
-                    collectedInvoices.collectionHistory.map((item, idx) => (
-                      <div key={`his-${idx}`}>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Collection {idx+1} </Text>
-                        <Text className="text-lg capitalize">{item.amountCollected}</Text>
-                      </div>
-                    )) : (
-                      <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                    )}
+                    {
+  collectedInvoices?.collectionHistory?.map((item, idx) => (
+    <div key={`his-${idx}`}>
+      <Text className="text-sm font-bold text-gray-500 mt-3">Collection {idx + 1}</Text>
+      <Text className="text-lg capitalize">{item.amountCollected}</Text>
+    </div>
+  )) ?? <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={<span>No Collection History Available</span>} />
+}
+
+
                   </div>
                 </div>
                 <div className="mt-4">
