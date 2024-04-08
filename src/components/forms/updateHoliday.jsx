@@ -1,20 +1,27 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Box,
   Button,
-  Text,
+    Select,
+  useToast,
   FormControl,
   FormLabel,
+  Tabs,
+  TabList,
+  Tab,
+  TabPanels,
+  TabPanel,
+  Flex,
   Input,
-  Select,
-  useToast,
+  Text,
 } from '@chakra-ui/react';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import MyDatePicker from './common/MyDatePicker';
-import moment from 'moment';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
-const CreateHoliday = () => {
+const UpdateHoliday = () => {
+  const { calendar_id } = useParams();
   const navigate = useNavigate();
   const toast = useToast();
   const [holiday, setHoliday] = useState({
@@ -22,6 +29,32 @@ const CreateHoliday = () => {
     date: new Date(),
     type: '',
   });
+
+  useEffect(() => {
+    // Fetch the existing holiday data
+    const fetchHoliday = async () => {
+        try {
+          const response = await axios.get(`${import.meta.env.VITE_API_BASE}/api/admin/getHolidayById/${calendar_id}`);
+          const validDate = new Date(response.data.date);
+          if (!isNaN(validDate)) { // Check if the date is valid
+            setHoliday({
+              ...holiday,
+              title: response.data.title,
+              date: validDate,
+              type: response.data.type,
+            });
+          } else {
+            console.error('Invalid date from API');
+            // Handle the invalid date case, e.g., set a default date or show an error
+          }
+        } catch (error) {
+          console.error('Error fetching holiday data:', error);
+        }
+      };
+      
+
+    fetchHoliday();
+  }, [calendar_id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,8 +69,8 @@ const CreateHoliday = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_BASE}/api/admin/createHoliday`,
+      const response = await axios.patch(
+        `${import.meta.env.VITE_API_BASE}/api/admin/updateHoliday/${calendar_id}`,
         holiday,
         {
           headers: {
@@ -46,20 +79,18 @@ const CreateHoliday = () => {
         }
       );
 
-      if (response.status === 200 || response.status === 201) {
-        toast({
-          title: 'Holiday created successfully.',
-          status: 'success',
-          duration: 2000,
-          isClosable: true,
-        });
-
-        navigate('/getAllHolidays');
-      }
-    } catch (error) {
-      console.error('Error:', error);
       toast({
-        title: 'Error creating holiday.',
+        title: 'Holiday updated successfully.',
+        status: 'success',
+        duration: 2000,
+        isClosable: true,
+      });
+
+      navigate('/getAllHolidays'); 
+    } catch (error) {
+      console.error('Error updating holiday:', error);
+      toast({
+        title: 'Error updating holiday.',
         description: error.response?.data?.message || 'An error occurred.',
         status: 'error',
         duration: 2000,
@@ -78,7 +109,7 @@ const CreateHoliday = () => {
         boxShadow="lg"
         m="4"
       >
-        <Text fontSize="2xl" fontWeight="semibold" mb="4">Add New Holiday</Text>
+        <Text fontSize="2xl" fontWeight="semibold" mb="4">Update Holiday</Text>
         <form onSubmit={handleSubmit}>
           <FormControl id="title" isRequired>
             <FormLabel>Title</FormLabel>
@@ -90,11 +121,10 @@ const CreateHoliday = () => {
           </FormControl>
           <FormControl id="date" mt="4" isRequired>
             <FormLabel>Date</FormLabel>
-            <MyDatePicker
+            <DatePicker
               selected={holiday.date}
               onChange={handleDateChange}
-              defaultValue={moment()}
-              format="YYYY-MM-DD"
+              dateFormat="yyyy-MM-dd"
             />
           </FormControl>
           <FormControl id="type" mt="4" isRequired>
@@ -102,16 +132,16 @@ const CreateHoliday = () => {
             <Select
               name="type"
               onChange={handleChange}
-              placeholder="Select type"
               value={holiday.type}
             >
               <option value="company">Company</option>
               <option value="public">Public</option>
               <option value="optional">Optional</option>
+              <option value="festive">Festive</option>
             </Select>
           </FormControl>
           <Button mt="6" colorScheme="blue" type="submit">
-            Create Holiday
+            Update Holiday
           </Button>
         </form>
       </Box>
@@ -119,4 +149,4 @@ const CreateHoliday = () => {
   );
 };
 
-export default CreateHoliday;
+export default UpdateHoliday;

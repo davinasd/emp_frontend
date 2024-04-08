@@ -1624,12 +1624,12 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                   <Text className="text-md font-bold text-gray-500 mt-2">Additional Information: </Text>
                   <div className="w-full flex items-center justify-between gap-2 mt-2 max-w-[450px]">
                     <div className="flex items-center gap-2">
-                    <Text className="font-bold">Date: </Text>
-                    <Text className="text-lg capitalize">{data?.date1}</Text>
+                      <Text className="font-bold">Date: </Text>
+                      <Text className="text-lg capitalize">{data?.date1}</Text>
                     </div>
                     <div className="flex items-center gap-2">
-                    <Text className="font-bold">Time: </Text>
-                    <Text className="text-lg capitalize">{data?.time1}</Text>
+                      <Text className="font-bold">Time: </Text>
+                      <Text className="text-lg capitalize">{data?.time1}</Text>
                     </div>
                   </div>
                   <div className="w-full flex items-center gap-2 mt-2">

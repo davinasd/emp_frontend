@@ -11,8 +11,9 @@ import {
 } from '@chakra-ui/react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import MyDatePicker from './common/MyDatePicker';
 import moment from 'moment';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const CreateHoliday = () => {
   const navigate = useNavigate();
@@ -37,7 +38,7 @@ const CreateHoliday = () => {
 
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_BASE}/api/admin/createHoliday`,
+        `${import.meta.env.VITE_API_BASE}/api/admin/addHoliday`,
         holiday,
         {
           headers: {
@@ -90,7 +91,7 @@ const CreateHoliday = () => {
           </FormControl>
           <FormControl id="date" mt="4" isRequired>
             <FormLabel>Date</FormLabel>
-            <MyDatePicker
+            <DatePicker
               selected={holiday.date}
               onChange={handleDateChange}
               defaultValue={moment()}

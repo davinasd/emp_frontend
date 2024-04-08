@@ -54,6 +54,11 @@ import GetAllExpense from "./components/GetAllExpense";
 import GetAllLedgers from "./components/GetAllLedger";
 import CreateLedger from "./components/CreateLedger";
 
+import GetAllHolidays from "./components/getAllholidays";
+import CreateHoliday from "./components/forms/addHoliday";
+
+import UpdateHoliday from "./components/forms/updateHoliday";
+
 function App() {
   const isLoggedIn = useSelector(selectIsLoggedIn);
   // const refreshPage = () => {
@@ -88,6 +93,31 @@ function App() {
               </AppLayout>
             }
           />
+          <Route
+            path="/getAllHolidays"
+            element={
+              <AppLayout
+                activeSideabarLink={"UserInfo"}
+                setActiveSideabarLink={setActiveSideabarLink}
+              >
+                <GetAllHolidays/>
+              </AppLayout>
+            }
+          />
+           <Route
+            path="/createHoliday"
+            element={
+              <AppLayout
+                activeSideabarLink={"UserInfo"}
+                setActiveSideabarLink={setActiveSideabarLink}
+              >
+                <CreateHoliday/>
+              </AppLayout>
+            }
+          />
+<Route path="/updateHoliday/:calendar_id" element={<UpdateHoliday />} />
+
+          
           <Route
             path="/manageLeads"
             element={
