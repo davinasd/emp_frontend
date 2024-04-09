@@ -11,7 +11,7 @@ import { HiDocumentDuplicate } from 'react-icons/hi2';
 import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel } from '@chakra-ui/react';
 import { MdOutlineCalendarMonth } from "react-icons/md";
 import { FcHome } from "react-icons/fc";
-import { FcCallTransfer, FcVoicePresentation, FcInspection, FcList, FcBusinessman, FcDocument, FcCalendar, FcFeedback, FcCurrencyExchange, FcPortraitMode, FcMoneyTransfer, FcUnlock, FcFaq } from "react-icons/fc";
+import { FcCallTransfer, FcVoicePresentation, FcInspection, FcList, FcBusinessman, FcDocument, FcCalendar, FcFeedback, FcCurrencyExchange, FcPortraitMode, FcMoneyTransfer, FcUnlock, FcFaq, FcDebt, FcGenericSortingDesc, FcOpenedFolder, FcNext } from "react-icons/fc";
 
 interface Props {
     isPhoneView: boolean;
@@ -90,7 +90,7 @@ const Sidebar = ({ isPhoneView, showSidebar, setShowSidebar, activeLink, setActi
                             <FcMoneyTransfer />  <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Finance {!isPhoneView && "Management"}</span>
                         </Link>
                         <Link to="/getAllPaidInvoices" onClick={handleNavClose} className={`flex md:pt-0 pb-3 md:pb-0 pt-4 flex-col md:flex-row text-center md:text-left items-center md:h-[45px] gap-2 px-4 rounded-md transition-all cursor-pointer ${activeLink === 'getAllPaidInvoices' ? 'bg-gray-500' : "hover:bg-gray-700"}`}>
-                            <FcMoneyTransfer />  <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Paid {!isPhoneView && "Invoices"}</span>
+                            <FcDebt />  <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Paid {!isPhoneView && "Invoices"}</span>
                         </Link>
                     </AccordionPanel>
                 </AccordionItem>
@@ -122,7 +122,7 @@ const Sidebar = ({ isPhoneView, showSidebar, setShowSidebar, activeLink, setActi
                             <FcInspection size={20} /> <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Ongoing {!isPhoneView && "Projects"}</span>
                         </Link>
                         <Link to="/GetAllCompletedProject" onClick={handleNavClose} className={`flex md:pt-0 pb-3 md:pb-0 pt-4 flex-colmd:flex-row text-center md:text-left items-center md:h-[45px] gap-2 px-4 rounded-md transition-all cursor-pointer ${activeLink === 'getAllCompletedProject' ? 'bg-gray-500' : "hover:bg-gray-700"}`}>
-                            <FcInspection size={20} /> <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Completed {!isPhoneView && "Projects"}</span>
+                            <FcDocument size={20} /> <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Completed {!isPhoneView && "Projects"}</span>
                         </Link>
                     </AccordionPanel>
                 </AccordionItem>
@@ -136,7 +136,7 @@ const Sidebar = ({ isPhoneView, showSidebar, setShowSidebar, activeLink, setActi
                     <AccordionPanel bg={"#090f29"} rounded={"md"} p={0}>
 
                         <Link to="/getAllTask" onClick={handleNavClose} className={`flex md:pt-0 pb-3 md:pb-0 pt-4 flex-colmd:flex-row text-center md:text-left items-center md:h-[45px] gap-2 px-4 rounded-md transition-all cursor-pointer ${activeLink === 'getAllTask' ? 'bg-gray-500' : "hover:bg-gray-700"}`}>
-                            <FcList size={20} />  <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Ongoing {!isPhoneView && "Tasks"}</span>
+                            <FcGenericSortingDesc size={20} />  <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Ongoing {!isPhoneView && "Tasks"}</span>
                         </Link>
                         <Link to="/getAllCompletedProject" onClick={handleNavClose} className={`flex md:pt-0 pb-3 md:pb-0 pt-4 flex-colmd:flex-row text-center md:text-left items-center md:h-[45px] gap-2 px-4 rounded-md transition-all cursor-pointer ${activeLink === 'getAllTask' ? 'bg-gray-500' : "hover:bg-gray-700"}`}>
                             <FcList size={20} />  <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Completed {!isPhoneView && "Tasks"}</span>
@@ -153,14 +153,14 @@ const Sidebar = ({ isPhoneView, showSidebar, setShowSidebar, activeLink, setActi
                 <FcFaq /> <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Expense {!isPhoneView && "Management"}</span>
             </Link>
             <Link to="/getAllLedgers" onClick={handleNavClose} className={`flex flex-col md:flex-row pt-2 text-center md:text-left items-center md:h-[45px] gap-2 mx-4 my-2 p-2 rounded-md transition-all cursor-pointer ${activeLink === 'getAllLedgers' ? 'bg-gray-500' : "hover:bg-gray-700"}`}>
-                <FcFaq /> <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Ledgers {!isPhoneView && "Management"}</span>
+                <FcOpenedFolder /> <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Ledgers {!isPhoneView && "Management"}</span>
             </Link>
             
             <Link to="/GetAllHolidays" onClick={handleNavClose} className={`flex flex-col md:flex-row pt-2 text-center md:text-left items-center md:h-[45px] gap-2 mx-4 my-2 p-2 rounded-md transition-all cursor-pointer ${activeLink === 'CreateTag' ? 'bg-gray-500' : "hover:bg-gray-700"}`}>
                 <FcFaq /> <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Holiday {!isPhoneView && "Management"}</span>
             </Link>
             <Link to="/createTag" onClick={handleNavClose} className={`flex flex-col md:flex-row pt-2 text-center md:text-left items-center md:h-[45px] gap-2 mx-4 my-2 p-2 rounded-md transition-all cursor-pointer ${activeLink === 'CreateTag' ? 'bg-gray-500' : "hover:bg-gray-700"}`}>
-                <FcFaq /> <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Tag {!isPhoneView && "Management"}</span>
+                <FcNext /> <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Tag {!isPhoneView && "Management"}</span>
             </Link>
         </div >
     )
