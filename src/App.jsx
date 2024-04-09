@@ -99,7 +99,7 @@ function App() {
             path="/getAllHolidays"
             element={
               <AppLayout
-                activeSideabarLink={"UserInfo"}
+                activeSideabarLink={"getAllHolidays"}
                 setActiveSideabarLink={setActiveSideabarLink}
               >
                 <GetAllHolidays/>
