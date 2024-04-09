@@ -6,10 +6,11 @@ import axios from "axios";
 const CalendarComponent = () => {
   const [specialDates, setSpecialDates] = useState([]);
   const [empSpecialDates, setEmpSpecialDates] = useState([]);
+  const [holidays, setHolidays] = useState([]);
 
   useEffect(() => {
     fetchSpecialDates();
-    fetchEmpSpecialDates();
+    fetchEmpSpecialDates();fetchHolidays();
   }, []);
 
   const fetchSpecialDates = async () => {
@@ -22,7 +23,16 @@ const CalendarComponent = () => {
       console.error("Error fetching data:", error);
     }
   };
-
+  const fetchHolidays = async () => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_BASE}/api/admin/getAllHolidays`
+      );
+      setHolidays(response.data.holidays);
+    } catch (error) {
+      console.error("Error fetching holidays:", error);
+    }
+  };
   const fetchEmpSpecialDates = async () => {
     try {
       const response = await axios.get(
@@ -60,7 +70,14 @@ const CalendarComponent = () => {
         date.joiningDate === formattedDate
       );
     });
+    const holidayEvents = holidays.filter((holiday) => {
+      if(holiday.date === formattedDate)
+      {console.log(holiday.date)
+    }
 
+      return holiday.date === formattedDate;
+    });
+    
     const clientListData = events.map((event) => {
       let eventType = "client";
       if (event.clientBirthday === formattedDate) {
@@ -79,7 +96,15 @@ const CalendarComponent = () => {
         eventType: eventType,
       };
     });
+    const holidayListData = holidayEvents.map((holiday) => {
+      let eventType = "Holiday";
 
+      return {
+        type: "error",
+        eventType:eventType,
+        holidayTitle: holiday.title
+      };
+    });
     const empListData = empEvents.map((event) => {
       let eventType = "emp";
       if (event.dob === formattedDate) {
@@ -93,12 +118,11 @@ const CalendarComponent = () => {
         eventType: eventType,
       };
     })
-    return { clientListData, empListData };
+    return { clientListData, empListData,holidayListData };
   }
 
   const dateCellRender = (value) => {
-    const { clientListData, empListData } = getListData(value);
-    // console.log(`emp: ${empListData}`)
+    const { clientListData, empListData, holidayListData } = getListData(value);
     return (
       <>
         <ul className="events">
@@ -122,37 +146,49 @@ const CalendarComponent = () => {
             </>
           ))}
         </ul>
-        {empListData?.length > 0 && (
+        {empListData?.map((item, index) => (
+  <>
+    {item.eventType === "emp" ? "Employee" : "Client"}
+    <li key={index}>
+      <Badge
+        status={item.type}
+        text={
           <>
-            <h4 className="text-lg font-semibold">Events</h4>
-            <ul>
-              {empListData?.map((item, index) => (
-                <>
-                  {item.eventType === "client" ? "Client" : item.eventType === "emp" && "Employee"}
-                  <li key={index}>
-                    <Badge
-                      status={item.type}
-                      text={
-                        <>
-                          Client: {item.dob}
-                          <br />
-                          Brand: {item.joiningDate}
-                        </>
-                      }
-                    />
-                  </li >
-                </>
-              ))}
-            </ul>
+            Employee: {item.employee}
+            <br />
+            Event Type: {item.eventType}
           </>
-        )}
+        }
+      />
+    </li >
+  </>
+))}
+
+{holidayListData?.map((item, index) => (
+  <>
+    {item.eventType === "Holiday" }
+    <li key={index}>
+      <Badge
+        status={item.type}
+        text={
+          <>
+            Holiday: {item.holidayTitle}
+            <br />
+            Event Type: {item.eventType}
+          </>
+        }
+      />
+    </li >
+  </>
+))}
+
+
       </>
     );
   };
 
   const cellRender = (current, info) => {
     if (info.type === "date") return dateCellRender(current);
-    // For month view, you can customize if needed
     return info.originNode;
   };
 

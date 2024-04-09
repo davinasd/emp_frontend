@@ -46,6 +46,10 @@ const TableContainer = ({ children, searchText, setSearchText, setFilteredData, 
                     return (elem.brandName.toLowerCase().includes(searchText.toLowerCase())
                         || elem.clientName.toLowerCase().includes(searchText.toLowerCase()));
                 }
+                if (formFor === "holiday") {
+                    return (elem.title.toLowerCase().includes(searchText.toLowerCase())
+                        || elem.date.toLowerCase().includes(searchText.toLowerCase()));
+                }
                 return elem.name.toLowerCase().includes(searchText.toLowerCase());
             }));
         }

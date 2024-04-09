@@ -156,7 +156,7 @@ const Sidebar = ({ isPhoneView, showSidebar, setShowSidebar, activeLink, setActi
                 <FcOpenedFolder /> <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Ledgers {!isPhoneView && "Management"}</span>
             </Link>
             
-            <Link to="/GetAllHolidays" onClick={handleNavClose} className={`flex flex-col md:flex-row pt-2 text-center md:text-left items-center md:h-[45px] gap-2 mx-4 my-2 p-2 rounded-md transition-all cursor-pointer ${activeLink === 'CreateTag' ? 'bg-gray-500' : "hover:bg-gray-700"}`}>
+            <Link to="/GetAllHolidays" onClick={handleNavClose} className={`flex flex-col md:flex-row pt-2 text-center md:text-left items-center md:h-[45px] gap-2 mx-4 my-2 p-2 rounded-md transition-all cursor-pointer ${activeLink === 'getAllHolidays' ? 'bg-gray-500' : "hover:bg-gray-700"}`}>
                 <FcFaq /> <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Holiday {!isPhoneView && "Management"}</span>
             </Link>
             <Link to="/createTag" onClick={handleNavClose} className={`flex flex-col md:flex-row pt-2 text-center md:text-left items-center md:h-[45px] gap-2 mx-4 my-2 p-2 rounded-md transition-all cursor-pointer ${activeLink === 'CreateTag' ? 'bg-gray-500' : "hover:bg-gray-700"}`}>

@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import {
-  Table,
   Thead,
   Tbody,
   Tr,
@@ -13,10 +12,17 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import { GoPlus } from "react-icons/go";
+import TableContainer from "./common/TableContainer";
+import { MdModeEditOutline } from "react-icons/md";
+import { DeleteIcon } from "@chakra-ui/icons";
+
 const GetAllHolidays = () => {
   const [holidays, setHolidays] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate(); // Correct: useNavigate is called at the top level
+
+  const [searchText, setSearchText] = useState("");
+  const [filteredHolidays, setFilteredHolidays] = useState(null);
 
   useEffect(() => {
     async function fetchHolidays() {
@@ -55,7 +61,7 @@ const GetAllHolidays = () => {
     }
   };
 
- 
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -67,8 +73,8 @@ const GetAllHolidays = () => {
 
   return (
     <>
-      <div className="w-full pt-4">
-      <Link to="/createHoliday">
+      <div className="w-full p-6">
+        <Link to="/createHoliday">
           <Button
             colorScheme="blue"
             _hover={{ bg: "blue.600" }}
@@ -81,35 +87,82 @@ const GetAllHolidays = () => {
         {holidays.length === 0 ? (
           <p className="text-red-500 text-lg">No Holidays Available</p>
         ) : (
-          <Table variant="simple">
-            <Thead>
+          <TableContainer
+            formFor="holiday"
+            searchText={searchText}
+            setSearchText={setSearchText}
+            setFilteredData={setFilteredHolidays}
+            data={holidays}
+          >
+            <Thead position="sticky" top={0} bg={"#F1F5F9"} zIndex={10}>
               <Tr>
-                <Th>Title</Th>
-                <Th>Date</Th>
-                <Th>Type</Th>
-                <Th>Actions</Th>
+                <Th fontWeight="bold" className="md:table-cell hidden">S. No.</Th>
+                <Th fontWeight="bold">Title</Th>
+                <Th fontWeight="bold">
+                  Date
+                </Th>
+                <Th fontWeight="bold" className="md:table-cell hidden">
+                  Type
+                </Th>
+                <Th fontWeight="bold">Action</Th>
+                <Th fontWeight="bold"></Th>
               </Tr>
             </Thead>
             <Tbody>
-              {holidays.map((holiday) => (
-                <Tr key={holiday._id}>
-                  <Td>{holiday.title}</Td>
-                  <Td>{holiday.date}</Td>
-                  <Td>{holiday.type}</Td>
-                  <Td>
-                    <Button colorScheme="red" onClick={() => handleDeleteHoliday(holiday.calender_id)}>
-                      Delete
+              {searchText !== ""
+                ? filteredHolidays?.map((holiday, index) => (
+                  <Tr key={holiday._id}>
+                    <Td className="md:table-cell hidden">{index + 1}</Td>
+                    <Td>{holiday.title}</Td>
+                    <Td>{holiday.date}</Td>
+                    <Td className="md:table-cell hidden">{holiday.type}</Td>
+                    <Td>
+                      <Button colorScheme="green" onClick={() => handleUpdateHoliday(holiday.calender_id)}>
+                        Update
+                      </Button>
+                    </Td>
+                    <Td>
+                      <Button colorScheme="red" onClick={() => handleDeleteHoliday(holiday.calender_id)}>
+                        Delete
+                      </Button>
+                    </Td>
+                  </Tr>
+                ))
+                : holidays.map((holiday, index) => (
+                  <Tr key={holiday._id}>
+                    <Td className="md:table-cell hidden">{index + 1}</Td>
+                    <Td>{holiday.title}</Td>
+                    <Td>{holiday.date}</Td>
+                    <Td className="md:table-cell hidden">{holiday.type}</Td>
+                    <Td>
+                      <Button
+                        size={"sm"}
+                        variant={"outline"}
+                        colorScheme="blue"
+                        ml={2}
+                        p={0}
+                        onClick={() => handleUpdateHoliday(holiday.calender_id)}
+                      >
+                        <MdModeEditOutline size={18} />
+                      </Button>
+                    </Td>
+                    <Td>
+                      <Button
+                      size={"sm"}
+                      variant={"outline"}
+                      colorScheme="red"
+                      ml={50}
+                      onClick={() =>
+                        handleDeleteHoliday(holiday.calender_id)
+                      }
+                    >
+                      <DeleteIcon />
                     </Button>
-                  </Td>
-                  <Td>
-                    <Button colorScheme="green" onClick={() => handleUpdateHoliday(holiday.calender_id)}>
-                      Update
-                    </Button>
-                  </Td>
-                </Tr>
-              ))}
+                    </Td>
+                  </Tr>
+                ))}
             </Tbody>
-          </Table>
+          </TableContainer>
         )}
       </div>
     </>
