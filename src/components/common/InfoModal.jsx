@@ -9,7 +9,7 @@ import {
   ModalOverlay,
   Text,
 } from "@chakra-ui/react";
-import { format } from 'date-fns';
+import { format } from "date-fns";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addEmployeeId } from "../../store/slice/EmployeeSlice";
@@ -69,23 +69,24 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
     const getCollectionHistory = async (invoice_id) => {
       // console.log(data)
       try {
-        await axios.get(`${import.meta.env.VITE_API_BASE}/api/admin/getAllInvoices`)
+        await axios
+          .get(`${import.meta.env.VITE_API_BASE}/api/admin/getAllInvoices`)
           .then((res) => {
             let data = res.data.filter((el) => {
               return el.invoice_id === invoice_id;
-            })[0]
+            })[0];
             console.log(data);
             setCollectedInvoices(data);
-          })
+          });
       } catch (error) {
-        console.log(`Error getting collection history: ${error}`)
+        console.log(`Error getting collection history: ${error}`);
       }
-    }
+    };
 
     if (modalFor === "invoice") {
       getCollectionHistory(data?.invoice_id);
     }
-  }, [])
+  }, []);
 
   if (modalFor === "manager")
     return (
@@ -127,67 +128,95 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                 <Divider />
                 <div className="flex gap-10">
                   <div className="max-w-[200px] md:max-w-[300px]">
-                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">Employee Information</h1>
+                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">
+                      Employee Information
+                    </h1>
                     {data.name && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Name </Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Name{" "}
+                        </Text>
                         <Text className="text-lg capitalize">{data.name}</Text>
                       </>
                     )}
                   </div>
                   <div className="max-w-[200px] md:max-w-[300px]">
-                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">Position Information</h1>
+                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">
+                      Position Information
+                    </h1>
                     {data.position && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Position </Text>
-                        <Text className="text-lg capitalize">{data.position}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Position{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.position}
+                        </Text>
                       </>
                     )}
                   </div>
                   <div className="max-w-[200px] md:max-w-[300px]">
-                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">Contact Information</h1>
+                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">
+                      Contact Information
+                    </h1>
                     {data.email && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Email </Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Email{" "}
+                        </Text>
                         <Text className="text-lg">{data.email}</Text>
                       </>
                     )}
                   </div>
                   <div className="max-w-[200px] md:max-w-[300px]">
-                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">Other Information</h1>
+                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">
+                      Other Information
+                    </h1>
                     {data.requirement && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Requirements </Text>
-                        <Text className="text-lg capitalize">{data.requirement}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Requirements{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.requirement}
+                        </Text>
                       </>
                     )}
                   </div>
                 </div>
                 <div className="w-full mt-4">
-                  <Text className="text-md font-bold text-gray-500 mt-2">Additional Information: </Text>
-                  <div className="w-full flex gap-2 mt-2">
-                  </div>
-                  <div className="w-full flex gap-2 mt-2">
-                  </div>
+                  <Text className="text-md font-bold text-gray-500 mt-2">
+                    Additional Information:{" "}
+                  </Text>
+                  <div className="w-full flex gap-2 mt-2"></div>
+                  <div className="w-full flex gap-2 mt-2"></div>
                 </div>
                 <div className="flex flex-col md:flex-row gap-3 w-full">
                   <div className="md:w-1/3 w-full mb-4">
                     <Text fontWeight="bold">Name: </Text>
-                    <Text fontSize={"24px"} textTransform={"capitalize"}>{data.name}</Text>
+                    <Text fontSize={"24px"} textTransform={"capitalize"}>
+                      {data.name}
+                    </Text>
                   </div>
                   <div className="md:w-1/3 w-full">
                     <Text fontWeight="bold">Position: </Text>
-                    <Text fontSize={"24px"} textTransform={"capitalize"}>{data.position}</Text>
+                    <Text fontSize={"24px"} textTransform={"capitalize"}>
+                      {data.position}
+                    </Text>
                   </div>
                   <div className="md:w-1/3 w-full">
                     <Text fontWeight="bold">Department: </Text>
-                    <Text fontSize={"24px"} textTransform={"capitalize"}>{data.department}</Text>
+                    <Text fontSize={"24px"} textTransform={"capitalize"}>
+                      {data.department}
+                    </Text>
                   </div>
                 </div>
                 <Text fontWeight="bold">Manager ID: </Text>
                 <Text mb={4}>{data.manager_id}</Text>
                 <Text fontWeight="bold">Email: </Text>
-                <Text fontSize={"18px"} mb={4}>{data.email}</Text>
+                <Text fontSize={"18px"} mb={4}>
+                  {data.email}
+                </Text>
                 <div className="flex flex-col md:flex-row md:gap-[150px] gap-4 w-full">
                   <div>
                     <Text fontWeight="bold">Date Of Birth: </Text>
@@ -230,7 +259,9 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>{data?.title} {data?.name}</ModalHeader>
+          <ModalHeader>
+            {data?.title} {data?.name}
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             {data && (
@@ -258,134 +289,214 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                 <Divider />
                 <div className="flex gap-10">
                   <div className="max-w-[200px] md:max-w-[300px]">
-                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">Employee Information</h1>
+                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">
+                      Employee Information
+                    </h1>
                     {data.name && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Name </Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Name{" "}
+                        </Text>
                         <Text className="text-lg capitalize">{data.name}</Text>
                       </>
                     )}
                     {data.gender && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Gender </Text>
-                        <Text className="text-lg capitalize">{data.gender}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Gender{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.gender}
+                        </Text>
                       </>
                     )}
                     {data.dob && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">DOB </Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          DOB{" "}
+                        </Text>
                         <Text className="text-lg capitalize">{data.dob}</Text>
                       </>
                     )}
                     {data.joiningDate && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Joining Date </Text>
-                        <Text className="text-lg capitalize">{data.joiningDate}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Joining Date{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.joiningDate}
+                        </Text>
                       </>
                     )}
                     {data.probationPeriod && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Probation Period </Text>
-                        <Text className="text-lg capitalize">{data.probationPeriod}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Probation Period{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.probationPeriod}
+                        </Text>
                       </>
                     )}
                     {data.leavingDate && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Leaving Date </Text>
-                        <Text className="text-lg capitalize">{data.leavingDate}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Leaving Date{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.leavingDate}
+                        </Text>
                       </>
                     )}
                   </div>
                   <div className="max-w-[200px] md:max-w-[300px]">
-                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">Position Information</h1>
+                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">
+                      Position Information
+                    </h1>
                     {data.position && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Position </Text>
-                        <Text className="text-lg capitalize">{data.position}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Position{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.position}
+                        </Text>
                       </>
                     )}
                     {data.type && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Type </Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Type{" "}
+                        </Text>
                         <Text className="text-lg capitalize">{data.type}</Text>
                       </>
                     )}
                     {data.designation && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Designation </Text>
-                        <Text className="text-lg capitalize">{data.designation}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Designation{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.designation}
+                        </Text>
                       </>
                     )}
                     {data.department && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Department </Text>
-                        <Text className="text-lg capitalize">{data.department}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Department{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.department}
+                        </Text>
                       </>
                     )}
                   </div>
                   <div className="max-w-[200px] md:max-w-[300px]">
-                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">Contact Information</h1>
+                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">
+                      Contact Information
+                    </h1>
                     {data.email && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Email </Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Email{" "}
+                        </Text>
                         <Text className="text-lg">{data.email}</Text>
                       </>
                     )}
                     {data.contactNo && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Contact </Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Contact{" "}
+                        </Text>
                         <Text className="text-lg">{data.contactNo}</Text>
                       </>
                     )}
                     {data.permanentAddress && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Permanent Address </Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Permanent Address{" "}
+                        </Text>
                         <Text className="text-lg">{data.permanentAddress}</Text>
                       </>
                     )}
                     {data.correspondenceAddress && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Correspondance Address </Text>
-                        <Text className="text-lg">{data.correspondenceAddress}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Correspondance Address{" "}
+                        </Text>
+                        <Text className="text-lg">
+                          {data.correspondenceAddress}
+                        </Text>
                       </>
                     )}
                   </div>
                   <div className="max-w-[200px] md:max-w-[300px]">
-                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">Other Information</h1>
+                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">
+                      Other Information
+                    </h1>
                     {data.requirement && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Requirements </Text>
-                        <Text className="text-lg capitalize">{data.requirement}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Requirements{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.requirement}
+                        </Text>
                       </>
                     )}
                     {data.aadharNumber && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Aadhar </Text>
-                        <Text className="text-lg capitalize">{data.aadharNumber}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Aadhar{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.aadharNumber}
+                        </Text>
                       </>
                     )}
                     {data.panNumber && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">PAN </Text>
-                        <Text className="text-lg capitalize">{data.panNumber}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          PAN{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.panNumber}
+                        </Text>
                       </>
                     )}
                     {data.bankDetails && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Bank Details </Text>
-                        <Text className="text-lg capitalize">Name: {data.bankDetails.bankName}</Text>
-                        <Text className="text-lg capitalize">Acc no: {data.bankDetails.bankAccountNo}</Text>
-                        <Text className="text-lg capitalize">IFSC: {data.bankDetails.bankIfscCode}</Text>
-                        <Text className="text-lg capitalize">Type: {data.bankDetails.type}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Bank Details{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          Name: {data.bankDetails.bankName}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          Acc no: {data.bankDetails.bankAccountNo}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          IFSC: {data.bankDetails.bankIfscCode}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          Type: {data.bankDetails.type}
+                        </Text>
                       </>
                     )}
                   </div>
                 </div>
                 <div className="w-full mt-4">
-                  <Text className="text-md font-bold text-gray-500 mt-2">Additional Information: </Text>
+                  <Text className="text-md font-bold text-gray-500 mt-2">
+                    Additional Information:{" "}
+                  </Text>
                   <div className="w-full flex gap-2 mt-2">
                     <Text className="text-lg font-bold">Permissions</Text>
-                    {data?.permissions?.map((item) => (<Tag key={item} className="text-lg">{item}</Tag>))}
+                    {data?.permissions?.map((item) => (
+                      <Tag key={item} className="text-lg">
+                        {item}
+                      </Tag>
+                    ))}
                   </div>
                   <div className="w-full flex gap-2 mt-2">
                     <Text className="text-lg font-bold">Guardian Details</Text>
@@ -434,41 +545,65 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                 <Divider />
                 <div className="flex gap-10">
                   <div className="max-w-[200px] md:max-w-[300px]">
-                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">Leave Information</h1>
+                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">
+                      Leave Information
+                    </h1>
                     {data.type && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Type </Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Type{" "}
+                        </Text>
                         <Text className="text-lg capitalize">{data.type}</Text>
                       </>
                     )}
                     {data.startDate && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Start Date </Text>
-                        <Text className="text-lg">{new Date(data.startDate).toLocaleDateString('en-GB')}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Start Date{" "}
+                        </Text>
+                        <Text className="text-lg">
+                          {new Date(data.startDate).toLocaleDateString("en-GB")}
+                        </Text>
                       </>
                     )}
                     {data.endDate && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">End Date </Text>
-                        <Text className="text-lg">{new Date(data.endDate).toLocaleDateString('en-GB')}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          End Date{" "}
+                        </Text>
+                        <Text className="text-lg">
+                          {new Date(data.endDate).toLocaleDateString("en-GB")}
+                        </Text>
                       </>
                     )}
                     {data.createdAt && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Application Date</Text>
-                        <Text className="text-lg">{new Date(data.createdAt).toLocaleDateString('en-GB')}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Application Date
+                        </Text>
+                        <Text className="text-lg">
+                          {new Date(data.createdAt).toLocaleDateString("en-GB")}
+                        </Text>
                       </>
                     )}
                     {data.status && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Status </Text>
-                        <Text className="text-lg capitalize">{data.status}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Status{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.status}
+                        </Text>
                       </>
                     )}
                     {data.reason && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Reason </Text>
-                        <Text className="text-lg capitalize">{data.reason}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Reason{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.reason}
+                        </Text>
                       </>
                     )}
                   </div>
@@ -496,7 +631,9 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader textTransform={"capitalize"}>{data?.title} {data?.clientName}</ModalHeader>
+          <ModalHeader textTransform={"capitalize"}>
+            {data?.title} {data?.clientName}
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             {data && (
@@ -524,111 +661,171 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                 <Divider />
                 <div className="flex gap-10">
                   <div className="max-w-[200px] md:max-w-[300px]">
-                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">Task Information</h1>
+                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">
+                      Task Information
+                    </h1>
                     {data.clientName && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Name </Text>
-                        <Text className="text-lg capitalize">{data.clientName}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Name{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.clientName}
+                        </Text>
                       </>
                     )}
                     {data.clientBirthday && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Name </Text>
-                        <Text className="text-lg capitalize">{data.clientBirthday}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Name{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.clientBirthday}
+                        </Text>
                       </>
                     )}
                     {data.workStartDate && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Work Start Date </Text>
-                        <Text className="text-lg capitalize">{data.workStartDate}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Work Start Date{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.workStartDate}
+                        </Text>
                       </>
                     )}
                     {data.city && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">City </Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          City{" "}
+                        </Text>
                         <Text className="text-lg capitalize">{data.city}</Text>
                       </>
                     )}
                     {data.state && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">State </Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          State{" "}
+                        </Text>
                         <Text className="text-lg capitalize">{data.state}</Text>
                       </>
                     )}
                     {data.pincode && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Pincode </Text>
-                        <Text className="text-lg capitalize">{data.pincode}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Pincode{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.pincode}
+                        </Text>
                       </>
                     )}
                     {data.country && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Country </Text>
-                        <Text className="text-lg capitalize">{data.country}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Country{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.country}
+                        </Text>
                       </>
                     )}
                   </div>
                   <div className="max-w-[200px] md:max-w-[300px]">
-                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">Brand Information</h1>
+                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">
+                      Brand Information
+                    </h1>
                     {data.brandName && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Brand Name </Text>
-                        <Text className="text-lg capitalize">{data.brandName}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Brand Name{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.brandName}
+                        </Text>
                       </>
                     )}
                     {data.companyName && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Company Name </Text>
-                        <Text className="text-lg capitalize">{data.companyName}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Company Name{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.companyName}
+                        </Text>
                       </>
                     )}
                     {data.enquiryDate && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Enquiry Date </Text>
-                        <Text className="text-lg capitalize">{data.enquiryDate}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Enquiry Date{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.enquiryDate}
+                        </Text>
                       </>
                     )}
                     {data.buisnessAddress && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Business Address </Text>
-                        <Text className="text-lg capitalize">{data.buisnessAddress}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Business Address{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.buisnessAddress}
+                        </Text>
                       </>
                     )}
                   </div>
                   <div className="max-w-[200px] md:max-w-[300px]">
-                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">Contact Information</h1>
+                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">
+                      Contact Information
+                    </h1>
                     {(data.email1 || data.email2) && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Emails </Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Emails{" "}
+                        </Text>
                         <Text className="text-lg">{data.email1}</Text>
                         <Text className="text-lg">{data.email2}</Text>
                       </>
                     )}
                     {(data.phone1 || data.phone2) && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Phone </Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Phone{" "}
+                        </Text>
                         <Text className="text-lg">{data.phone1}</Text>
                         <Text className="text-lg">{data.phone2}</Text>
                       </>
                     )}
                     {data.website && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Website </Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Website{" "}
+                        </Text>
                         <Text className="text-lg">{data.website}</Text>
                       </>
                     )}
                   </div>
                   <div className="max-w-[200px] md:max-w-[300px]">
-                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">Other Information</h1>
+                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">
+                      Other Information
+                    </h1>
                     {data.requirement && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Requirements </Text>
-                        <Text className="text-lg capitalize">{data.requirement}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Requirements{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.requirement}
+                        </Text>
                       </>
                     )}
                     {data.source && data.source.length > 0 && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Source </Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Source{" "}
+                        </Text>
                         <ul>
                           {data.source.map((item, index) => (
                             <li key={index}>{item}</li>
@@ -641,7 +838,9 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                         <Text fontWeight="bold">Single File: </Text>
                         <Button
                           as="a"
-                          href={`${import.meta.env.VITE_API_BASE}/uploads/${data.singleFile}`}
+                          href={`${import.meta.env.VITE_API_BASE}/uploads/${
+                            data.singleFile
+                          }`}
                           target="_blank"
                           rel="noopener noreferrer"
                           textDecoration="none"
@@ -654,14 +853,18 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                       </div>
                     )}
                     {Array.isArray(data.multipleFiles) &&
-                      data.multipleFiles.length > 0 ? (
+                    data.multipleFiles.length > 0 ? (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Multiple Files</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Multiple Files
+                        </Text>
                         {data.multipleFiles.map((file, index) => (
                           <div key={index}>
                             <Button
                               as="a"
-                              href={`${import.meta.env.VITE_API_BASE}/uploads/${file}`}
+                              href={`${
+                                import.meta.env.VITE_API_BASE
+                              }/uploads/${file}`}
                               target="_blank"
                               rel="noopener noreferrer"
                               textDecoration="none"
@@ -676,13 +879,16 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                             </Button>
                           </div>
                         ))}
-                      </>) : (
+                      </>
+                    ) : (
                       <Text fontWeight="bold">No files provided</Text>
                     )}
                   </div>
                 </div>
                 <div className="w-full mt-4">
-                  <Text className="text-md font-bold text-gray-500 mt-2">Additional Information: </Text>
+                  <Text className="text-md font-bold text-gray-500 mt-2">
+                    Additional Information:{" "}
+                  </Text>
                   <Text className="text-lg">{data.additionalInformation}</Text>
                 </div>
               </>
@@ -741,43 +947,65 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                 <Divider />
                 <div className="flex gap-10">
                   <div className="max-w-[200px] md:max-w-[300px]">
-                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">Project Information</h1>
+                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">
+                      Project Information
+                    </h1>
                     {data.projectName && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Project Name </Text>
-                        <Text className="text-lg capitalize">{data.projectName}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Project Name{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.projectName}
+                        </Text>
                       </>
                     )}
                     {data.brandName && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Brand Name </Text>
-                        <Text className="text-lg capitalize">{data.brandName}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Brand Name{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.brandName}
+                        </Text>
                       </>
                     )}
                     {data.priority && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Priority </Text>
-                        <Text className="text-lg capitalize">{data.priority}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Priority{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.priority}
+                        </Text>
                       </>
                     )}
                   </div>
                   <div className="max-w-[200px] md:max-w-[300px]">
-                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">Other Information</h1>
+                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">
+                      Other Information
+                    </h1>
                     {data.startDate && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Start Date </Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Start Date{" "}
+                        </Text>
                         <Text className="text-lg">{data.startDate}</Text>
                       </>
                     )}
                     {data.deadline && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Deadline </Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Deadline{" "}
+                        </Text>
                         <Text className="text-lg">{data.deadline}</Text>
                       </>
                     )}
                     {data.tags && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Tags </Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Tags{" "}
+                        </Text>
                         {data.tags.length > 0 && ( // Check if tags exist and have length greater than 0
                           <div>
                             <Text fontWeight="bold">Tags: </Text>
@@ -791,7 +1019,9 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                   </div>
                 </div>
                 <div className="w-full mt-4">
-                  <Text className="text-md font-bold text-gray-500 mt-2">Additional Information: </Text>
+                  <Text className="text-md font-bold text-gray-500 mt-2">
+                    Additional Information:{" "}
+                  </Text>
                   <div className="w-full flex gap-2 mt-2">
                     {data?.description}
                   </div>
@@ -851,59 +1081,111 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                   </Menu> */}
                 </div>
                 <Divider />
-                <div className="flex gap-10">
-                  <div className="max-w-[200px] md:max-w-[300px]">
-                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">Basic Information</h1>
-                    {data.date1 && (
-                      <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Date </Text>
-                        <Text className="text-lg capitalize">{data.date1}</Text>
-                      </>
-                    )}
-                    {data.time1 && (
-                      <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Time </Text>
-                        <Text className="text-lg capitalize">{data.time1}</Text>
-                      </>
-                    )}
+                <div className="flex gap-20">
+                  <div className="flex flex-col">
+                    <div className="max-w-[200px] md:max-w-[300px]">
+                      <h1 className="text-lg font-semibold bg-gray-100 text-gray-600 rounded-md w-full px-3 py-1 mb-4">
+                        Basic Information
+                      </h1>
+                      {data.date1 && (
+                        <>
+                          <Text className="text-sm font-medium text-gray-600 mt-3">
+                            Date{" "}
+                          </Text>
+                          <Text className="text-lg capitalize">
+                            {data.date1}
+                          </Text>
+                        </>
+                      )}
+                      {data.time1 && (
+                        <>
+                          <Text className="text-sm font-medium text-gray-600 mt-3">
+                            Time{" "}
+                          </Text>
+                          <Text className="text-lg capitalize">
+                            {data.time1}
+                          </Text>
+                        </>
+                      )}
+                    </div>
+                    <div className="mt-10">
+                      <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md max-w-[190px] px-3 py-1 mb-4">
+                        Service Information:{" "}
+                      </h1>
+                      {data.services && (
+                        <div className="grid grid-cols-2">
+                          {data.services.map((service, index) => (
+                            <div key={index}>
+                              <Text className="text-xl font-bold text-gray-600">
+                                Service {index + 1}{" "}
+                              </Text>
+                              <Text className="text-sm font-medium text-gray-600 mt-1">
+                                Invoice{" "}
+                              </Text>
+                              <Text className="text-lg capitalize">
+                                {service.product}
+                              </Text>
+                              <Text className="text-sm font-medium text-gray-600 mt-1">
+                                Description{" "}
+                              </Text>
+                              <Text className="text-lg capitalize">
+                                {service.serviceDescription}
+                              </Text>
+                              <Text className="text-sm font-medium text-gray-600 mt-1">
+                                Duration{" "}
+                              </Text>
+                              <Text className="text-lg capitalize">
+                                {service.duration}
+                              </Text>
+                              <Text className="text-sm font-medium text-gray-600 mt-1">
+                                Quantity{" "}
+                              </Text>
+                              <Text className="text-lg capitalize">
+                                {service.quantity}
+                              </Text>
+                              <Text className="text-sm font-medium text-gray-600 mt-1">
+                                Unit Price{" "}
+                              </Text>
+                              <Text className="text-lg capitalize">
+                                {service.unitPrice}
+                              </Text>
+                              <Text className="text-sm font-medium text-gray-600 mt-1">
+                                Start Date{" "}
+                              </Text>
+                              <Text className="text-lg capitalize">
+                                {service.startDate}
+                              </Text>
+                              <Text className="text-sm font-medium text-gray-600 mt-1">
+                                End Date{" "}
+                              </Text>
+                              <Text className="text-lg capitalize">
+                                {service.endDate}
+                              </Text>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   </div>
                   <div className="max-w-[200px] md:max-w-[300px]">
-                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">Collection History</h1>
-                    {collectedInvoices.collectionHistory.length > 0 ? 
-                    collectedInvoices.collectionHistory.map((item, idx) => (
-                      <div key={`his-${idx}`}>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Collection {idx+1} </Text>
-                        <Text className="text-lg capitalize">{item.amountCollected}</Text>
-                      </div>
-                    )) : (
+                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-600 rounded-md w-full px-3 py-1 mb-4 ">
+                      Collection History
+                    </h1>
+                    {collectedInvoices?.collectionHistory?.length > 0 ? (
+                      collectedInvoices?.collectionHistory?.map((item, idx) => (
+                        <div key={`his-${idx}`}>
+                          <Text className="text-base font-medium text-gray-600 mt-3">
+                            Collection {idx + 1}{" "}
+                          </Text>
+                          <Text className="text-lg capitalize mt-1">
+                            {item.amountCollected}
+                          </Text>
+                        </div>
+                      ))
+                    ) : (
                       <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
                     )}
                   </div>
-                </div>
-                <div className="mt-4">
-                  <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md max-w-[190px] px-3 py-1 mb-4">Service Information: </h1>
-                  {data.services && (
-                    <div className="grid grid-cols-2">
-                      {data.services.map((service, index) => (
-                        <div key={index}>
-                          <Text className="text-xl font-bold text-gray-600">Service {index + 1} </Text>
-                          <Text className="text-sm font-bold text-gray-500 mt-1">Invoice </Text>
-                          <Text className="text-lg capitalize">{service.product}</Text>
-                          <Text className="text-sm font-bold text-gray-500 mt-1">Description </Text>
-                          <Text className="text-lg capitalize">{service.serviceDescription}</Text>
-                          <Text className="text-sm font-bold text-gray-500 mt-1">Duration </Text>
-                          <Text className="text-lg capitalize">{service.duration}</Text>
-                          <Text className="text-sm font-bold text-gray-500 mt-1">Quantity </Text>
-                          <Text className="text-lg capitalize">{service.quantity}</Text>
-                          <Text className="text-sm font-bold text-gray-500 mt-1">Unit Price </Text>
-                          <Text className="text-lg capitalize">{service.unitPrice}</Text>
-                          <Text className="text-sm font-bold text-gray-500 mt-1">Start Date </Text>
-                          <Text className="text-lg capitalize">{service.startDate}</Text>
-                          <Text className="text-sm font-bold text-gray-500 mt-1">End Date </Text>
-                          <Text className="text-lg capitalize">{service.endDate}</Text>
-                        </div>
-                      ))}
-                    </div>)}
                 </div>
               </>
             )}
@@ -941,7 +1223,9 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                       <h2 className="text-lg mr-2">View:</h2>
                       <Button
                         as="a"
-                        href={`${import.meta.env.VITE_API_BASE}/uploads/${data.singleFile}`}
+                        href={`${import.meta.env.VITE_API_BASE}/uploads/${
+                          data.singleFile
+                        }`}
                         target="_blank"
                         rel="noopener noreferrer"
                         textDecoration="none"
@@ -978,17 +1262,25 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                 <Divider />
                 <div className="flex gap-10">
                   <div className="max-w-[200px] md:max-w-[300px]">
-                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">Letter Information</h1>
+                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">
+                      Letter Information
+                    </h1>
                     {data.name && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Name </Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Name{" "}
+                        </Text>
                         <Text className="text-lg capitalize">{data.name}</Text>
                       </>
                     )}
                     {data.createdAt && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Date </Text>
-                        <Text className="text-lg capitalize">{new Date(data.createdAt).toLocaleDateString('en-GB')}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Date{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {new Date(data.createdAt).toLocaleDateString("en-GB")}
+                        </Text>
                       </>
                     )}
                   </div>
@@ -1016,7 +1308,9 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>{data?.title} {data?.clientName}</ModalHeader>
+          <ModalHeader>
+            {data?.title} {data?.clientName}
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             {data && (
@@ -1044,116 +1338,186 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                 <Divider />
                 <div className="flex gap-10">
                   <div className="max-w-[200px] md:max-w-[300px]">
-                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">Lead Information</h1>
+                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">
+                      Lead Information
+                    </h1>
                     {data.companyName && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Company Name </Text>
-                        <Text className="text-lg capitalize">{data.companyName}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Company Name{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.companyName}
+                        </Text>
                       </>
                     )}
                     {data.brandName && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Brand Name </Text>
-                        <Text className="text-lg capitalize">{data.brandName}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Brand Name{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.brandName}
+                        </Text>
                       </>
                     )}
                     {data.clientName && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Client Name </Text>
-                        <Text className="text-lg capitalize">{data.clientName}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Client Name{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.clientName}
+                        </Text>
                       </>
                     )}
                     {data.gender && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Gender </Text>
-                        <Text className="text-lg capitalize">{data.gender}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Gender{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.gender}
+                        </Text>
                       </>
                     )}
                     {data.enquiryDate && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Enquiry Date </Text>
-                        <Text className="text-lg capitalize">{data.enquiryDate}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Enquiry Date{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.enquiryDate}
+                        </Text>
                       </>
                     )}
                   </div>
                   <div className="max-w-[200px] md:max-w-[300px]">
-                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">Contact Information</h1>
+                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">
+                      Contact Information
+                    </h1>
                     {(data.email1 || data.email2) && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Emails </Text>
-                        <Text className="text-lg capitalize">{data.email1}</Text>
-                        <Text className="text-lg capitalize">{data.email2}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Emails{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.email1}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.email2}
+                        </Text>
                       </>
                     )}
                     {(data.phone1 || data.phone2) && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Phone </Text>
-                        <Text className="text-lg capitalize">{data.phone1}</Text>
-                        <Text className="text-lg capitalize">{data.phone2}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Phone{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.phone1}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.phone2}
+                        </Text>
                       </>
                     )}
                     {data.businessAddress && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Business Address </Text>
-                        <Text className="text-lg capitalize">{data.businessAddress}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Business Address{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.businessAddress}
+                        </Text>
                       </>
                     )}
                     {data.billingAddress && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Billing Address </Text>
-                        <Text className="text-lg capitalize">{data.billingAddress}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Billing Address{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.billingAddress}
+                        </Text>
                       </>
                     )}
                     {data.city && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">City </Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          City{" "}
+                        </Text>
                         <Text className="text-lg capitalize">{data.city}</Text>
                       </>
                     )}
                     {data.state && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">State </Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          State{" "}
+                        </Text>
                         <Text className="text-lg capitalize">{data.state}</Text>
                       </>
                     )}
                     {data.country && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Country </Text>
-                        <Text className="text-lg capitalize">{data.country}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Country{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.country}
+                        </Text>
                       </>
                     )}
                     {data.pincode && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Pincode </Text>
-                        <Text className="text-lg capitalize">{data.pincode}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Pincode{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.pincode}
+                        </Text>
                       </>
                     )}
                   </div>
                   <div className="max-w-[200px] md:max-w-[300px]">
-                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">Other Information</h1>
+                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">
+                      Other Information
+                    </h1>
                     {data.website && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Website </Text>
-                        <Text className="text-lg capitalize">{data.website}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Website{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.website}
+                        </Text>
                       </>
                     )}
                   </div>
                 </div>
                 <div className="w-full mt-4">
-                  <Text className="text-md font-bold text-gray-500 mt-2">Additional Information: </Text>
+                  <Text className="text-md font-bold text-gray-500 mt-2">
+                    Additional Information:{" "}
+                  </Text>
                   <div className="w-full flex gap-2 mt-2">
                     {data.additionalInformation && (
-                      <Text className="text-lg capitalize">{data.additionalInformation}</Text>
+                      <Text className="text-lg capitalize">
+                        {data.additionalInformation}
+                      </Text>
                     )}
                   </div>
                   <div className="w-full flex gap-2 mt-2">
                     {data.status && (
-                      <Text className="text-lg capitalize">Status: {data.status}</Text>
+                      <Text className="text-lg capitalize">
+                        Status: {data.status}
+                      </Text>
                     )}
                   </div>
                   <div className="w-full flex gap-2 mt-2">
                     {data.sourceInformation && (
-                      <Text className="text-lg capitalize">Source Information: {data.sourceInformation}</Text>
+                      <Text className="text-lg capitalize">
+                        Source Information: {data.sourceInformation}
+                      </Text>
                     )}
                   </div>
                   <div className="w-full flex gap-2 mt-2">
@@ -1184,7 +1548,9 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                         <Text fontWeight="bold">Single File: </Text>
                         <Button
                           as="a"
-                          href={`${import.meta.env.VITE_API_BASE}/uploads/${data.singleFile}`}
+                          href={`${import.meta.env.VITE_API_BASE}/uploads/${
+                            data.singleFile
+                          }`}
                           target="_blank"
                           rel="noopener noreferrer"
                           textDecoration="none"
@@ -1197,14 +1563,16 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                       </div>
                     )}
                     {Array.isArray(data.multipleFiles) &&
-                      data.multipleFiles.length > 0 ? (
+                    data.multipleFiles.length > 0 ? (
                       <div>
                         <Text fontWeight="bold">Files Provided: </Text>
                         {data.multipleFiles.map((file, index) => (
                           <div key={index}>
                             <Button
                               as="a"
-                              href={`${import.meta.env.VITE_API_BASE}/uploads/${file}`}
+                              href={`${
+                                import.meta.env.VITE_API_BASE
+                              }/uploads/${file}`}
                               target="_blank"
                               rel="noopener noreferrer"
                               textDecoration="none"
@@ -1246,7 +1614,9 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader textTransform={"capitalize"}>{data?.brandName}</ModalHeader>
+          <ModalHeader textTransform={"capitalize"}>
+            {data?.brandName}
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             {data && (
@@ -1284,12 +1654,20 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                 <Divider />
                 <div className="flex gap-10">
                   <div className="max-w-[200px] md:max-w-[300px]">
-                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">Task Information</h1>
-                    <Text className="text-sm font-bold text-gray-500 mt-3">Brand Name </Text>
+                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">
+                      Task Information
+                    </h1>
+                    <Text className="text-sm font-bold text-gray-500 mt-3">
+                      Brand Name{" "}
+                    </Text>
                     <Text className="text-lg capitalize">{data.brandName}</Text>
-                    <Text className="text-sm font-bold text-gray-500 mt-2">Task ID: </Text>
+                    <Text className="text-sm font-bold text-gray-500 mt-2">
+                      Task ID:{" "}
+                    </Text>
                     <Text className="text-lg">{data.task_id}</Text>
-                    <Text className="text-sm font-bold text-gray-500 mt-2">Priority </Text>
+                    <Text className="text-sm font-bold text-gray-500 mt-2">
+                      Priority{" "}
+                    </Text>
                     <Text className="text-lg capitalize">
                       {priorityArray[data.priority] || data.priority}
                       {/* <div className={`h-2 w-2 rounded-full ${data.priority === 0 && "bg-red-400"
@@ -1298,19 +1676,29 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                         } ${data.priority === 3 && "bg-gray-300"
                         }`} /> */}
                     </Text>
-                    <Text className="text-sm font-bold text-gray-500 mt-2">Status: </Text>
+                    <Text className="text-sm font-bold text-gray-500 mt-2">
+                      Status:{" "}
+                    </Text>
                     <Text className="text-lg capitalize">{data.status}</Text>
                   </div>
                   <div className="max-w-[200px] md:max-w-[300px]">
-                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">General Information</h1>
-                    <Text className="text-sm font-bold text-gray-500 mt-3">Start Date: </Text>
+                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">
+                      General Information
+                    </h1>
+                    <Text className="text-sm font-bold text-gray-500 mt-3">
+                      Start Date:{" "}
+                    </Text>
                     <Text className="text-lg">{data.startDate}</Text>
-                    <Text className="text-sm font-bold text-gray-500 mt-2">Deadline: </Text>
+                    <Text className="text-sm font-bold text-gray-500 mt-2">
+                      Deadline:{" "}
+                    </Text>
                     <Text className="text-lg">{data.deadline}</Text>
                   </div>
                 </div>
                 <div className="w-full mt-4">
-                  <Text className="text-md font-bold text-gray-500 mt-2">Description: </Text>
+                  <Text className="text-md font-bold text-gray-500 mt-2">
+                    Description:{" "}
+                  </Text>
                   <Text className="text-lg">{data.description}</Text>
                 </div>
               </>
@@ -1336,7 +1724,9 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader textTransform={"capitalize"}>{data?.name || "Expense"}</ModalHeader>
+          <ModalHeader textTransform={"capitalize"}>
+            {data?.name || "Expense"}
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             {data && (
@@ -1368,32 +1758,58 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                 <Divider />
                 <div className="flex gap-10">
                   <div className="max-w-[200px] md:max-w-[300px]">
-                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">General Information</h1>
-                    <Text className="text-sm font-bold text-gray-500 mt-3">Amount </Text>
-                    <Text className="text-lg capitalize">{data?.amountReceived}</Text>
-                    <Text className="text-sm font-bold text-gray-500 mt-2">Created At: </Text>
+                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">
+                      General Information
+                    </h1>
+                    <Text className="text-sm font-bold text-gray-500 mt-3">
+                      Amount{" "}
+                    </Text>
+                    <Text className="text-lg capitalize">
+                      {data?.amountReceived}
+                    </Text>
+                    <Text className="text-sm font-bold text-gray-500 mt-2">
+                      Created At:{" "}
+                    </Text>
                     <Text className="text-lg">{data?.createdAt}</Text>
-                    <Text className="text-sm font-bold text-gray-500 mt-2">Date: </Text>
+                    <Text className="text-sm font-bold text-gray-500 mt-2">
+                      Date:{" "}
+                    </Text>
                     <Text className="text-lg capitalize">{data?.date1}</Text>
-                    <Text className="text-sm font-bold text-gray-500 mt-2">Time: </Text>
+                    <Text className="text-sm font-bold text-gray-500 mt-2">
+                      Time:{" "}
+                    </Text>
                     <Text className="text-lg capitalize">{data?.time1}</Text>
-                    <Text className="text-sm font-bold text-gray-500 mt-2">Total Spent: </Text>
-                    <Text className="text-lg capitalize">{data?.totalSpent}</Text>
-                    <Text className="text-sm font-bold text-gray-500 mt-2">Employee: </Text>
-                    <Text className="text-lg capitalize">{data?.totalSpent}</Text>
+                    <Text className="text-sm font-bold text-gray-500 mt-2">
+                      Total Spent:{" "}
+                    </Text>
+                    <Text className="text-lg capitalize">
+                      {data?.totalSpent}
+                    </Text>
+                    <Text className="text-sm font-bold text-gray-500 mt-2">
+                      Employee:{" "}
+                    </Text>
+                    <Text className="text-lg capitalize">
+                      {data?.totalSpent}
+                    </Text>
                   </div>
                   <div className="max-w-[200px] md:max-w-[300px]">
-                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">Other Information</h1>
+                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">
+                      Other Information
+                    </h1>
                     {data?.categories?.map((cat, index) => (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Category {index + 1}: </Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Category {index + 1}:{" "}
+                        </Text>
                         <Text className="text-lg">{cat.supplyTagName}</Text>
                       </>
                     ))}
                   </div>
                 </div>
                 <div className="w-full mt-4">
-                  <Text className="text-md font-bold text-gray-500 mt-2">Description: </Text>
+                  <Text className="text-md font-bold text-gray-500 mt-2">
+                    Description:{" "}
+                  </Text>
                   <Text className="text-lg">{data.description}</Text>
                 </div>
               </>
@@ -1452,48 +1868,68 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                 <Divider />
                 <div className="flex gap-10">
                   <div className="max-w-[200px] md:max-w-[300px]">
-                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">Employee Information</h1>
+                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">
+                      Employee Information
+                    </h1>
                     {data.name && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Name </Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Name{" "}
+                        </Text>
                         <Text className="text-lg capitalize">{data.name}</Text>
                       </>
                     )}
                   </div>
                   <div className="max-w-[200px] md:max-w-[300px]">
-                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">Position Information</h1>
+                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">
+                      Position Information
+                    </h1>
                     {data.position && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Position </Text>
-                        <Text className="text-lg capitalize">{data.position}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Position{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.position}
+                        </Text>
                       </>
                     )}
                   </div>
                   <div className="max-w-[200px] md:max-w-[300px]">
-                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">Contact Information</h1>
+                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">
+                      Contact Information
+                    </h1>
                     {data.email && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Email </Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Email{" "}
+                        </Text>
                         <Text className="text-lg">{data.email}</Text>
                       </>
                     )}
                   </div>
                   <div className="max-w-[200px] md:max-w-[300px]">
-                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">Other Information</h1>
+                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">
+                      Other Information
+                    </h1>
                     {data.requirement && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Requirements </Text>
-                        <Text className="text-lg capitalize">{data.requirement}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Requirements{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.requirement}
+                        </Text>
                       </>
                     )}
                   </div>
                 </div>
                 <div className="w-full mt-4">
-                  <Text className="text-md font-bold text-gray-500 mt-2">Additional Information: </Text>
-                  <div className="w-full flex gap-2 mt-2">
-                  </div>
-                  <div className="w-full flex gap-2 mt-2">
-                  </div>
+                  <Text className="text-md font-bold text-gray-500 mt-2">
+                    Additional Information:{" "}
+                  </Text>
+                  <div className="w-full flex gap-2 mt-2"></div>
+                  <div className="w-full flex gap-2 mt-2"></div>
                 </div>
                 <div>
                   <Link to={`/GetEmp`}>
@@ -1540,7 +1976,6 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
     );
   }
 
-
   if (modalFor === "ledger") {
     return (
       <Modal
@@ -1585,59 +2020,86 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                 <Divider />
                 <div className="flex gap-10">
                   <div className="max-w-[200px] md:max-w-[300px]">
-                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">General Information</h1>
+                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">
+                      General Information
+                    </h1>
                     {data.brandName && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Brand Name </Text>
-                        <Text className="text-lg capitalize">{data.brandName}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Brand Name{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.brandName}
+                        </Text>
                       </>
                     )}
                     {data.clientName && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Client Name </Text>
-                        <Text className="text-lg capitalize">{data.clientName}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Client Name{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.clientName}
+                        </Text>
                       </>
                     )}
                     {data.companyName && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Company Name </Text>
-                        <Text className="text-lg capitalize">{data.companyName}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Company Name{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data.companyName}
+                        </Text>
                       </>
                     )}
                     {data.createdAt && (
                       <>
-                        <Text className="text-sm font-bold text-gray-500 mt-3">Created At </Text>
-                        <Text className="text-lg capitalize">{format(new Date(data.createdAt), "dd/MM/yyyy")}</Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Created At{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {format(new Date(data.createdAt), "dd/MM/yyyy")}
+                        </Text>
                       </>
                     )}
                   </div>
                   <div className="max-w-[200px] md:max-w-[300px]">
-                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">Finance Information</h1>
-                    <Text className="text-sm font-bold text-gray-500 mt-3">Paid </Text>
+                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">
+                      Finance Information
+                    </h1>
+                    <Text className="text-sm font-bold text-gray-500 mt-3">
+                      Paid{" "}
+                    </Text>
                     <Text className="text-lg capitalize">{data?.paid}</Text>
-                    <Text className="text-sm font-bold text-gray-500 mt-3">Received </Text>
+                    <Text className="text-sm font-bold text-gray-500 mt-3">
+                      Received{" "}
+                    </Text>
                     <Text className="text-lg capitalize">{data?.received}</Text>
                   </div>
                 </div>
                 <div className="w-full mt-4">
-                  <Text className="text-md font-bold text-gray-500 mt-2">Additional Information: </Text>
+                  <Text className="text-md font-bold text-gray-500 mt-2">
+                    Additional Information:{" "}
+                  </Text>
                   <div className="w-full flex items-center justify-between gap-2 mt-2 max-w-[450px]">
                     <div className="flex items-center gap-2">
-                    <Text className="font-bold">Date: </Text>
-                    <Text className="text-lg capitalize">{data?.date1}</Text>
+                      <Text className="font-bold">Date: </Text>
+                      <Text className="text-lg capitalize">{data?.date1}</Text>
                     </div>
                     <div className="flex items-center gap-2">
-                    <Text className="font-bold">Time: </Text>
-                    <Text className="text-lg capitalize">{data?.time1}</Text>
+                      <Text className="font-bold">Time: </Text>
+                      <Text className="text-lg capitalize">{data?.time1}</Text>
                     </div>
                   </div>
                   <div className="w-full flex items-center gap-2 mt-2">
                     <Text className="font-bold">Description: </Text>
-                    <Text className="text-lg capitalize">{data?.description}</Text>
+                    <Text className="text-lg capitalize">
+                      {data?.description}
+                    </Text>
                   </div>
                 </div>
-                <div>
-                </div>
+                <div></div>
               </>
             )}
           </ModalBody>
