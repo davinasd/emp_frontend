@@ -44,6 +44,7 @@ const Emp = () => {
     guardianDetails: {
       guardianName: "",
       guardianContactNo: "",
+      relation: "",
     },
     bankDetails: {
       bankName: "",
@@ -65,14 +66,27 @@ const Emp = () => {
   //   });
   // };
   const handleChange = (e) => {
-
     const { name, value } = e.target;
-
-    setProjectData({ ...projectData, [name]: value });
+    const [mainKey, subKey] = name.split('.'); // Split the name to get mainKey and subKey
+    if (subKey) {
+      // If subKey exists, it means it's a nested object
+      setProjectData({
+        ...projectData,
+        [mainKey]: {
+          ...projectData[mainKey], // Preserve other fields of the main object
+          [subKey]: value // Update the value of the nested field
+        }
+      });
+    } else {
+      // If no subKey, update the mainKey directly
+      setProjectData({ ...projectData, [mainKey]: value });
+    }
   };
+  
   const handleSelectOption = (name, value) => {
     setProjectData({ ...projectData, [name]: value });
   };
+
   // const getTagNameById = (id) => {
   //   const tag = tags.find((tag) => tag.source_tag_id === id);
   //   return tag ? tag.sourceTagName : "Unknown Tag";
@@ -88,117 +102,92 @@ const Emp = () => {
       });
   }, []);
 
-  const handleSingleFileChange = () => { }
-  const handleMultipleFilesChange = () => { }
-  const handleDeleteSingleFile = () => { }
-  const handleDeleteMultipleFile = () => { }
 
-  // const handleTagChange = (e) => {
-  //   const selectedTags = Array.from(
-  //     e.target.selectedOptions,
-  //     (option) => option.value
-  //   );
 
-  //   // Fetch tag names for selected tag IDs
-  //   const selectedTagNames = selectedTags.map((tagId) => getTagNameById(tagId));
-  //   console.log(selectedTagNames);
+  const handleTagChange = (e) => {
+    const selectedTags = Array.from(
+      e.target.selectedOptions,
+      (option) => option.value
+    );
 
-  //   // Update projectData with tag names
-  //   setProjectData({
-  //     ...projectData,
-  //     source: [...projectData.source, ...selectedTagNames],
-  //   });
-  // };
-  // const handleSelectChange = (setSelected, name, value) => {
-  //   setSelected(value);
-  //   setProjectData({ ...projectData, [name]: value });
-  // };
-  // const handleSingleFileChange = (e) => {
-  //   setProjectData({ ...projectData, singleFile: e.target.files[0] });
-  // };
+    // Fetch tag names for selected tag IDs
+    const selectedTagNames = selectedTags.map((tagId) => getTagNameById(tagId));
+    console.log(selectedTagNames);
 
-  // const handleMultipleFilesChange = (e) => {
-  //   const files = Array.from(e.target.files);
-  //   setProjectData({
-  //     ...projectData,
-  //     multipleFiles: [...projectData.multipleFiles, ...files],
-  //   });
-  // };
+    // Update projectData with tag names
+    setProjectData({
+      ...projectData,
+      source: [...projectData.source, ...selectedTagNames],
+    });
+  };
+  const handleSelectChange = (setSelected, name, value) => {
+    setProjectData({ ...projectData, [name]: value });
+  };
+  const handleSingleFileChange = (e) => {
+    setProjectData({ ...projectData, singleFile: e.target.files[0] });
+  };
 
-  // const handleDeleteSingleFile = () => {
-  //   setProjectData({ ...projectData, singleFile: null });
-  // };
+  const handleMultipleFilesChange = (e) => {
+    const files = Array.from(e.target.files);
+    setProjectData({
+      ...projectData,
+      multipleFiles: [...projectData.multipleFiles, ...files],
+    });
+  };
+  const handleDeleteSingleFile = () => {
+    singleFileRef.current.value = ""; // Clear the file input if necessary
+    const { singleFile, ...newData } = projectData;
+    setProjectData({ ...newData, singleFile: null }); // Set singleFile to null to clear it
+  };
 
-  // const handleDeleteMultipleFile = (index) => {
-  //   const updatedFiles = [...projectData.multipleFiles];
-  //   updatedFiles.splice(index, 1);
-  //   setProjectData({ ...projectData, multipleFiles: updatedFiles });
-  // };
+  const handleDeleteMultipleFile = (index) => {
+    const updatedFiles = [...projectData.multipleFiles];
+    updatedFiles.splice(index, 1);
+    setProjectData({ ...projectData, multipleFiles: updatedFiles });
+  };
   const RequiredIndicator = () => {
     return <Text as="span" color="red.500" ml={1}>*</Text>;
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    let formData = new FormData();
-
-    // Filter out entries with empty string values
+    const formData = new FormData();
     Object.entries(projectData).forEach(([key, value]) => {
-      if (value !== "") {
+      if (key === "singleFile" || key === "multipleFiles") {
+        if (value) {
+          formData.append(key, value);
+        }
+      } else if (key === "dob" || key === "joiningDate") {
+        // Handle dob and joiningDate separately
+        const dateValue = value instanceof Date ? value.toISOString() : value; // Convert to ISO string if it's a Date object
+        formData.append(key, dateValue);
+      } else if (typeof value === "object" && value !== null && !(value instanceof File)) {
+        // Handle nested objects recursively
+        handleNestedObject(formData, key, value);
+      } else if (value !== "" && value !== null) {
+        // Check if value is not null before appending to FormData
         formData.append(key, value);
       }
     });
-    const requiredFields = [
-      { key: 'title', label: 'Title' },
-      { key: 'name', label: 'Employee Name ' },
-      { key: 'gender', label: 'Gender' },
-      { key: 'contactNo', label: 'Contact Number' },
-      { key: 'dob', label: 'DOB' },
-      { key: 'position', label: 'Position' },
-      { key: 'designation', label: 'Designation' },
-      { key: 'department', label: 'Department' },
-      { key: 'email', label: 'Email' },
-      { key: 'password', label: 'Password' },
-      { key: 'joiningDate', label: 'Joining Date' },
-      { key: 'type', label: 'Employment Type' },
-      { key: 'aadharNumber', label: 'Aadhar Number' },
-      { key: 'panNumber', label: 'Pan Number' },
-      { key: 'probationPeriod', label: 'Probation Period' },
-      { key: 'permanentAddress', label: 'Permanent Address' },
-      { key: 'correspondenceAddress', label: 'Correspondence Address' },
-      // { key: 'singleFile', label: 'Single File' },
-      // { key: 'guardianDetails.relation', label: 'Relation' },
-      // { key: 'guardianDetails.guardianName', label: 'Guardian Name' },
-      // { key: 'guardianDetails.guardianContactNo', label: 'Guardian Contact Number' },
-      // { key: 'bankName', label: 'Bank Name' },
-      // { key: 'bankAccountNo', label: 'Bank Account Number' },
-      // { key: 'bankIfscCode', label: 'Bank IFSC Code' },
-      // { key: 'type', label: 'Bank Type' },
-      // { key: 'branch', label: 'Branch Name' },
-
-
-    ];
-
-    for (let { key, label, isArray } of requiredFields) {
-      if (isArray ? !projectData[key] || projectData[key].length === 0 : !projectData[key]) {
-        toast.error(`${label} is required.`);
-        return;
-      }
-    }
-    // const data = formData.singleFile;
-    // console.log(data)
-    formData = { ...formData, singleFile: singleFileRef }
-    console.log(formData);
-    axios
-      .post(
-        `${import.meta.env.VITE_API_BASE}/api/admin/createEmployee`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
+    
+    // Helper function to handle nested objects recursively
+    function handleNestedObject(formData, key, value) {
+      Object.entries(value).forEach(([subKey, subValue]) => {
+        if (typeof subValue === "object" && subValue !== null && !(subValue instanceof File)) {
+          handleNestedObject(formData, `${key}[${subKey}]`, subValue);
+        } else {
+          // Check if subValue is not null before appending to FormData
+          if (subValue !== null) {
+            formData.append(`${key}[${subKey}]`, subValue);
+          }
         }
-      )
+      });
+    }
+    axios
+      .post(`${import.meta.env.VITE_API_BASE}/api/admin/createEmployee`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
       .then((response) => {
         if (response.status === 200) {
           toast.success(response.data.message);
@@ -212,6 +201,8 @@ const Emp = () => {
         toast.error(error.response.data.message);
       });
   };
+
+
   const handleSelectManager = (e) => {
     const selectedManagerId = e.target.value;
     setProjectData({ ...projectData, manager_id: selectedManagerId });
@@ -291,11 +282,12 @@ const Emp = () => {
                     onChange={(value) => handleSelectOption("position", value)}
                     placeholder="Select Position"
                   >
-                    <Select.Option value="0">Superadmin</Select.Option>
-                    <Select.Option value="1">Admin</Select.Option>
-                    <Select.Option value="2">User</Select.Option>
-                    <Select.Option value="3">Manager</Select.Option>
+                    <Select.Option value="superadmin">Superadmin</Select.Option>
+                    <Select.Option value="admin">Admin</Select.Option>
+                    <Select.Option value="user">User</Select.Option>
+                    <Select.Option value="manager">Manager</Select.Option>
                   </Select>
+
                 </FormControl>
                 <FormControl id="designation" >
                   <FormLabel>Designation<RequiredIndicator /> </FormLabel>
@@ -464,11 +456,12 @@ const Emp = () => {
               <div className="flex gap-3">
                 {projectData.singleFile && (
                   <div>
-                    <p>Single File: {projectData.singleFile}</p>
+                    <p>Single File: {projectData.singleFile.name}</p>
                     <Button onClick={handleDeleteSingleFile}>Delete</Button>
                   </div>
                 )}
-                <FormControl mb="4" id="singleFile">
+
+                <FormControl mb="4">
                   <FormLabel>Single File</FormLabel>
                   <Input
                     type="file"
@@ -567,15 +560,19 @@ const Emp = () => {
               <div className="flex gap-3 mb-3">
                 <FormControl id="position" >
                   <FormLabel>Position<RequiredIndicator /> </FormLabel>
-                  <Input name="position" onChange={handleChange} />
+                  <Select
+                    style={{ width: "100%", height: "40px" }}
+                    name="position"
+                    onChange={(e) => handleSelectOption("position", e)}
+                    placeholder="Select Position"
+                  >
+                    <Select.Option value="superadmin">Superadmin</Select.Option>
+                    <Select.Option value="admin">Admin</Select.Option>
+                    <Select.Option value="user">User</Select.Option>
+                    <Select.Option value="manager">Manager</Select.Option>
+                  </Select>
                 </FormControl>
-                <FormControl id="designation">
-                  <FormLabel>Designation<RequiredIndicator /></FormLabel>
-                  <Input
-                    name="designation"
-                    onChange={handleChange}
-                  />
-                </FormControl>
+
               </div>
               \
               <div className="flex flex-col gap-3 mb-3">
@@ -689,10 +686,11 @@ const Emp = () => {
                 <div className="flex gap-3">
                   {projectData.singleFile && (
                     <div>
-                      <p>Single File: {projectData.singleFile}</p>
+                      <p>Single File: {projectData.singleFile.name}</p>
                       <Button onClick={handleDeleteSingleFile}>Delete</Button>
                     </div>
                   )}
+
                   <FormControl mb="4">
                     <FormLabel>Single File</FormLabel>
                     <Input
