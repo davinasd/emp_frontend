@@ -213,7 +213,7 @@ const Invoice = () => {
 
   return (
     <Stack spacing={4}>
-      <FormControl maxWidth={300} >
+      <FormControl max-w-max >
         <FormLabel>Select Brand <RequiredIndicator /></FormLabel>
         <Select placeholder="Select Brand" onChange={handleClientChange}>
           {clients.map((client) => (
@@ -235,13 +235,14 @@ const Invoice = () => {
         </Card>
       )}
       <FormControl>
-        <FormLabel>
+        <FormLabel >
           Bill Type
           <RequiredIndicator />
         </FormLabel>
-        <div className="flex gap-3">
+        <div className="flex gap-3" >
           <Select
-            width={100}
+            w-full
+            max-w-80
             onChange={(e) => setMethodGSTorCash(e.target.value)}
             value={methodGSTorCash}
           >
@@ -259,15 +260,16 @@ const Invoice = () => {
               placeholder="Enter GST"
               value={selectedGst}
               onChange={(e) => setSelectedGst(e.target.value)}
-              maxWidth={50}
+              w-full
+              max-w-20
             />
           </>)}
         </div>
       </FormControl>
-      <FormControl>
+      <FormControl >
         <FormLabel>Discount<RequiredIndicator /></FormLabel>
         <Input
-          maxWidth={100}
+          max-w-max
           value={discount}
           onChange={(e) => setDiscount(e.target.value)}
         />

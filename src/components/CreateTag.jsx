@@ -9,12 +9,14 @@ const CreateTag = () => {
   const [products, setProducts] = useState([]);
   const [sources, setSources] = useState([]);
   const [supplies, setSupplies] = useState([]);
+  const [years, setYears] = useState(null);
+  const [durations, setDurations] = useState([]);
   const [newTag, setNewTag] = useState("");
   const [newProduct, setNewProduct] = useState("");
   const [newSource, setNewSource] = useState("");
-  const [years, setYears] = useState(null);
   const [newYear, setNewYear] = useState(null);
   const [newSupply, setNewSupply] = useState(null);
+  const [newDuration, setNewDuration] = useState(null);
 
   const toast = useToast();
 
@@ -24,6 +26,7 @@ const CreateTag = () => {
     fetchSources();
     fetchYears();
     fetchSupply();
+    fetchDuration();
   }, []);
 
   const fetchTags = async () => {
@@ -76,6 +79,17 @@ const CreateTag = () => {
         `${import.meta.env.VITE_API_BASE}/api/admin/getAllSupplys`
       );
       setSupplies(response.data);
+    } catch (error) {
+      console.error("Error fetching sources:", error);
+    }
+  };
+
+  const fetchDuration = async () => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_BASE}/api/admin/getAllDuration`, {}
+      );
+      setDurations(response.data);
     } catch (error) {
       console.error("Error fetching sources:", error);
     }
@@ -248,12 +262,31 @@ const CreateTag = () => {
       console.error("Error deleting source:", error);
     }
   };
-
+// console.log(durations)
   const handleDeleteSupply = async (sourceTagId) => {
     try {
       await axios.delete(
         `${import.meta.env.VITE_API_BASE
         }/api/admin/deleteSupplyById/${sourceTagId}`
+      );
+      toast({
+        title: "Success",
+        description: "Successfully deleted Source Tag",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+      fetchSupply();
+    } catch (error) {
+      console.error("Error deleting source:", error);
+    }
+  };
+
+  const handleDeleteDuration = async (sourceTagId) => {
+    try {
+      await axios.delete(
+        `${import.meta.env.VITE_API_BASE
+        }/api/admin/deleteDurationById/${sourceTagId}`
       );
       toast({
         title: "Success",
@@ -446,6 +479,39 @@ const CreateTag = () => {
               <div
                 className="p-[7px] transition-all bg-green-500 hover:bg-green-400 rounded-full cursor-pointer"
                 onClick={() => handleDeleteSupply(supply?.supply_id)}
+              >
+                <FaTrash size={12} />
+              </div>
+            </div>
+          </Tag>
+        ))}
+      </Box>
+      <h1 className="text-lg font-semibold mt-10 mb-4">Duration</h1>
+      <div className="flex justify-start gap-2 max-w-[400px]">
+        <Input
+          placeholder="Enter duration"
+          value={newDuration}
+          onChange={(e) => setNewDuration(e.target.value)}
+        />
+        {/* <Button
+          colorScheme="green"
+          variant={"outline"}
+          onClick={handleAddSupply}
+        >
+          <FaPlus />
+        </Button> */}
+      </div>
+      <Box mt={6} p={4} boxShadow={"md"} rounded={"lg"} width={"full"}>
+        {durations?.map((duration) => (
+          <Tag
+            key={duration._id}
+            className="px-2 py-1 mb-2 bg-red-400 border-red-600 text-[16px] font-semibold text-white"
+          >
+            <div className="flex gap-5 items-center">
+              {duration?.duration}
+              <div
+                className="p-[7px] transition-all bg-red-500 hover:bg-red-400 rounded-full cursor-pointer"
+                onClick={() => handleDeleteDuration(duration?.duration_id)}
               >
                 <FaTrash size={12} />
               </div>
