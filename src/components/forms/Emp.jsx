@@ -44,7 +44,7 @@ const Emp = () => {
     guardianDetails: {
       guardianName: "",
       guardianContactNo: "",
-      relation: "",
+      relation: ""
     },
     bankDetails: {
       bankName: "",

@@ -14,6 +14,8 @@ import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import MyDatePicker from "../common/MyDatePicker";
+import { convertDateFormatString, converDateStringFormat } from "../../helpers";
 
 const CreateHoliday = () => {
   const navigate = useNavigate();
@@ -31,6 +33,7 @@ const CreateHoliday = () => {
 
   const handleDateChange = (date) => {
     setHoliday({ ...holiday, date: date });
+    console.log(date)
   };
 
   const handleSubmit = async (e) => {
@@ -90,14 +93,18 @@ const CreateHoliday = () => {
             />
           </FormControl>
           <FormControl id="date" mt="4" isRequired>
-            <FormLabel>Date</FormLabel>
-            <DatePicker
-              selected={holiday.date}
-              onChange={handleDateChange}
-              defaultValue={moment()}
-              format="YYYY-MM-DD"
-            />
-          </FormControl>
+  <FormLabel>Date</FormLabel>
+  <DatePicker
+    className="mb-1 h-[40px]"
+    selected={holiday.date}
+    onChange={handleDateChange}
+    dateFormat="dd/MM/yy" 
+    />
+    <br />
+    {holiday?.date && <>{convertDateFormatString(holiday?.date)}</>}
+  </FormControl>
+                  
+          
           <FormControl id="type" mt="4" isRequired>
             <FormLabel>Type</FormLabel>
             <Select
