@@ -115,7 +115,7 @@ const ProjectCard = () => {
             size={"sm"}
             rounded={"lg"}
           >
-            {financialYears.map((year) => (
+            {financialYears?.map((year) => (
               <option key={`fy-${year._id}`} value={year.financial_year.split('-')[0]}>{year.financial_year}</option>
             ))}
           </Select>

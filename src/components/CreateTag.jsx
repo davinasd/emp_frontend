@@ -86,8 +86,8 @@ const CreateTag = () => {
 
   const fetchDuration = async () => {
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_BASE}/api/admin/getAllDuration`, {}
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_BASE}/api/admin/getAllDuration`
       );
       setDurations(response.data);
     } catch (error) {
@@ -207,6 +207,26 @@ const CreateTag = () => {
     }
   };
 
+  const handleAddDuration = async () => {
+    try {
+      if (newDuration === "") {
+        toast({
+          title: "Error",
+          description: "Please fill all the fields",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+      } else {
+        await axios.post(`${import.meta.env.VITE_API_BASE}/api/admin/addDuration`, { duration: newDuration });
+        setNewDuration("");
+        fetchDuration();
+      }
+    } catch (error) {
+      console.error("Error adding source:", error);
+    }
+  };
+
   const handleDeleteTag = async (tagId) => {
     try {
       await axios.delete(
@@ -295,7 +315,7 @@ const CreateTag = () => {
         duration: 5000,
         isClosable: true,
       });
-      fetchSupply();
+      fetchDuration();
     } catch (error) {
       console.error("Error deleting source:", error);
     }
@@ -493,13 +513,13 @@ const CreateTag = () => {
           value={newDuration}
           onChange={(e) => setNewDuration(e.target.value)}
         />
-        {/* <Button
+        <Button
           colorScheme="green"
           variant={"outline"}
-          onClick={handleAddSupply}
+          onClick={handleAddDuration}
         >
           <FaPlus />
-        </Button> */}
+        </Button>
       </div>
       <Box mt={6} p={4} boxShadow={"md"} rounded={"lg"} width={"full"}>
         {durations?.map((duration) => (
