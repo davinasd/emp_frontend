@@ -1083,7 +1083,7 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                 <Divider />
                 <div className="flex gap-20">
                   <div className="flex flex-col">
-                    <div className="max-w-[200px] md:max-w-[300px]">
+                    <div className="max-w-[200px] md:max-w-[300px] shadow-lg rounded-lg overflow-hidden p-2">
                       <h1 className="text-lg font-semibold bg-gray-100 text-gray-600 rounded-md w-full px-3 py-1 mb-4">
                         Basic Information
                       </h1>
@@ -1108,7 +1108,7 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                         </>
                       )}
                     </div>
-                    <div className="mt-10">
+                    <div className="mt-10 shadow-lg rounded-lg overflow-hidden p-2">
                       <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md max-w-[190px] px-3 py-1 mb-4">
                         Service Information:{" "}
                       </h1>
@@ -1167,7 +1167,7 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                       )}
                     </div>
                   </div>
-                  <div className="max-w-[200px] md:max-w-[300px]">
+                  <div className="max-w-[200px] md:max-w-[300px] shadow-lg rounded-lg overflow-hidden p-2">
                     <h1 className="text-lg font-semibold bg-gray-100 text-gray-600 rounded-md w-full px-3 py-1 mb-4 ">
                       Collection History
                     </h1>
