@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Button, Card, CardBody, Flex, Progress, Select } from "@chakra-ui/react";
 import axios from "axios";
 import { FaTty } from "react-icons/fa6";
-import { HiArrowTrendingUp } from "react-icons/hi2";
 import { TfiBarChart } from "react-icons/tfi";
 import { IoAlertCircleOutline } from "react-icons/io5";
 import { SlDrawer } from "react-icons/sl"
@@ -10,10 +9,9 @@ import { Divider } from "antd";
 import { allMonths } from "../../helpers";
 
 const ConvertedLeads = () => {
-  const currentYear = new Date().getFullYear();
   const [totalLeads, setTotalLeads] = useState(0);
   const [leadsInProgress, setLeadsInProgress] = useState(0);
-  const [convertedLeads, setConvertedLeads] = useState(0);
+  // const [convertedLeads, setConvertedLeads] = useState(0);
   const [lostLeads, setLostLeads] = useState(0);
   const [rawLeads, setRawLeads] = useState(0);
   const [selectedYear, setSelectedYear] = useState(null);
@@ -76,7 +74,7 @@ const ConvertedLeads = () => {
           setLeadsInProgress(inProgressLead.count);
         }
         if (convertedLead) {
-          setConvertedLeads(convertedLead.count);
+          // setConvertedLeads(convertedLead.count);
         }
         if (lostLead) {
           setLostLeads(lostLead.count);
@@ -165,17 +163,17 @@ const ConvertedLeads = () => {
                 size={"sm"}
                 rounded={"lg"}
               >
-              {selectedYear && allMonths.map((month, index) => (
-                <option key={`m-${month}`} value={index + 1}>{selectedYear}-{month}</option>
-              ))}
+                {selectedYear && allMonths.map((month, index) => (
+                  <option key={`m-${month}`} value={index + 1}>{selectedYear}-{month}</option>
+                ))}
               </Select>
             )}
-          {selectedFilter && <Button width={100} size={"sm"} onClick={handleYearClear} className="self-end">Clear</Button>}
+            {selectedFilter && <Button width={100} size={"sm"} onClick={handleYearClear} className="self-end">Clear</Button>}
           </div>
         </div>
         <Divider />
-        <CardBody m={0} p={0}>
-          <Flex color={"gray.500"} alignItems="center" justifyContent="space-between">
+        <CardBody m={0} p={0} className="flex flex-col gap-6">
+          {/* <Flex color={"gray.500"} alignItems="center" justifyContent="space-between">
             <div className="flex gap-4 items-center text-lg">
               <HiArrowTrendingUp />
               Converted
@@ -188,49 +186,55 @@ const ConvertedLeads = () => {
             mt={2}
             height={2}
             rounded="lg"
-          />
-          <Flex color={"gray.500"} mt={4} alignItems="center" justifyContent="space-between">
-            <div className="flex gap-4 items-center text-lg">
-              <TfiBarChart />
-              In Progress
-            </div>
-            {totalLeads === 0 ? 0 : leadsInProgress}/{totalLeads}
-          </Flex>
-          <Progress
-            value={totalLeads === 0 ? 0 : (leadsInProgress / totalLeads) * 100}
-            colorScheme="blue"
-            mt={2}
-            height={2}
-            rounded="lg"
-          />
-          <Flex color={"gray.500"} mt={4} alignItems="center" justifyContent="space-between">
-            <div className="flex gap-4 items-center text-lg">
-              <IoAlertCircleOutline />
-              Lost
-            </div>
-            {totalLeads === 0 ? 0 : lostLeads}/{totalLeads}
-          </Flex>
-          <Progress
-            value={totalLeads === 0 ? 0 : (lostLeads / totalLeads) * 100}
-            colorScheme="red"
-            mt={2}
-            height={2}
-            rounded="lg"
-          />
-          <Flex color={"gray.500"} mt={4} alignItems="center" justifyContent="space-between">
-            <div className="flex gap-4 items-center text-lg">
-              <SlDrawer />
-              Raw
-            </div>
-            {totalLeads === 0 ? 0 : rawLeads}/{totalLeads}
-          </Flex>
-          <Progress
-            value={totalLeads === 0 ? 0 : (rawLeads / totalLeads) * 100}
-            colorScheme="yellow"
-            mt={2}
-            height={2}
-            rounded="lg"
-          />
+          /> */}
+          <div>
+            <Flex color={"gray.500"} alignItems="center" justifyContent="space-between">
+              <div className="flex gap-4 items-center text-lg">
+                <TfiBarChart />
+                In Progress
+              </div>
+              {totalLeads === 0 ? 0 : leadsInProgress}/{totalLeads}
+            </Flex>
+            <Progress
+              value={totalLeads === 0 ? 0 : (leadsInProgress / totalLeads) * 100}
+              colorScheme="blue"
+              mt={2}
+              height={2}
+              rounded="lg"
+            />
+          </div>
+          <div>
+            <Flex color={"gray.500"} alignItems="center" justifyContent="space-between">
+              <div className="flex gap-4 items-center text-lg">
+                <IoAlertCircleOutline />
+                Lost
+              </div>
+              {totalLeads === 0 ? 0 : lostLeads}/{totalLeads}
+            </Flex>
+            <Progress
+              value={totalLeads === 0 ? 0 : (lostLeads / totalLeads) * 100}
+              colorScheme="red"
+              mt={2}
+              height={2}
+              rounded="lg"
+            />
+          </div>
+          <div>
+            <Flex color={"gray.500"} alignItems="center" justifyContent="space-between">
+              <div className="flex gap-4 items-center text-lg">
+                <SlDrawer />
+                Raw
+              </div>
+              {totalLeads === 0 ? 0 : rawLeads}/{totalLeads}
+            </Flex>
+            <Progress
+              value={totalLeads === 0 ? 0 : (rawLeads / totalLeads) * 100}
+              colorScheme="yellow"
+              mt={2}
+              height={2}
+              rounded="lg"
+            />
+          </div>
         </CardBody>
       </Card>
     </>

@@ -600,10 +600,10 @@ function App() {
             path="/getAllReceivable"
             element={
               <AppLayout
-                activeSideabarLink={""}
+                activeSideabarLink={"getAllReceivable"}
                 setActiveSideabarLink={setActiveSideabarLink}
               >
-                <GetAllReceivable></GetAllReceivable>
+                <GetAllReceivable />
               </AppLayout>
             }
           />

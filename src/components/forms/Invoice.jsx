@@ -9,9 +9,9 @@ import {
   CardBody,
   Select,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import "react-datepicker/dist/react-datepicker.css";
-import { toast } from "react-toastify";
 import MyDatePicker from "../common/MyDatePicker";
 import { PiArrowsLeftRightFill } from "react-icons/pi";
 import { FaPlus, FaTrashCan } from "react-icons/fa6";
@@ -22,13 +22,16 @@ const RequiredIndicator = () => {
   return <Text as="span" color="red.500" ml={1}>*</Text>;
 };
 const Invoice = () => {
+  const toast = useToast();
   const [clients, setClients] = useState([]);
   const [products, setProducts] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(null);
   const [selectedClient, setSelectedClient] = useState("");
   const [selectedGst, setSelectedGst] = useState(18);
   const [services, setServices] = useState([]);
   const [methodGSTorCash, setMethodGSTorCash] = useState('gst');
   const [discount, setDiscount] = useState(0);
+  const [total, setTotal] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -92,17 +95,23 @@ const Invoice = () => {
     setServices(updatedServices);
   };
 
+  useEffect(() => {
+    setTotal(services?.reduce((a, v) => a = a + parseInt(v.unitPrice), 0));
+  }, [services])
+
   const handleAddService = () => {
     setServices([
       ...services,
       {
         product: "",
         serviceDescription: "",
+        mini_description: "",
         duration: "",
         quantity: 1,
         unitPrice: 0,
         startDate: "",
         endDate: "",
+        date: "",
       },
     ]);
   };
@@ -127,10 +136,13 @@ const Invoice = () => {
         startDate: service.startDate.toISOString(),
         endDate: service.endDate.toISOString(),
       })),
+      date: selectedDate,
       gst: selectedGst || 18,
     };
     const requiredFields = [
       { key: 'client_id', label: 'Client' },
+      { key: 'billType', label: 'billType' },
+      { key: 'startDate', label: 'startDate' },
       { key: 'billType', label: 'billType' },
       { key: 'services', label: 'Services', isArray: true },
     ];
@@ -145,7 +157,13 @@ const Invoice = () => {
 
     const errorMessage = validateForm(requestData, requiredFields);
     if (errorMessage) {
-      toast.error(errorMessage);
+      toast({
+        title: "Error",
+        description: errorMessage,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
       return; // Stop further execution if validation fails
     }
 
@@ -178,8 +196,12 @@ const Invoice = () => {
       setServices([]);
       setSelectedGst("");
       setProducts([]);
-      toast.success("Invoice Slip is downloaded successfully.", {
-        autoClose: 2000,
+      toast({
+        title: "Success",
+        description: "Invoice slip downloaded successfully",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
       });
       setTimeout(() => {
         navigate("/getAllInvoice");
@@ -187,19 +209,13 @@ const Invoice = () => {
 
     } catch (error) {
       console.error("Error creating invoice:", error);
-      toast.error(
-        "Failed to download Invoice slip.",
-        {
-          position: "bottom-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        }
-      );
+      toast({
+        title: "Error",
+        description: "Failed to download invoice slip",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
     }
   };
   const formatDate = (date) => {
@@ -230,49 +246,26 @@ const Invoice = () => {
             <Text textTransform={"capitalize"}>
               Client Name: {selectedClient.clientName}
             </Text>
-            <Text>Client Company: {selectedClient.companyName}</Text>
+            <Text textTransform={"capitalize"}>Client Company: {selectedClient.companyName}</Text>
+            <Text textTransform={"capitalize"}>Business Address: {selectedClient.businessAddress}</Text>
           </CardBody>
         </Card>
       )}
       <FormControl>
-        <FormLabel >
-          Bill Type
-          <RequiredIndicator />
+        <FormLabel>
+          Date
         </FormLabel>
-        <div className="flex gap-3" >
-          <Select
-            w-full
-            max-w-80
-            onChange={(e) => setMethodGSTorCash(e.target.value)}
-            value={methodGSTorCash}
-          >
-            <option value={'cash'}>
-              Cash
-            </option>
-            <option value={'gst'}>
-              GST
-            </option>
-          </Select>
-          {methodGSTorCash === 'gst' && (<>
-            {/* <FormLabel>GST </FormLabel> */}
-            <Input
-              type="number"
-              placeholder="Enter GST"
-              value={selectedGst}
-              onChange={(e) => setSelectedGst(e.target.value)}
-              w-full
-              max-w-20
-            />
-          </>)}
+        <div>
+          <MyDatePicker
+            className="h-[40px]"
+            selected={selectedDate}
+            onChange={(date) =>
+              setSelectedDate(date)
+            }
+            format={"DD/MM/YYYY"}
+          />
+          <div>{formatDate(selectedDate)}</div>
         </div>
-      </FormControl>
-      <FormControl >
-        <FormLabel>Discount<RequiredIndicator /></FormLabel>
-        <Input
-          max-w-max
-          value={discount}
-          onChange={(e) => setDiscount(e.target.value)}
-        />
       </FormControl>
 
       {services.length > 0 && (
@@ -306,7 +299,7 @@ const Invoice = () => {
                     {/* <SelectProduct width={"100%"} selectSourceValue={productValue} setSelectSourceValue={setProductValue} /> */}
                   </FormControl>
                   <FormControl>
-                    <FormLabel>Service Description<RequiredIndicator /></FormLabel>
+                    <FormLabel>Service Description</FormLabel>
                     <Input
                       value={service.serviceDescription}
                       onChange={(e) =>
@@ -322,7 +315,17 @@ const Invoice = () => {
 
                 <div className="flex gap-4 items-center mt-4">
                   <FormControl>
-                    <FormLabel>Duration<RequiredIndicator /></FormLabel>
+                    <FormLabel>Mini Description</FormLabel>
+                    <Input
+                      type="text"
+                      value={service.mini_description}
+                      onChange={(e) =>
+                        handleServiceChange(index, "mini_description", e.target.value)
+                      }
+                    />
+                  </FormControl>
+                  <FormControl>
+                    <FormLabel>Duration</FormLabel>
                     <Input
                       type="text"
                       value={service.duration}
@@ -354,7 +357,6 @@ const Invoice = () => {
                       value={
                         (service?.unitPrice * service?.quantity
                           + (selectedGst * service?.unitPrice / 100))
-                        - (parseInt(discount) * service?.unitPrice / 100)
                       }
                       disabled
                     />
@@ -405,6 +407,54 @@ const Invoice = () => {
           </div>
         </div>
       )}
+      <FormControl>
+        <FormLabel >
+          Bill Type
+          <RequiredIndicator />
+        </FormLabel>
+        <div className="flex gap-3" >
+          <Select
+            maxWidth={100}
+            onChange={(e) => setMethodGSTorCash(e.target.value)}
+            value={methodGSTorCash}
+          >
+            <option value={'cash'}>
+              Cash
+            </option>
+            <option value={'gst'}>
+              GST
+            </option>
+          </Select>
+          {methodGSTorCash === 'gst' && (<>
+            {/* <FormLabel>GST </FormLabel> */}
+            <Input
+              type="number"
+              placeholder="Enter GST"
+              value={selectedGst}
+              onChange={(e) => setSelectedGst(e.target.value)}
+              maxWidth={100}
+            />
+          </>)}
+        </div>
+      </FormControl>
+      <div className="flex justify-between w-full">
+        <FormControl>
+          <FormLabel>Discount<RequiredIndicator /></FormLabel>
+          <Input
+            value={discount}
+            onChange={(e) => setDiscount(e.target.value)}
+            maxWidth={100}
+          />
+        </FormControl>
+        <FormControl maxWidth={200}>
+          <FormLabel>Total<RequiredIndicator /></FormLabel>
+          <Input
+            value={total + (total * selectedGst / 100) - discount}
+            // onChange={(e) => setTotal(e.target.value)}
+            maxWidth={200}
+          />
+        </FormControl>
+      </div>
 
       {services.length === 0 && selectedClient && (
         <Button
