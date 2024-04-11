@@ -9,10 +9,6 @@ import { selectExpenseId } from "../../store/slice/ExpenseSlice"
 
 const CreateExpense = () => {
     const toast = useToast();
-    const currDate = new Date();
-    const currTime = currDate.getHours() + ":"
-        + currDate.getMinutes() + ":"
-        + currDate.getSeconds();
     const [expenses, setExpenses] = useState([]);
     const [employees, setEmployees] = useState([]);
     const [selectedEmployee, setSelectedEmployee] = useState(null);
@@ -21,37 +17,30 @@ const CreateExpense = () => {
         amountReceived: 0,
         description: "",
         categories: [],
-        totalSpent: 0,
-        createdAt: `${currDate}`
+        totalSpent: 0
         // date1: "",
         // time1: currTime,
     });
-    const [client, setClient] = useState("");
     const [selectSupplies, setSelectSupplies] = useState([]);
-    const [projectData, setProjectData] = useState({});
     const expId = useSelector(selectExpenseId);
 
     useEffect(() => {
-        // axios
-        //     .get(
-        //         `${import.meta.env.VITE_API_BASE}/api/admin/getLeadDetails/${expId}`
-        //     )
-        //     .then((response) => {
-        //         const clientData = response.data;
-        //         setClient(response.data);
-        //         setProjectData((projectData) => ({
-        //             ...projectData,
-        //             enquiryDate: clientData?.enquiryDate || projectData.enquiryDate,
-        //         }));
-        //     })
+        axios
+            .get(
+                `${import.meta.env.VITE_API_BASE}/api/admin/getExpenseById/${expId}`
+            )
+            .then((response) => {
+                // const clientData = response.data;
+                setNewExpense(response.data[0]);
+            })
 
-        //     .catch((error) => {
-        //         console.error("Error fetching client details:", error);
-        //         toast.error("Failed to fetch client details");
-        //     });
+            .catch((error) => {
+                console.error("Error fetching client details:", error);
+                toast.error("Failed to fetch client details");
+            });
     }, [expId]);
 
-    // console.log(projectData);
+    console.log(newExpense);
     console.log(expId);
 
     useEffect(() => {
@@ -63,17 +52,6 @@ const CreateExpense = () => {
 
     const RequiredIndicator = () => {
         return <Text as="span" color="red.500" ml={1}>*</Text>;
-    };
-
-    const fetchExpense = async () => {
-        try {
-            const response = await axios.get(
-                `${import.meta.env.VITE_API_BASE}/api/admin/getAllExpenses`
-            );
-            setExpenses(response.data);
-        } catch (error) {
-            console.error("Error fetching sources:", error);
-        }
     };
 
     // console.log(expenses)
