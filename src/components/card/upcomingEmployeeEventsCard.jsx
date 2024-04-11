@@ -9,8 +9,8 @@ const UpcomingEmployeeEventsCard = () => {
 
   function parseUpcomingEvents(employeeData) {
     const eventNames = {
-      joiningDate: 'Joining Date', 
-      dob: 'Date of Birth', 
+      joiningDate: "Joining Date",
+      dob: "Date of Birth",
     };
 
     return employeeData.upcomingEvents.map((eventKey) => {
@@ -44,29 +44,32 @@ const UpcomingEmployeeEventsCard = () => {
     <Card>
       <CardBody>
         <h1 className="text-lg flex gap-2 items-center">
-          <FaCalendarAlt size={24} color="#ccc" /> Upcoming Events
+          <FaCalendarAlt size={24} color="#ccc" /> Employee Events
         </h1>
         <Divider my={6} />
-        {employees.map((employee) => (
-          <div
-            key={employee._id}
-            onClick={() => handleEmployeeSelect(employee._id)}
-            className="cursor-pointer"
-          >
-            <div className="text-blue-600 flex justify-between">
-              <span>Employee: {employee.name}</span> {/* Adjusted for employee data */}
-            </div>
-            {selectedEmployee === employee._id && (
-              <div className="mb-3 mt-1">
-                {parseUpcomingEvents(employee).map((event, index) => (
-                  <Text key={index} fontSize="sm">
-                    {event}
-                  </Text>
-                ))}
+        <div className="grid grid-cols-8 overflow-y-auto max-h-50 ">
+          {employees.map((employee) => (
+            <div
+              key={employee._id}
+              onClick={() => handleEmployeeSelect(employee._id)}
+              className="cursor-pointer border-gray-200 shadow-inner rounded-lg overflow-hidden m-2 p-2 "
+            >
+              <div className="text-blue-600 flex justify-between">
+                <span>Employee: {employee.name}</span>{" "}
+                {/* Adjusted for employee data */}
               </div>
-            )}
-          </div>
-        ))}
+              {selectedEmployee === employee._id && (
+                <div className="mb-3 mt-1">
+                  {parseUpcomingEvents(employee).map((event, index) => (
+                    <Text key={index} fontSize="sm">
+                      {event}
+                    </Text>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
       </CardBody>
     </Card>
   );
