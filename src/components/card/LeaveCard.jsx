@@ -9,8 +9,6 @@ import { CgSandClock } from "react-icons/cg";
 import { allMonths } from "../../helpers";
 
 const LeaveCard = () => {
-  const currentYear = new Date().getFullYear();
-  const currenMonth = new Date().getMonth();
   const [totalLeads, setTotalLeads] = useState(0);
   const [leadsInProgress, setLeadsInProgress] = useState(0);
   const [convertedLeads, setConvertedLeads] = useState(0);

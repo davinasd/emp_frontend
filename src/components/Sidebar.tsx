@@ -76,6 +76,9 @@ const Sidebar = ({ isPhoneView, showSidebar, setShowSidebar, activeLink, setActi
                         <Link to="/getAllLetters" onClick={handleNavClose} className={`flex pb-4 mb-2 md:mb-0 md:pb-0 flex-col md:flex-row text-center md:text-left items-center md:h-[45px] gap-2 px-4 rounded-md transition-all cursor-pointer ${activeLink === 'getAllLetters' ? 'bg-gray-500' : "hover:bg-gray-700"}`}>
                             <FcFeedback />  <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Letter</span>
                         </Link>
+                        <Link to="/GetAllHolidays" onClick={handleNavClose} className={`flex pb-4 mb-2 md:mb-0 md:pb-0 flex-col md:flex-row text-center md:text-left items-center md:h-[45px] gap-2 px-4 rounded-md transition-all cursor-pointer ${activeLink === 'getAllHolidays' ? 'bg-gray-500' : "hover:bg-gray-700"}`}>
+                            <FcFaq /> <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Holiday {!isPhoneView && "Management"}</span>
+                        </Link>
                     </AccordionPanel>
                 </AccordionItem>
                 <AccordionItem width={"full"} border={"none"} onClick={() => accordionClick(1)}>
@@ -91,6 +94,12 @@ const Sidebar = ({ isPhoneView, showSidebar, setShowSidebar, activeLink, setActi
                         </Link>
                         <Link to="/getAllPaidInvoices" onClick={handleNavClose} className={`flex md:pt-0 pb-3 md:pb-0 pt-4 flex-col md:flex-row text-center md:text-left items-center md:h-[45px] gap-2 px-4 rounded-md transition-all cursor-pointer ${activeLink === 'getAllPaidInvoices' ? 'bg-gray-500' : "hover:bg-gray-700"}`}>
                             <FcDebt />  <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Paid {!isPhoneView && "Invoices"}</span>
+                        </Link>
+                        <Link to="/getAllExpense" onClick={handleNavClose} className={`flex pb-4 mb-2 md:mb-0 md:pb-0 flex-col md:flex-row text-center md:text-left items-center md:h-[45px] gap-2 px-4 rounded-md transition-all cursor-pointer ${activeLink === 'getAllExpense' ? 'bg-gray-500' : "hover:bg-gray-700"}`}>
+                            <FcFaq /> <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Expense {!isPhoneView && "Management"}</span>
+                        </Link>
+                        <Link to="/getAllLedgers" onClick={handleNavClose} className={`flex pb-4 mb-2 md:mb-0 md:pb-0 flex-col md:flex-row text-center md:text-left items-center md:h-[45px] gap-2 px-4 rounded-md transition-all cursor-pointer ${activeLink === 'getAllLedgers' ? 'bg-gray-500' : "hover:bg-gray-700"}`}>
+                            <FcOpenedFolder /> <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Ledgers {!isPhoneView && "Management"}</span>
                         </Link>
                     </AccordionPanel>
                 </AccordionItem>
@@ -142,22 +151,14 @@ const Sidebar = ({ isPhoneView, showSidebar, setShowSidebar, activeLink, setActi
                             <FcList size={20} />  <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Completed {!isPhoneView && "Tasks"}</span>
                         </Link>
 
-
                     </AccordionPanel>
                 </AccordionItem>
             </Accordion>
             {/* <Link to="/getAllSlip" onClick={handleNavClose} className={`flex items-center h-[45px] gap-2 mx-4 my-2 p-2 rounded-md transition-all cursor-pointer ${activeLink === 'getAllSlip' ? 'bg-gray-500' : "hover:bg-gray-700"}`}>
                 <LuNewspaper size={18} />  <span className={`${expandNavbar ? "visible" : "hidden"}`}>Slip Management</span>
             </Link> */}
-            <Link to="/getAllExpense" onClick={handleNavClose} className={`flex flex-col md:flex-row pt-2 text-center md:text-left items-center md:h-[45px] gap-2 mx-4 my-2 p-2 rounded-md transition-all cursor-pointer ${activeLink === 'getAllExpense' ? 'bg-gray-500' : "hover:bg-gray-700"}`}>
-                <FcFaq /> <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Expense {!isPhoneView && "Management"}</span>
-            </Link>
-            <Link to="/getAllLedgers" onClick={handleNavClose} className={`flex flex-col md:flex-row pt-2 text-center md:text-left items-center md:h-[45px] gap-2 mx-4 my-2 p-2 rounded-md transition-all cursor-pointer ${activeLink === 'getAllLedgers' ? 'bg-gray-500' : "hover:bg-gray-700"}`}>
-                <FcOpenedFolder /> <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Ledgers {!isPhoneView && "Management"}</span>
-            </Link>
-            
-            <Link to="/GetAllHolidays" onClick={handleNavClose} className={`flex flex-col md:flex-row pt-2 text-center md:text-left items-center md:h-[45px] gap-2 mx-4 my-2 p-2 rounded-md transition-all cursor-pointer ${activeLink === 'getAllHolidays' ? 'bg-gray-500' : "hover:bg-gray-700"}`}>
-                <FcFaq /> <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Holiday {!isPhoneView && "Management"}</span>
+            <Link to="/getAllReceivable" onClick={handleNavClose} className={`flex flex-col md:flex-row pt-2 text-center md:text-left items-center md:h-[45px] gap-2 mx-4 my-2 p-2 rounded-md transition-all cursor-pointer ${activeLink === 'getAllReceivable' ? 'bg-gray-500' : "hover:bg-gray-700"}`}>
+                <FcFaq /> <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Receivable {!isPhoneView && "Management"}</span>
             </Link>
             <Link to="/createTag" onClick={handleNavClose} className={`flex flex-col md:flex-row pt-2 text-center md:text-left items-center md:h-[45px] gap-2 mx-4 my-2 p-2 rounded-md transition-all cursor-pointer ${activeLink === 'CreateTag' ? 'bg-gray-500' : "hover:bg-gray-700"}`}>
                 <FcNext /> <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Tag {!isPhoneView && "Management"}</span>

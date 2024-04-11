@@ -75,7 +75,6 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
             let data = res.data.filter((el) => {
               return el.invoice_id === invoice_id;
             })[0];
-            console.log(data);
             setCollectedInvoices(data);
           });
       } catch (error) {
@@ -86,7 +85,7 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
     if (modalFor === "invoice") {
       getCollectionHistory(data?.invoice_id);
     }
-  }, []);
+  }, [data]);
 
   if (modalFor === "manager")
     return (
@@ -155,7 +154,7 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                       </>
                     )}
                   </div>
-                  <div className="max-w-[200px] md:max-w-[300px]">
+                  <div className="w-full md:max-w-[300px]">
                     <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">
                       Contact Information
                     </h1>
@@ -1081,7 +1080,7 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                   </Menu> */}
                 </div>
                 <Divider />
-                <div className="flex gap-20">
+                <div className="flex gap-6">
                   <div className="flex flex-col">
                     <div className="max-w-[200px] md:max-w-[300px] shadow-lg rounded-lg overflow-hidden p-2">
                       <h1 className="text-lg font-semibold bg-gray-100 text-gray-600 rounded-md w-full px-3 py-1 mb-4">
@@ -1108,8 +1107,8 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                         </>
                       )}
                     </div>
-                    <div className="mt-10 shadow-lg rounded-lg overflow-hidden p-2">
-                      <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md max-w-[190px] px-3 py-1 mb-4">
+                    <div className="mt-4 min-w-[300px] shadow-lg rounded-lg overflow-hidden p-2">
+                      <h1 className="text-lg w-full font-semibold bg-gray-100 text-gray-500 rounded-md px-3 py-1 mb-4">
                         Service Information:{" "}
                       </h1>
                       {data.services && (
@@ -1167,7 +1166,7 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                       )}
                     </div>
                   </div>
-                  <div className="max-w-[200px] md:max-w-[300px] shadow-lg rounded-lg overflow-hidden p-2">
+                  <div className="w-full shadow-lg rounded-lg overflow-hidden p-2">
                     <h1 className="text-lg font-semibold bg-gray-100 text-gray-600 rounded-md w-full px-3 py-1 mb-4 ">
                       Collection History
                     </h1>
