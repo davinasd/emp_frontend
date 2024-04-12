@@ -105,7 +105,7 @@ const GetAllLedgers = () => {
                 <h1 className="text-3xl font-bold mb-4">Ledger Information</h1>
 
                 <div className="flex gap-2">
-                    <Link to="/createLetter">
+                    <Link to="/createLedger">
                         <Button
                             colorScheme="blue"
                             onClick={onOpen}
