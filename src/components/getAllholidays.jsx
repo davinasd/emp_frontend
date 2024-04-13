@@ -7,6 +7,13 @@ import {
   Td,
   Button,
   Spinner,
+  AlertDialog,
+  AlertDialogOverlay,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogCloseButton,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -21,6 +28,8 @@ const GetAllHolidays = () => {
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate(); // Correct: useNavigate is called at the top level
 
+  const [deleteHolidayId, setDeleteHolidayId] = useState(null);
+  const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [filteredHolidays, setFilteredHolidays] = useState(null);
 
@@ -47,7 +56,9 @@ const GetAllHolidays = () => {
   const handleDeleteHoliday = async (calender_id) => {
     try {
       await axios.delete(
-        `${import.meta.env.VITE_API_BASE}/api/admin/deleteHoliday/${calender_id}`
+        `${
+          import.meta.env.VITE_API_BASE
+        }/api/admin/deleteHoliday/${calender_id}`
       );
       toast.success("Holiday successfully deleted");
       // Fetch the updated list of holidays
@@ -55,12 +66,21 @@ const GetAllHolidays = () => {
         `${import.meta.env.VITE_API_BASE}/api/admin/getAllHolidays`
       );
       setHolidays(updatedHolidays.data.holidays);
+      setIsDeleteAlertOpen(false);
     } catch (error) {
       console.error("Error deleting holiday:", error);
       toast.error("Failed to delete holiday");
     }
   };
 
+  const handleDeleteConfirmation = (holidayId) => {
+    setDeleteHolidayId(holidayId);
+    setIsDeleteAlertOpen(true);
+  };
+
+  const handleDeleteCancel = () => {
+    setIsDeleteAlertOpen(false);
+  };
 
   if (isLoading) {
     return (
@@ -69,7 +89,6 @@ const GetAllHolidays = () => {
       </div>
     );
   }
-
 
   return (
     <>
@@ -96,11 +115,11 @@ const GetAllHolidays = () => {
           >
             <Thead position="sticky" top={0} bg={"#F1F5F9"} zIndex={10}>
               <Tr>
-                <Th fontWeight="bold" className="md:table-cell hidden">S. No.</Th>
-                <Th fontWeight="bold">Title</Th>
-                <Th fontWeight="bold">
-                  Date
+                <Th fontWeight="bold" className="md:table-cell hidden">
+                  S. No.
                 </Th>
+                <Th fontWeight="bold">Title</Th>
+                <Th fontWeight="bold">Date</Th>
                 <Th fontWeight="bold" className="md:table-cell hidden">
                   Type
                 </Th>
@@ -111,60 +130,99 @@ const GetAllHolidays = () => {
             <Tbody>
               {searchText !== ""
                 ? filteredHolidays?.map((holiday, index) => (
-                  <Tr key={holiday._id}>
-                    <Td className="md:table-cell hidden">{index + 1}</Td>
-                    <Td>{holiday.title}</Td>
-                    <Td>{holiday.date}</Td>
-                    <Td className="md:table-cell hidden">{holiday.type}</Td>
-                    <Td>
-                      <Button colorScheme="green" onClick={() => handleUpdateHoliday(holiday.calender_id)}>
-                        Update
-                      </Button>
-                    </Td>
-                    <Td>
-                      <Button colorScheme="red" onClick={() => handleDeleteHoliday(holiday.calender_id)}>
-                        Delete
-                      </Button>
-                    </Td>
-                  </Tr>
-                ))
+                    <Tr key={holiday._id}>
+                      <Td className="md:table-cell hidden">{index + 1}</Td>
+                      <Td>{holiday.title}</Td>
+                      <Td>{holiday.date}</Td>
+                      <Td className="md:table-cell hidden">{holiday.type}</Td>
+                      <Td>
+                        <Button
+                          colorScheme="green"
+                          onClick={() =>
+                            handleUpdateHoliday(holiday.calender_id)
+                          }
+                        >
+                          Update
+                        </Button>
+                      </Td>
+                      <Td>
+                        <Button
+                          colorScheme="red"
+                          onClick={() =>
+                            handleDeleteConfirmation(holiday.calender_id)
+                          }
+                        >
+                          Delete
+                        </Button>
+                      </Td>
+                    </Tr>
+                  ))
                 : holidays.map((holiday, index) => (
-                  <Tr key={holiday._id}>
-                    <Td className="md:table-cell hidden">{index + 1}</Td>
-                    <Td>{holiday.title}</Td>
-                    <Td>{holiday.date}</Td>
-                    <Td className="md:table-cell hidden">{holiday.type}</Td>
-                    <Td>
-                      <Button
-                        size={"sm"}
-                        variant={"outline"}
-                        colorScheme="blue"
-                        ml={2}
-                        p={0}
-                        onClick={() => handleUpdateHoliday(holiday.calender_id)}
-                      >
-                        <MdModeEditOutline size={18} />
-                      </Button>
-                    </Td>
-                    <Td>
-                      <Button
-                      size={"sm"}
-                      variant={"outline"}
-                      colorScheme="red"
-                      ml={50}
-                      onClick={() =>
-                        handleDeleteHoliday(holiday.calender_id)
-                      }
-                    >
-                      <DeleteIcon />
-                    </Button>
-                    </Td>
-                  </Tr>
-                ))}
+                    <Tr key={holiday._id}>
+                      <Td className="md:table-cell hidden">{index + 1}</Td>
+                      <Td>{holiday.title}</Td>
+                      <Td>{holiday.date}</Td>
+                      <Td className="md:table-cell hidden">{holiday.type}</Td>
+                      <Td>
+                        <Button
+                          size={"sm"}
+                          variant={"outline"}
+                          colorScheme="blue"
+                          ml={2}
+                          p={0}
+                          onClick={() =>
+                            handleUpdateHoliday(holiday.calender_id)
+                          }
+                        >
+                          <MdModeEditOutline size={18} />
+                        </Button>
+                      </Td>
+                      <Td>
+                        <Button
+                          size={"sm"}
+                          variant={"outline"}
+                          colorScheme="red"
+                          ml={50}
+                          onClick={() =>
+                            handleDeleteConfirmation(holiday.calender_id)
+                          }
+                        >
+                          <DeleteIcon />
+                        </Button>
+                      </Td>
+                    </Tr>
+                  ))}
             </Tbody>
           </TableContainer>
         )}
       </div>
+      <AlertDialog
+        isOpen={isDeleteAlertOpen}
+        leastDestructiveRef={undefined}
+        onClose={handleDeleteCancel}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Delete Holiday
+            </AlertDialogHeader>
+            <AlertDialogCloseButton />
+            <AlertDialogBody>
+              Are you sure you want to delete this holiday?
+            </AlertDialogBody>
+            <AlertDialogFooter>
+              <Button onClick={handleDeleteCancel}>Cancel</Button>
+              <Button
+                colorScheme="red"
+                onClick={() => handleDeleteHoliday(deleteHolidayId)}
+                ml={3}
+              >
+                Delete
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
     </>
   );
 };

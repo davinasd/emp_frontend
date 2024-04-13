@@ -143,7 +143,7 @@ const CreateLedger = () => {
                 boxShadow="lg"
                 m="4"
             >
-                <h1 className="text-2xl font-semibold">Add Leadger</h1>
+                <h1 className="text-2xl font-semibold">Add Ledger</h1>
                 <p className="font-light mb-4">
                     Fill the below form to add a new ledger
                 </p>
@@ -181,7 +181,7 @@ const CreateLedger = () => {
                             </FormControl>
                             <FormControl id="client_id">
                                 <FormLabel>
-                                    Client Name
+                                    Select Brand
                                     <RequiredIndicator />{" "}
                                 </FormLabel>
                                 <Select

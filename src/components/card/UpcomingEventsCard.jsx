@@ -8,12 +8,12 @@ const UpcomingClientEventsCard = () => {
   const [selectedClient, setSelectedClient] = useState(null);
   function parseUpcomingEvents(clientData) {
     const eventNames = {
-      clientBirthday: 'Client Birthday',
-      clientAnniversary: 'Client Anniversary',
-      workStartDate: 'Work Start Date',
-      companyAnniversary: 'Company Anniversary',
+      clientBirthday: "Client Birthday",
+      clientAnniversary: "Client Anniversary",
+      workStartDate: "Work Start Date",
+      companyAnniversary: "Company Anniversary",
     };
-  
+
     return clientData.upcomingEvents.map((eventKey) => {
       const eventName = eventNames[eventKey];
       const eventDate = clientData[eventKey];
@@ -21,8 +21,8 @@ const UpcomingClientEventsCard = () => {
     });
   }
 
-  console.log(clients);
-  
+  // console.log(clients);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -46,34 +46,33 @@ const UpcomingClientEventsCard = () => {
   return (
     <Card>
       <CardBody>
-        <div className="">
-          <h1 className="text-lg flex gap-2 items-center">
-            <RxCalendar size={24} color="#ccc" /> Upcoming Events
-          </h1>
-          <Divider my={6} />
+        <h1 className="text-lg flex gap-2 items-center">
+          <RxCalendar size={24} color="#ccc" /> Clients Events
+        </h1>
+        <Divider my={6} />
+        <div className="grid grid-cols-8 overflow-y-auto max-h-50">
           {clients.map((client) => (
-  <div
-    key={client._id}
-    onClick={() => handleClientSelect(client._id)}
-    className="cursor-pointer"
-  >
-    <div className="text-blue-600 flex justify-between">
-      <span>Client: {client.clientName}</span>
-      <span>Brand: {client.brandName}</span>
-    </div>
+            <div
+              key={client._id}
+              onClick={() => handleClientSelect(client._id)}
+              className="cursor-pointer border-gray-200 shadow-inner rounded-lg overflow-hidden m-2 p-2"
+            >
+              <div className="text-blue-600 flex flex-col mt-2">
+                <span>Client: {client.clientName}</span>
+                <span>Brand: {client.brandName}</span>
+              </div>
 
-    {selectedClient === client._id && (
-      <div className="mb-3 mt-1">
-        {parseUpcomingEvents(client).map((event, index) => (
-          <Text key={index} fontSize="sm">
-            {event}
-          </Text>
-        ))}
-      </div>
-    )}
-  </div>
-))}
-
+              {selectedClient === client._id && (
+                <div className="mb-3 mt-1">
+                  {parseUpcomingEvents(client).map((event, index) => (
+                    <Text key={index} fontSize="sm">
+                      {event}
+                    </Text>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
         </div>
       </CardBody>
     </Card>

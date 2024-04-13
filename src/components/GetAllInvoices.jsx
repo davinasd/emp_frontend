@@ -89,10 +89,16 @@ const GetAllInvoices = () => {
       await axios.delete(
         `${import.meta.env.VITE_API_BASE
         }/api/admin/deleteInvoiceById/${deleteInvoiceId}`
-      );
-      toast.success("Successfully deleted Invoice");
-      fetchData(selectedYear, selectedMonth);
-      setIsDeleteAlertOpen(false);
+      )
+      toast({
+        title: "Success",
+        description: "Successfully deleted Invoice",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+        fetchData(selectedYear, selectedMonth);
+        setIsDeleteAlertOpen(false);
     } catch (error) {
       console.error("Error deleting invoice:", error);
     }

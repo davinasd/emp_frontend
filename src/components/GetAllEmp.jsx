@@ -15,6 +15,7 @@ import {
   AlertDialogBody,
   AlertDialogFooter,
   AlertDialogCloseButton,
+  useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import InfoModal from "./common/InfoModal";
@@ -22,7 +23,6 @@ import TableContainer from "./common/TableContainer";
 import { Empty } from "antd";
 import { Link } from "react-router-dom";
 import { GoPlus } from "react-icons/go";
-import { toast } from "react-toastify";
 import { DeleteIcon } from "@chakra-ui/icons";
 import { IoMdEye } from "react-icons/io";
 import { MdModeEditOutline } from "react-icons/md";
@@ -39,6 +39,7 @@ const GetAllEmp = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [deleteProjectId, setDeleteProjectId] = useState(null);
   const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
+  const toast = useToast();
 
   useEffect(() => {
     async function fetchData() {
@@ -67,7 +68,13 @@ const GetAllEmp = () => {
         `${import.meta.env.VITE_API_BASE
         }/api/admin/deleteEmployeeById/${deleteProjectId}`
       );
-      toast.success("Successfully deleted employee")
+      toast({
+        title: "Success",
+        description: "Successfully deleted employee",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
       const response = await axios.get(
         `${import.meta.env.VITE_API_BASE}/api/admin/getAllEmployees`
       );

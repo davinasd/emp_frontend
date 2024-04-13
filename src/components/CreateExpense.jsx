@@ -222,7 +222,7 @@ const CreateExpense = () => {
                 colorScheme="purple"
                 onClick={handleAddExpense}
             >
-                Craete Expense
+                Create Expense
             </Button>
         </Box>
     )

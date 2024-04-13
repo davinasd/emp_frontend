@@ -69,16 +69,18 @@ const GetAllPaidInvoices = () => {
                 `${import.meta.env.VITE_API_BASE
                 }/api/admin/deleteInvoiceById/${deleteInvoiceId}`
             );
-            toast.success("Successfully deleted Invoice");
+            toast({
+                title: "Success",
+                description: "Successfully deleted Invoice",
+                status: "success",
+                duration: 5000,
+                isClosable: true,
+            });
             fetchData(selectedYear, selectedMonth);
             setIsDeleteAlertOpen(false);
         } catch (error) {
             console.error("Error deleting invoice:", error);
         }
-    };
-    const handleReset = () => {
-        setSelectedYear(null);
-        setSelectedMonth(null);
     };
 
     const handleDeleteConfirmation = (projectId) => {

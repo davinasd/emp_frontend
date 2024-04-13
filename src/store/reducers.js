@@ -8,6 +8,7 @@ import leadSlice from "./slice/LeadSlice";
 import leaveSlice from "./slice/LeaveSlice"; // Import the leaveSlice
 import letterSlice from "./slice/LetterSlice"; // Import the leaveSlice
 import expenseSlice from "./slice/ExpenseSlice";
+import { receivableSlice } from "./slice/ReceivableSlice";
 
 const rootReducer = combineReducers({
   auth: authSlice,
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   project: projectSlice,
   lead: leadSlice,
   expense: expenseSlice,
+  receivable: receivableSlice,
   leave: leaveSlice, // Include the leaveSlice in the root reducer
   letter: letterSlice, // Include the leaveSlice in the root reducer
 });

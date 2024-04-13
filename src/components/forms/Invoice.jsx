@@ -142,7 +142,7 @@ const Invoice = () => {
     const requiredFields = [
       { key: 'client_id', label: 'Client' },
       { key: 'billType', label: 'billType' },
-      { key: 'startDate', label: 'startDate' },
+      { key: 'date', label: 'date' },
       { key: 'billType', label: 'billType' },
       { key: 'services', label: 'Services', isArray: true },
     ];

@@ -28,6 +28,7 @@ import { DeleteIcon } from "@chakra-ui/icons";
 import { useDispatch } from "react-redux";
 import { IoMdEye } from "react-icons/io";
 import { MdModeEditOutline } from "react-icons/md";
+import { setReceivableId } from "../store/slice/ReceivableSlice";
 
 const GetAllReceivable = () => {
   const [receivables, setReceivables] = useState([]);
@@ -79,6 +80,7 @@ const GetAllReceivable = () => {
   };
 
   const handleDeleteConfirmation = (receivableId) => {
+    console.log(receivableId);
     setDeleteReceivableId(receivableId);
     setIsDeleteAlertOpen(true);
   };
@@ -164,7 +166,7 @@ const GetAllReceivable = () => {
                       colorScheme="red"
                       ml={2}
                       onClick={() =>
-                        handleDeleteConfirmation(receivable.receivable_id)
+                        handleDeleteConfirmation(receivable.rec_id)
                       }
                     >
                       <DeleteIcon />
@@ -176,7 +178,7 @@ const GetAllReceivable = () => {
                         colorScheme="blue"
                         ml={2}
                         p={0}
-                        onClick={() => handleUpdateReceivable(receivable.receivable_id)}
+                        onClick={() => handleUpdateReceivable(receivable.rec_id)}
                       >
                       <MdModeEditOutline size={18} />
                       </Button>
@@ -209,7 +211,7 @@ const GetAllReceivable = () => {
                         colorScheme="blue"
                         ml={2}
                         p={0}
-                        onClick={() => handleUpdateReceivable(receivable.receivable_id)}
+                        onClick={() => handleUpdateReceivable(receivable.rec_id)}
                       >
                         <MdModeEditOutline size={18} />
                       </Button>
@@ -222,7 +224,7 @@ const GetAllReceivable = () => {
                       colorScheme="red"
                       ml={50}
                       onClick={() =>
-                        handleDeleteConfirmation(receivable.receivable_id)
+                        handleDeleteConfirmation(receivable.rec_id)
                       }
                     >
                       <DeleteIcon />
