@@ -21,7 +21,7 @@ const UpcomingClientEventsCard = () => {
     });
   }
 
-  console.log(clients);
+  // console.log(clients);
 
   useEffect(() => {
     const fetchData = async () => {

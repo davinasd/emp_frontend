@@ -837,9 +837,8 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                         <Text fontWeight="bold">Single File: </Text>
                         <Button
                           as="a"
-                          href={`${import.meta.env.VITE_API_BASE}/uploads/${
-                            data.singleFile
-                          }`}
+                          href={`${import.meta.env.VITE_API_BASE}/uploads/${data.singleFile
+                            }`}
                           target="_blank"
                           rel="noopener noreferrer"
                           textDecoration="none"
@@ -852,7 +851,7 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                       </div>
                     )}
                     {Array.isArray(data.multipleFiles) &&
-                    data.multipleFiles.length > 0 ? (
+                      data.multipleFiles.length > 0 ? (
                       <>
                         <Text className="text-sm font-bold text-gray-500 mt-3">
                           Multiple Files
@@ -861,9 +860,8 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                           <div key={index}>
                             <Button
                               as="a"
-                              href={`${
-                                import.meta.env.VITE_API_BASE
-                              }/uploads/${file}`}
+                              href={`${import.meta.env.VITE_API_BASE
+                                }/uploads/${file}`}
                               target="_blank"
                               rel="noopener noreferrer"
                               textDecoration="none"
@@ -1222,9 +1220,8 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                       <h2 className="text-lg mr-2">View:</h2>
                       <Button
                         as="a"
-                        href={`${import.meta.env.VITE_API_BASE}/uploads/${
-                          data.singleFile
-                        }`}
+                        href={`${import.meta.env.VITE_API_BASE}/uploads/${data.singleFile
+                          }`}
                         target="_blank"
                         rel="noopener noreferrer"
                         textDecoration="none"
@@ -1547,9 +1544,8 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                         <Text fontWeight="bold">Single File: </Text>
                         <Button
                           as="a"
-                          href={`${import.meta.env.VITE_API_BASE}/uploads/${
-                            data.singleFile
-                          }`}
+                          href={`${import.meta.env.VITE_API_BASE}/uploads/${data.singleFile
+                            }`}
                           target="_blank"
                           rel="noopener noreferrer"
                           textDecoration="none"
@@ -1562,16 +1558,15 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                       </div>
                     )}
                     {Array.isArray(data.multipleFiles) &&
-                    data.multipleFiles.length > 0 ? (
+                      data.multipleFiles.length > 0 ? (
                       <div>
                         <Text fontWeight="bold">Files Provided: </Text>
                         {data.multipleFiles.map((file, index) => (
                           <div key={index}>
                             <Button
                               as="a"
-                              href={`${
-                                import.meta.env.VITE_API_BASE
-                              }/uploads/${file}`}
+                              href={`${import.meta.env.VITE_API_BASE
+                                }/uploads/${file}`}
                               target="_blank"
                               rel="noopener noreferrer"
                               textDecoration="none"
@@ -2099,6 +2094,130 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                   </div>
                 </div>
                 <div></div>
+              </>
+            )}
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme="purple" onClick={onClose}>
+              Close
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    );
+  }
+
+  if (modalFor === "receivable") {
+    console.log(data);
+    return (
+      <Modal
+        size={"6xl"}
+        scrollBehavior="inside"
+        onClose={onClose}
+        isOpen={isOpen}
+        motionPreset="slideInBottom"
+        isCentered
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>{data?.brandName} Ledger Information</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            {data && (
+              <>
+                <div className="flex flex-col md:flex-row gap-2 items-end md:items-center justify-end">
+                  {/* <h2 className="text-lg mr-2">Get:</h2>
+                  <Link to={`/GetEmp`}>
+                    <Button colorScheme="green">Employee</Button>
+                  </Link> */}
+                  {/* <Divider type="vertical" />
+                  <Menu>
+                    <MenuButton as={Button} variant={"outline"} rightIcon={<ChevronDownIcon />}>
+                      Actions
+                    </MenuButton>
+                    <MenuList>
+                      <MenuItem>
+                        <div className="w-full flex items-center" onClick={() => handleTaskDelete()}>
+                          <DeleteIcon mr={2} /> Delete
+                        </div>
+                      </MenuItem>
+                      <MenuItem>
+                        <div className="w-full flex items-center" onClick={() => handleChangeTaskStatus()}>
+                          <CheckCircleIcon mr={2} /> Change Status
+                        </div>
+                      </MenuItem>
+                    </MenuList>
+                  </Menu> */}
+                </div>
+                <Divider />
+                <div className="flex gap-10">
+                  <div className="max-w-[200px] md:max-w-[300px]">
+                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">
+                      General Information
+                    </h1>
+                    {data?.brandName && (
+                      <>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Brand Name{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {new Date(data?.createdAt).toLocaleDateString("en-GB")}
+                        </Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Created At{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data?.brandName}
+                        </Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Client Name{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data?.clientName}
+                        </Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Conpany Name{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data?.companyName}
+                        </Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Date & Time
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {new Date(data?.date1).toLocaleDateString("en-GB")}, {data.time1}
+                        </Text>
+                      </>
+                    )}
+                  </div>
+                  <div className="max-w-[200px] md:max-w-[300px]">
+                    <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">
+                      Financial Information
+                    </h1>
+                    {data?.brandName && (
+                      <>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Amount{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data?.amount}
+                        </Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Balance Due{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data?.balanceDue}
+                        </Text>
+                        <Text className="text-sm font-bold text-gray-500 mt-3">
+                          Total Amount{" "}
+                        </Text>
+                        <Text className="text-lg capitalize">
+                          {data?.totalAmount}
+                        </Text>
+                      </>
+                    )}
+                  </div>
+                </div>
               </>
             )}
           </ModalBody>

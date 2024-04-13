@@ -15,6 +15,7 @@ import {
     AlertDialogBody,
     AlertDialogFooter,
     AlertDialogCloseButton,
+    useToast,
 } from "@chakra-ui/react";
 import { format } from 'date-fns';
 import axios from "axios";
@@ -24,7 +25,6 @@ import TableContainer from "./common/TableContainer";
 import { Link } from "react-router-dom";
 import { Empty } from "antd";
 import { DeleteIcon } from "@chakra-ui/icons";
-import { toast } from "react-toastify";
 import { IoMdEye } from "react-icons/io";
 import GetLedgersByEmp from "./common/GetLedgersByEmp";
 import GetLedgersByClient from "./common/GetLedgersByClient";
@@ -41,20 +41,23 @@ const GetAllLedgers = () => {
     const [getLedgersByEmp, setGetLedgersByEmp] = useState(false);
     const [getLedgersByClient, setGetLedgersByClient] = useState(false);
 
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                const response = await axios.get(
-                    `${import.meta.env.VITE_API_BASE}/api/admin/getAllLedgers`
-                );
-                console.log(response.data); // Check the structure of the response
-                setLetters(response.data); // Assuming response.data.data is the array of letters
-                setIsLoading(false);
-            } catch (error) {
-                console.error("Error fetching data:", error);
-                setIsLoading(false);
-            }
+    const toast = useToast();
+
+    async function fetchData() {
+        try {
+            const response = await axios.get(
+                `${import.meta.env.VITE_API_BASE}/api/admin/getAllLedgers`
+            );
+            console.log(response.data); // Check the structure of the response
+            setLetters(response.data); // Assuming response.data.data is the array of letters
+            setIsLoading(false);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+            setIsLoading(false);
         }
+    }
+
+    useEffect(() => {
         fetchData();
     }, []);
 
@@ -71,11 +74,14 @@ const GetAllLedgers = () => {
             await axios.delete(
                 `${import.meta.env.VITE_API_BASE}/api/admin/deleteLedger/${deleteLetterId}`
             );
-            toast.success("Successfully deleted leave");
-            const response = await axios.get(
-                `${import.meta.env.VITE_API_BASE}/api/admin/getAllLetters`
-            );
-            setLetters(response.data);
+            toast({
+                title: "Success",
+                description: "Successfully deleted Ledger",
+                status: "success",
+                duration: 5000,
+                isClosable: true,
+            });
+            fetchData();
             setIsDeleteAlertOpen(false);
         } catch (error) {
             console.error("Error deleting leave:", error);

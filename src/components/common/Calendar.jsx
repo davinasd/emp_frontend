@@ -10,7 +10,7 @@ const CalendarComponent = () => {
 
   useEffect(() => {
     fetchSpecialDates();
-    fetchEmpSpecialDates();fetchHolidays();
+    fetchEmpSpecialDates(); fetchHolidays();
   }, []);
 
   const fetchSpecialDates = async () => {
@@ -71,13 +71,13 @@ const CalendarComponent = () => {
       );
     });
     const holidayEvents = holidays.filter((holiday) => {
-      if(holiday.date === formattedDate)
-      {console.log(holiday.date)
-    }
+      // if (holiday.date === formattedDate) {
+      //   console.log(holiday.date)
+      // }
 
       return holiday.date === formattedDate;
     });
-    
+
     const clientListData = events.map((event) => {
       let eventType = "client";
       if (event.clientBirthday === formattedDate) {
@@ -96,15 +96,18 @@ const CalendarComponent = () => {
         eventType: eventType,
       };
     });
+
     const holidayListData = holidayEvents.map((holiday) => {
       let eventType = "Holiday";
-
       return {
-        type: "error",
-        eventType:eventType,
-        holidayTitle: holiday.title
+        type: "success",
+        holidayTitle: `${holiday.title} `,
+        holidayType: `${holiday.type} `,
+        eventType: eventType,
       };
     });
+    console.log(holidayListData)
+
     const empListData = empEvents.map((event) => {
       let eventType = "emp";
       if (event.dob === formattedDate) {
@@ -118,11 +121,13 @@ const CalendarComponent = () => {
         eventType: eventType,
       };
     })
-    return { clientListData, empListData,holidayListData };
+    return { clientListData, empListData, holidayListData };
   }
 
   const dateCellRender = (value) => {
     const { clientListData, empListData, holidayListData } = getListData(value);
+    // console.log("holiday");
+    // console.log(holidayListData);
     return (
       <>
         <ul className="events">
@@ -147,42 +152,40 @@ const CalendarComponent = () => {
           ))}
         </ul>
         {empListData?.map((item, index) => (
-  <>
-    {item.eventType === "emp" ? "Employee" : "Client"}
-    <li key={index}>
-      <Badge
-        status={item.type}
-        text={
           <>
-            Employee: {item.employee}
-            <br />
-            Event Type: {item.eventType}
+            {item.eventType === "emp" ? "Employee" : "Client"}
+            <li key={index}>
+              <Badge
+                status={item.type}
+                text={
+                  <>
+                    Employee: {item.employee}
+                    <br />
+                    Event Type: {item.eventType}
+                  </>
+                }
+              />
+            </li >
           </>
-        }
-      />
-    </li >
-  </>
-))}
+        ))}
 
-{holidayListData?.map((item, index) => (
-  <>
-    {item.eventType === "Holiday" }
-    <li key={index}>
-      <Badge
-        status={item.type}
-        text={
+        {holidayListData?.map((item, index) => (
           <>
-            Holiday: {item.holidayTitle}
-            <br />
-            Event Type: {item.eventType}
+            {item.eventType === "Holiday" && "Holiday"}
+            <li key={index}>
+              <Badge
+                status={item.type}
+                text={
+                  <>
+                    Holiday: {item.holidayTitle}
+                    <br />
+                    Event Type: {item.eventType}
+                  </>
+                }
+              />
+            </li >
           </>
-        }
-      />
-    </li >
-  </>
-))}
-
-
+        ))}
       </>
     );
   };

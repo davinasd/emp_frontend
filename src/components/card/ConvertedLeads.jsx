@@ -64,7 +64,7 @@ const ConvertedLeads = () => {
     axios.get(`${import.meta.env.VITE_API_BASE}/api/admin/getLeadsByStatus`)
       .then((response) => {
         const leads = response.data;
-        console.log(leads)
+        // console.log(leads)
         const inProgressLead = leads.find((lead) => lead._id === "In-Progress");
         const convertedLead = leads.find((lead) => lead._id === "Client");
         const lostLead = leads.find((lead) => lead._id === "Lost");

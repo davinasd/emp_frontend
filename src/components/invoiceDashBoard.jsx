@@ -26,7 +26,6 @@ const InvoiceDashboardStatsCard = () => {
       const requests = endpoints.map((endpoint) =>
         axios.get(`${apiBaseUrl}/api/admin${endpoint}`).catch((error) => console.error(`Error fetching ${endpoint}:`, error))
       );
-      console.log(import.meta.env.VITE_API_BASE);
 
 
       try {
@@ -45,7 +44,7 @@ const InvoiceDashboardStatsCard = () => {
     fetchData();
   }, []);
 
-  console.log(ledgersReport)
+  // console.log(ledgersReport)
 
 
   const totalInvoices = totalPaidInvoices + totalUnpaidInvoices;

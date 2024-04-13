@@ -46,7 +46,7 @@ const LeaveCard = () => {
       firstQuarterMonth: firstQuarterMonth || ""
     })
       .then((response) => {
-        console.log(response.data)
+        // console.log(response.data)
         setTotalLeads(response.data.totalLeaveCount);
       })
       .catch((error) => {
@@ -57,7 +57,7 @@ const LeaveCard = () => {
     axios.post(`${import.meta.env.VITE_API_BASE}/api/admin/getLeavesByStatus/${selectedYear}/${selectedMonth}`)
       .then((response) => {
         const leads = response.data;
-        console.log(response.data)
+        // console.log(response.data)
         const inProgressLead = leads.find((lead) => lead._id === "Approved");
         const convertedLead = leads.find((lead) => lead._id === "Pending");
         const lostLead = leads.find((lead) => lead._id === "Rejected");
