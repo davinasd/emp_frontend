@@ -7,6 +7,10 @@ import { IoAlertCircleOutline } from "react-icons/io5";
 import { SlDrawer } from "react-icons/sl"
 import { Divider } from "antd";
 import { allMonths } from "../../helpers";
+import { quarter1 } from "../../helpers";
+import { quarter2 } from "../../helpers";
+import { quarter3 } from "../../helpers";
+import { quarter4 } from "../../helpers";
 
 const ConvertedLeads = () => {
   const [totalLeads, setTotalLeads] = useState(0);
@@ -152,10 +156,10 @@ const ConvertedLeads = () => {
                 <option key={`quarter-1`} value={1}>1 - {selectedYear}</option>
                 <option key={`quarter-2`} value={2}>2 - {selectedYear}</option>
                 <option key={`quarter-3`} value={3}>3 - {selectedYear}</option>
-                <option key={`quarter-4`} value={4}>4 - {selectedYear}</option>
+                <option key={`quarter-4`} value={4}>4 - {parseInt(selectedYear)+1}</option>
               </Select>
             )}
-            {selectedQuarter && (
+            {selectedQuarter == 1 && (
               <Select
                 placeholder='Select Quarter'
                 value={selectQuarterFirstMonth || ""}
@@ -163,8 +167,47 @@ const ConvertedLeads = () => {
                 size={"sm"}
                 rounded={"lg"}
               >
-                {selectedYear && allMonths.map((month, index) => (
+                {selectedYear && quarter1.map((month, index) => (
                   <option key={`m-${month}`} value={index + 1}>{selectedYear}-{month}</option>
+                ))}
+              </Select>
+            )}
+            {selectedQuarter == 2 && (
+              <Select
+                placeholder='Select Quarter'
+                value={selectQuarterFirstMonth || ""}
+                onChange={(e) => setSelectQuarterFirstMonth(e.target.value)}
+                size={"sm"}
+                rounded={"lg"}
+              >
+                {selectedYear && quarter2.map((month, index) => (
+                  <option key={`m-${month}`} value={index + 1}>{selectedYear}-{month}</option>
+                ))}
+              </Select>
+            )}
+            {selectedQuarter == 3 && (
+              <Select
+                placeholder='Select Quarter'
+                value={selectQuarterFirstMonth || ""}
+                onChange={(e) => setSelectQuarterFirstMonth(e.target.value)}
+                size={"sm"}
+                rounded={"lg"}
+              >
+                {selectedYear && quarter3.map((month, index) => (
+                  <option key={`m-${month}`} value={index + 1}>{selectedYear}-{month}</option>
+                ))}
+              </Select>
+            )}
+            {selectedQuarter == 4 && (
+              <Select
+                placeholder='Select Quarter'
+                value={selectQuarterFirstMonth || ""}
+                onChange={(e) => setSelectQuarterFirstMonth(e.target.value)}
+                size={"sm"}
+                rounded={"lg"}
+              >
+                {selectedYear && quarter4.map((month, index) => (
+                  <option key={`m-${month}`} value={index + 1}>{parseInt(selectedYear)+1}-{month}</option>
                 ))}
               </Select>
             )}
