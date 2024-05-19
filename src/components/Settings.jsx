@@ -1,9 +1,91 @@
-import { Box, Flex, Heading, Text, Button, useDisclosure, Accordion, AccordionItem, AccordionButton, AccordionIcon, AccordionPanel, Switch } from '@chakra-ui/react';
+import { Box, Flex, Heading, Text, Button, Accordion, AccordionItem, AccordionButton, AccordionIcon, AccordionPanel, Switch, useToast } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
-import PermissionModal from './modal/PermissionModal';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 
 const Settings = () => {
-  // const { isOpen: isPermissionModalOpen, onOpen: onPermissionModalOpen, onClose: onPermissionModalClose } = useDisclosure();
+  const toast = useToast();
+  const userDataString = localStorage.getItem("userData");
+  const userData = userDataString ? JSON.parse(userDataString) : null;
+  const employee_id = userData ? userData.employee_id : null;
+
+  const [currentUserData, setCurrentUserData] = useState();
+  const [selectedPermissions, setSelectedPermissions] = useState([]);
+  const [noPermission, setNoPermission] = useState(false);
+
+  const handlePermissionChange = async (permissionName, isSelected) => {
+    let updatedPermissions;
+
+    if (isSelected) {
+      // Add the permission to the list
+      if (permissionName === "none") {
+        setNoPermission(true);
+        updatedPermissions = [];
+      } else {
+        setNoPermission(false);
+        updatedPermissions = [
+          ...selectedPermissions,
+          { name: permissionName, value: permissionName }
+        ];
+      }
+    } else {
+      // Remove the permission from the list
+      updatedPermissions = selectedPermissions.filter(
+        (perm) => perm.name !== permissionName
+      );
+    }
+
+    // Update the state
+    setSelectedPermissions(updatedPermissions);
+
+    try {
+      await axios.put(
+        `${import.meta.env.VITE_API_BASE}/api/admin/employees/EditPermission/${employee_id}`,
+        { permissions: updatedPermissions }
+      );
+      toast({
+        title: "Success",
+        description: "Updated user permission",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+    } catch (error) {
+      console.error("Error updating permission:", error);
+      toast({
+        title: "Error",
+        description: "Failed to update user permission.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+  };
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_BASE}/api/admin/getEmployeeByID/${employee_id}`);
+        setCurrentUserData(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        toast({
+          title: "Error",
+          description: "Failed to fetch user data. Please try again later.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+      }
+    };
+    fetchUserData();
+  }, [])
+
+  useEffect(() => {
+    setSelectedPermissions(currentUserData?.permissions);
+  }, [currentUserData])
+
   return (
     <Flex direction="column" p={5} gap={4}>
       <Heading mb={6}>Dashboard</Heading>
@@ -40,27 +122,27 @@ const Settings = () => {
               <div
                 className="w-full py-2 text-md font-semibold border-b border-t flex items-center justify-between"
               >
-                None <Switch size='md' />
+                None <Switch size='md' isChecked={selectedPermissions?.length === 0} onChange={(e) => handlePermissionChange("none", e.target.checked)} />
               </div>
               <div
                 className="w-full py-2 text-md font-semibold border-b border-t flex items-center justify-between"
               >
-                Read <Switch size='md' />
+                Read <Switch size='md' isChecked={!noPermission && selectedPermissions?.some(i => i.value.includes('read'))} onChange={(e) => handlePermissionChange("read", e.target.checked)} />
               </div>
               <div
                 className="w-full py-2 text-md font-semibold border-b border-t flex items-center justify-between"
               >
-                Write <Switch size='md' />
+                Write <Switch size='md' isChecked={!noPermission && selectedPermissions?.some(i => i.value.includes('write'))} onChange={(e) => handlePermissionChange("write", e.target.checked)} />
               </div>
               <div
                 className="w-full py-2 text-md font-semibold border-b border-t flex items-center justify-between"
               >
-                Update <Switch size='md' />
+                Update <Switch size='md' isChecked={!noPermission && selectedPermissions?.some(i => i.value.includes('update'))} onChange={(e) => handlePermissionChange("update", e.target.checked)} />
               </div>
               <div
                 className="w-full py-2 text-md font-semibold border-b border-t flex items-center justify-between"
               >
-                Delete <Switch size='md' />
+                Delete <Switch size='md' isChecked={!noPermission && selectedPermissions?.some(i => i.value.includes('delete'))} onChange={(e) => handlePermissionChange("delete", e.target.checked)} />
               </div>
             </AccordionPanel>
           </AccordionItem>
