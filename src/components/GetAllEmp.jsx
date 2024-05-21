@@ -30,6 +30,11 @@ import { useDispatch } from "react-redux";
 import { addEmployeeId } from "../store/slice/EmployeeSlice";
 
 const GetAllEmp = () => {
+  const userDataString = localStorage.getItem("userData");
+  const userData = userDataString ? JSON.parse(userDataString) : null;
+  const employee_id = userData ? userData.employee_id : null;
+  const [currentUserData, setCurrentUserData] = useState({});
+
   const dispatch = useDispatch();
   const [employees, setEmployees] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -42,6 +47,26 @@ const GetAllEmp = () => {
   const [deleteProjectId, setDeleteProjectId] = useState(null);
   const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
   const toast = useToast();
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_BASE}/api/admin/getEmployeeByID/${employee_id}`);
+        setCurrentUserData(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        toast({
+          title: "Error",
+          description: "Failed to fetch user data. Please try again later.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+      }
+    };
+    fetchUserData();
+  }, [])
 
   useEffect(() => {
     async function fetchData() {
@@ -67,8 +92,7 @@ const GetAllEmp = () => {
   const handleDeleteEmployee = async () => {
     try {
       await axios.delete(
-        `${
-          import.meta.env.VITE_API_BASE
+        `${import.meta.env.VITE_API_BASE
         }/api/admin/deleteEmployeeById/${deleteProjectId}`
       );
       toast({
@@ -222,95 +246,111 @@ const GetAllEmp = () => {
             <Tbody>
               {searchText !== ""
                 ? filteredEmployees.map((emp, index) => (
-                    <Tr key={emp._id}>
-                      <Td>{index + 1}</Td>
-                      <Td>{emp.name}</Td>
-                      <Td className="md:table-cell hidden">{emp.position}</Td>
-                      <Td className="md:table-cell hidden">{emp.department}</Td>
-                      <Td className="md:table-cell hidden">
-                        {emp.joiningDate}
-                      </Td>
-                      <Td>
-                        <Button
-                          size={"sm"}
-                          colorScheme="purple"
-                          onClick={() => handleMoreInfo(emp)}
-                        >
-                          <IoMdEye />
-                        </Button>
-                        <Link to="/UpdateEmp">
+                  <Tr key={emp._id}>
+                    <Td>{index + 1}</Td>
+                    <Td>{emp.name}</Td>
+                    <Td className="md:table-cell hidden">{emp.position}</Td>
+                    <Td className="md:table-cell hidden">{emp.department}</Td>
+                    <Td className="md:table-cell hidden">
+                      {emp.joiningDate}
+                    </Td>
+                    <Td>
+                      <Button
+                        size={"sm"}
+                        colorScheme="purple"
+                        onClick={() => handleMoreInfo(emp)}
+                      >
+                        <IoMdEye />
+                      </Button>
+                      {currentUserData?.permissions?.some((el) => {
+                        return el.name === "salaryslip" && el.value.includes("delete")
+                      }) && (
+                          <Link to="/UpdateEmp">
+                            <Button
+                              size={"sm"}
+                              variant={"outline"}
+                              colorScheme="blue"
+                              ml={2}
+                              p={0}
+                              onClick={() => handleUpdateEmp(emp.employee_id)}
+                            >
+                              <MdModeEditOutline size={18} />
+                            </Button>
+                          </Link>
+                        )}
+                    </Td>
+                    <Td>
+                      {currentUserData?.permissions?.some((el) => {
+                        return el.name === "salaryslip" && el.value.includes("delete")
+                      }) && (
                           <Button
                             size={"sm"}
                             variant={"outline"}
-                            colorScheme="blue"
+                            colorScheme="red"
                             ml={2}
-                            p={0}
-                            onClick={() => handleUpdateEmp(emp.employee_id)}
+                            onClick={() =>
+                              handleDeleteConfirmation(emp.employee_id)
+                            }
                           >
-                            <MdModeEditOutline size={18} />
+                            <DeleteIcon />
                           </Button>
-                        </Link>
-                      </Td>
-                      <Td>
-                        <Button
-                          size={"sm"}
-                          variant={"outline"}
-                          colorScheme="red"
-                          ml={2}
-                          onClick={() =>
-                            handleDeleteConfirmation(emp.employee_id)
-                          }
-                        >
-                          <DeleteIcon />
-                        </Button>
-                      </Td>
-                    </Tr>
-                  ))
+                        )}
+                    </Td>
+                  </Tr>
+                ))
                 : employees.map((emp, index) => (
-                    <Tr key={emp._id}>
-                      <Td>{index + 1}</Td>
-                      <Td>{emp.name}</Td>
-                      <Td className="md:table-cell hidden">{emp.position}</Td>
-                      <Td className="md:table-cell hidden">{emp.department}</Td>
-                      <Td className="md:table-cell hidden">
-                        {emp.joiningDate}
-                      </Td>
-                      <Td>
-                        <Button
-                          size={"sm"}
-                          colorScheme="purple"
-                          onClick={() => handleMoreInfo(emp)}
-                        >
-                          <IoMdEye />
-                        </Button>
-                        <Link to="/UpdateEmp">
+                  <Tr key={emp._id}>
+                    <Td>{index + 1}</Td>
+                    <Td>{emp.name}</Td>
+                    <Td className="md:table-cell hidden">{emp.position}</Td>
+                    <Td className="md:table-cell hidden">{emp.department}</Td>
+                    <Td className="md:table-cell hidden">
+                      {emp.joiningDate}
+                    </Td>
+                    <Td>
+                      <Button
+                        size={"sm"}
+                        colorScheme="purple"
+                        onClick={() => handleMoreInfo(emp)}
+                      >
+                        <IoMdEye />
+                      </Button>
+                      {currentUserData?.permissions?.some((el) => {
+                        return el.name === "salaryslip" && el.value.includes("delete")
+                      }) && (
+                          <Link to="/UpdateEmp">
+                            <Button
+                              size={"sm"}
+                              variant={"outline"}
+                              colorScheme="blue"
+                              ml={2}
+                              p={0}
+                              onClick={() => handleUpdateEmp(emp.employee_id)}
+                            >
+                              <MdModeEditOutline size={18} />
+                            </Button>
+                          </Link>
+                        )}
+                    </Td>
+                    <Td>
+                      {currentUserData?.permissions?.some((el) => {
+                        return el.name === "salaryslip" && el.value.includes("delete")
+                      }) && (
                           <Button
                             size={"sm"}
                             variant={"outline"}
-                            colorScheme="blue"
+                            colorScheme="red"
                             ml={2}
-                            p={0}
-                            onClick={() => handleUpdateEmp(emp.employee_id)}
+                            onClick={() =>
+                              handleDeleteConfirmation(emp.employee_id)
+                            }
                           >
-                            <MdModeEditOutline size={18} />
+                            <DeleteIcon />
                           </Button>
-                        </Link>
-                      </Td>
-                      <Td>
-                        <Button
-                          size={"sm"}
-                          variant={"outline"}
-                          colorScheme="red"
-                          ml={2}
-                          onClick={() =>
-                            handleDeleteConfirmation(emp.employee_id)
-                          }
-                        >
-                          <DeleteIcon />
-                        </Button>
-                      </Td>
-                    </Tr>
-                  ))}
+                        )}
+                    </Td>
+                  </Tr>
+                ))}
             </Tbody>
           </TableContainer>
         )}

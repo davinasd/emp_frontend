@@ -13,7 +13,7 @@ const Settings = () => {
   const [selectedPermissions, setSelectedPermissions] = useState([]);
   const [noPermission, setNoPermission] = useState(false);
 
-  const handlePermissionChange = async (permissionName, isSelected) => {
+  const handlePermissionChange = async (permissionName, isSelected, permissionValue) => {
     let updatedPermissions;
 
     if (isSelected) {
@@ -25,7 +25,7 @@ const Settings = () => {
         setNoPermission(false);
         updatedPermissions = [
           ...selectedPermissions,
-          { name: permissionName, value: permissionName }
+          { name: permissionName, value: permissionValue }
         ];
       }
     } else {
@@ -119,7 +119,21 @@ const Settings = () => {
               </AccordionButton>
             </h2>
             <AccordionPanel pb={4} pt={0}>
-              <div
+              {currentUserData?.permissions.map(perm => (
+                <div key={perm.name}>
+                  <h3 className="text-xl font-semibold capitalize my-4">{perm.name}</h3>
+                  {["read", "write", "update", "delete"].map(operation => (
+                    <div
+                      key={`${perm.name}-${operation}`}
+                      className="w-full py-2 text-md font-semibold border-b border-t flex items-center justify-between capitalize"
+                    >
+                      {operation}
+                      <Switch size='md' isChecked={!noPermission && selectedPermissions?.some(i => i.name === perm.name) && selectedPermissions?.some(i => i.value.includes(operation))} onChange={(e) => handlePermissionChange(perm.name, e.target.checked, ["read"])} />
+                    </div>
+                  ))}
+                </div>
+              ))}
+              {/* <div
                 className="w-full py-2 text-md font-semibold border-b border-t flex items-center justify-between"
               >
                 None <Switch size='md' isChecked={selectedPermissions?.length === 0} onChange={(e) => handlePermissionChange("none", e.target.checked)} />
@@ -143,7 +157,7 @@ const Settings = () => {
                 className="w-full py-2 text-md font-semibold border-b border-t flex items-center justify-between"
               >
                 Delete <Switch size='md' isChecked={!noPermission && selectedPermissions?.some(i => i.value.includes('delete'))} onChange={(e) => handlePermissionChange("delete", e.target.checked)} />
-              </div>
+              </div> */}
             </AccordionPanel>
           </AccordionItem>
         </Accordion>

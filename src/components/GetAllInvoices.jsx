@@ -29,6 +29,11 @@ import { IoMdEye } from "react-icons/io";
 import { CgDollar } from "react-icons/cg";
 
 const GetAllInvoices = () => {
+  const userDataString = localStorage.getItem("userData");
+  const userData = userDataString ? JSON.parse(userDataString) : null;
+  const employee_id = userData ? userData.employee_id : null;
+  const [currentUserData, setCurrentUserData] = useState({});
+
   const [invoices, setInvoices] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedInvoice, setSelectedInvoice] = useState(null);
@@ -46,6 +51,26 @@ const GetAllInvoices = () => {
   const [selectedInovoiceHistory, setSelectedInovoiceHistory] = useState();
 
   const toast = useToast();
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_BASE}/api/admin/getEmployeeByID/${employee_id}`);
+        setCurrentUserData(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        toast({
+          title: "Error",
+          description: "Failed to fetch user data. Please try again later.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+      }
+    };
+    fetchUserData();
+  }, [])
 
   async function fetchData(year, month) {
     setIsLoading(true);
@@ -97,8 +122,8 @@ const GetAllInvoices = () => {
         duration: 5000,
         isClosable: true,
       });
-        fetchData(selectedYear, selectedMonth);
-        setIsDeleteAlertOpen(false);
+      fetchData(selectedYear, selectedMonth);
+      setIsDeleteAlertOpen(false);
     } catch (error) {
       console.error("Error deleting invoice:", error);
     }
@@ -331,40 +356,35 @@ const GetAllInvoices = () => {
                           >
                             <DownloadIcon />
                           </Button>
-                          <Button
-                            size={"sm"}
-                            variant={"outline"}
-                            isLoading={downloading === index}
-                            colorScheme="purple"
-                            onClick={() =>
-                              handleDownload(invoice.invoice_id, index)
-                            }
-                          >
-                            Hey
-                          </Button>
-                          <Button
-                            size={"sm"}
-                            variant={"outline"}
-                            isLoading={downloading === index}
-                            colorScheme="purple"
-                            onClick={() =>
-                              handleDownload(invoice.invoice_id, index)
-                            }
-                          >
-                            <DownloadIcon />
-                          </Button>
+                          {currentUserData?.permissions?.some((el) => {
+                            return el.name === "invoice" && el.value.includes("write")
+                          }) && (
+                              <Button
+                                size={"sm"}
+                                variant={"outline"}
+                                isLoading={downloading === index}
+                                colorScheme="purple"
+                                onClick={() => handleCollectedModalOpen(invoice.invoice_id)}
+                              >
+                                <CgDollar />
+                              </Button>
+                            )}
                         </Td>
                         <Td>
-                          <Button
-                            size={"sm"}
-                            variant={"outline"}
-                            colorScheme="red"
-                            onClick={() =>
-                              handleDeleteConfirmation(invoice.invoice_id)
-                            }
-                          >
-                            <DeleteIcon />
-                          </Button>
+                          {currentUserData?.permissions?.some((el) => {
+                            return el.name === "invoice" && el.value.includes("delete")
+                          }) && (
+                              <Button
+                                size={"sm"}
+                                variant={"outline"}
+                                colorScheme="red"
+                                onClick={() =>
+                                  handleDeleteConfirmation(invoice.invoice_id)
+                                }
+                              >
+                                <DeleteIcon />
+                              </Button>
+                            )}
                         </Td>
                       </Tr>
                     ))
@@ -394,27 +414,35 @@ const GetAllInvoices = () => {
                           >
                             <DownloadIcon />
                           </Button>
-                          <Button
-                            size={"sm"}
-                            variant={"outline"}
-                            isLoading={downloading === index}
-                            colorScheme="purple"
-                            onClick={() => handleCollectedModalOpen(invoice.invoice_id)}
-                          >
-                            <CgDollar />
-                          </Button>
+                          {currentUserData?.permissions?.some((el) => {
+                            return el.name === "invoice" && el.value.includes("write")
+                          }) && (
+                              <Button
+                                size={"sm"}
+                                variant={"outline"}
+                                isLoading={downloading === index}
+                                colorScheme="purple"
+                                onClick={() => handleCollectedModalOpen(invoice.invoice_id)}
+                              >
+                                <CgDollar />
+                              </Button>
+                            )}
                         </Td>
                         <Td>
-                          <Button
-                            size={"sm"}
-                            variant={"outline"}
-                            colorScheme="red"
-                            onClick={() =>
-                              handleDeleteConfirmation(invoice.invoice_id)
-                            }
-                          >
-                            <DeleteIcon />
-                          </Button>
+                          {currentUserData?.permissions?.some((el) => {
+                            return el.name === "invoice" && el.value.includes("delete")
+                          }) && (
+                              <Button
+                                size={"sm"}
+                                variant={"outline"}
+                                colorScheme="red"
+                                onClick={() =>
+                                  handleDeleteConfirmation(invoice.invoice_id)
+                                }
+                              >
+                                <DeleteIcon />
+                              </Button>
+                            )}
                         </Td>
                       </Tr>
                     ))}

@@ -25,6 +25,11 @@ import { toast } from "react-toastify";
 import { IoMdEye } from "react-icons/io";
 
 const GetAllSlip = () => {
+  const userDataString = localStorage.getItem("userData");
+  const userData = userDataString ? JSON.parse(userDataString) : null;
+  const employee_id = userData ? userData.employee_id : null;
+  const [currentUserData, setCurrentUserData] = useState({});
+
   const [projects, setProjects] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
@@ -36,6 +41,26 @@ const GetAllSlip = () => {
   const [downloading, setDownloading] = useState(null);
   const [deleteSlipId, setDeleteSlipId] = useState(null); // State to store the slip id to be deleted
   const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false); // State to manage the delete confirmation dialog
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_BASE}/api/admin/getEmployeeByID/${employee_id}`);
+        setCurrentUserData(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        toast({
+          title: "Error",
+          description: "Failed to fetch user data. Please try again later.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+      }
+    };
+    fetchUserData();
+  }, [])
 
   useEffect(() => {
     async function fetchData() {
@@ -87,9 +112,8 @@ const GetAllSlip = () => {
   }
 
   const handleDownload = (id, index) => {
-    const url = `${
-      import.meta.env.VITE_API_BASE
-    }/api/admin/downloadSalarySlip/${id}`;
+    const url = `${import.meta.env.VITE_API_BASE
+      }/api/admin/downloadSalarySlip/${id}`;
     axiosDownloadFile(url, `${id}.pdf`);
     setDownloading(index);
   };
@@ -114,8 +138,7 @@ const GetAllSlip = () => {
   const handleDeleteSlip = async () => {
     try {
       await axios.delete(
-        `${
-          import.meta.env.VITE_API_BASE
+        `${import.meta.env.VITE_API_BASE
         }/api/admin/deleteSlipById/${deleteSlipId}`
       );
       toast.success("Successfully deleted Slip");
@@ -134,7 +157,7 @@ const GetAllSlip = () => {
     setSelectedMonth(null);
   };
 
-  console.log(projects);
+  console.log(currentUserData);
 
   return (
     <>
@@ -250,93 +273,101 @@ const GetAllSlip = () => {
             <Tbody>
               {searchText !== ""
                 ? filteredProjects.map((project, index) => (
-                    <Tr key={project._id}>
-                      <Td className="md:table-cell hidden">{index + 1}</Td>
-                      <Td>{project.name}</Td>
-                      <Td className="md:table-cell hidden">
-                        {project.basicPay}
-                      </Td>
-                      <Td className="md:table-cell hidden">
-                        {project.travelPay}
-                      </Td>
-                      <Td className="md:table-cell hidden">{project.bonus}</Td>
-                      <Td className="flex gap-2 flex-col md:flex-row">
-                        <Button
-                          size={"sm"}
-                          colorScheme="purple"
-                          onClick={() => handleMoreInfo(project)}
-                        >
-                          <IoMdEye />
-                        </Button>
-                        <Button
-                          size={"sm"}
-                          variant={"outline"}
-                          isLoading={index === downloading}
-                          colorScheme="purple"
-                          onClick={() => handleDownload(project.slip_id, index)}
-                        >
-                          <DownloadIcon />
-                        </Button>
-                      </Td>
-                      <Td>
-                        {" "}
-                        <Button
-                          size={"sm"}
-                          variant={"outline"}
-                          colorScheme="red"
-                          onClick={() =>
-                            handleDeleteConfirmation(project.slip_id)
-                          } // Open delete confirmation dialog
-                        >
-                          <DeleteIcon />
-                        </Button>
-                      </Td>
-                    </Tr>
-                  ))
+                  <Tr key={project._id}>
+                    <Td className="md:table-cell hidden">{index + 1}</Td>
+                    <Td>{project.name}</Td>
+                    <Td className="md:table-cell hidden">
+                      {project.basicPay}
+                    </Td>
+                    <Td className="md:table-cell hidden">
+                      {project.travelPay}
+                    </Td>
+                    <Td className="md:table-cell hidden">{project.bonus}</Td>
+                    <Td className="flex gap-2 flex-col md:flex-row">
+                      <Button
+                        size={"sm"}
+                        colorScheme="purple"
+                        onClick={() => handleMoreInfo(project)}
+                      >
+                        <IoMdEye />
+                      </Button>
+                      <Button
+                        size={"sm"}
+                        variant={"outline"}
+                        isLoading={index === downloading}
+                        colorScheme="purple"
+                        onClick={() => handleDownload(project.slip_id, index)}
+                      >
+                        <DownloadIcon />
+                      </Button>
+                    </Td>
+                    <Td>
+                      {" "}
+                      {currentUserData?.permissions?.some((el) => {
+                        return el.name === "salaryslip" && el.value.includes("delete")
+                      }) && (
+                          <Button
+                            size={"sm"}
+                            variant={"outline"}
+                            colorScheme="red"
+                            onClick={() =>
+                              handleDeleteConfirmation(project.slip_id)
+                            } // Open delete confirmation dialog
+                          >
+                            <DeleteIcon />
+                          </Button>
+                        )}
+                    </Td>
+                  </Tr>
+                ))
                 : projects.map((project, index) => (
-                    <Tr key={project._id}>
-                      <Td className="md:table-cell hidden">{index + 1}</Td>
-                      <Td>{project.name}</Td>
-                      <Td className="md:table-cell hidden">
-                        {project.basicPay}
-                      </Td>
-                      <Td className="md:table-cell hidden">
-                        {project.travelPay}
-                      </Td>
-                      <Td className="md:table-cell hidden">{project.bonus}</Td>
-                      <Td className="flex gap-2 flex-col md:flex-row">
-                        <Button
-                          size={"sm"}
-                          colorScheme="purple"
-                          onClick={() => handleMoreInfo(project)}
-                        >
-                          <IoMdEye />
-                        </Button>
-                        <Button
-                          size={"sm"}
-                          variant={"outline"}
-                          isLoading={index === downloading}
-                          colorScheme="purple"
-                          onClick={() => handleDownload(project.slip_id, index)}
-                        >
-                          <DownloadIcon />
-                        </Button>
-                      </Td>
-                      <Td>
-                        {" "}
-                        <Button
-                          size={"sm"}
-                          variant={"outline"}
-                          colorScheme="red"
-                          onClick={() =>
-                            handleDeleteConfirmation(project.slip_id)
-                          } // Open delete confirmation dialog
-                        >
-                          <DeleteIcon />
-                        </Button>
-                      </Td>
-                    </Tr>
-                  ))}
+                  <Tr key={project._id}>
+                    <Td className="md:table-cell hidden">{index + 1}</Td>
+                    <Td>{project.name}</Td>
+                    <Td className="md:table-cell hidden">
+                      {project.basicPay}
+                    </Td>
+                    <Td className="md:table-cell hidden">
+                      {project.travelPay}
+                    </Td>
+                    <Td className="md:table-cell hidden">{project.bonus}</Td>
+                    <Td className="flex gap-2 flex-col md:flex-row">
+                      <Button
+                        size={"sm"}
+                        colorScheme="purple"
+                        onClick={() => handleMoreInfo(project)}
+                      >
+                        <IoMdEye />
+                      </Button>
+                      <Button
+                        size={"sm"}
+                        variant={"outline"}
+                        isLoading={index === downloading}
+                        colorScheme="purple"
+                        onClick={() => handleDownload(project.slip_id, index)}
+                      >
+                        <DownloadIcon />
+                      </Button>
+                    </Td>
+                    <Td>
+                      {" "}
+                      {currentUserData?.permissions?.some((el) => {
+                        return el.name === "salaryslip" && el.value.includes("delete")
+                      }) && (
+                          <Button
+                            size={"sm"}
+                            variant={"outline"}
+                            colorScheme="red"
+                            onClick={() =>
+                              handleDeleteConfirmation(project.slip_id)
+                            } // Open delete confirmation dialog
+                          >
+                            <DeleteIcon />
+                          </Button>
+                        )}
+                    </Td>
+                  </Tr>
+                ))}
             </Tbody>
           </TableContainer>
         )}
