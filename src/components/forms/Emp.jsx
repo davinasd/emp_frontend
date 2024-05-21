@@ -9,6 +9,12 @@ import {
   TabPanel,
   Text,
   Select as ChakraSelect,
+  Switch,
+  Accordion,
+  AccordionButton,
+  AccordionPanel,
+  AccordionItem,
+  AccordionIcon,
 } from "@chakra-ui/react";
 import { Input, Select } from "antd";
 import axios from "axios";
@@ -37,6 +43,11 @@ const Emp = () => {
     leavingDate: "",
     aadharNumber: "",
     panNumber: "",
+    permissions: [
+      { name: "employee", value: ["read", "write", "delete"] },
+      { name: "salaryslip", value: ["none"] },
+      { name: "invoice", value: ["read", "write", "update"] },
+    ],
     permanentAddress: "",
     correspondenceAddress: "",
     singleFile: null,
@@ -82,7 +93,7 @@ const Emp = () => {
       setProjectData({ ...projectData, [mainKey]: value });
     }
   };
-  
+
   const handleSelectOption = (name, value) => {
     setProjectData({ ...projectData, [name]: value });
   };
@@ -168,7 +179,7 @@ const Emp = () => {
         formData.append(key, value);
       }
     });
-    
+
     // Helper function to handle nested objects recursively
     function handleNestedObject(formData, key, value) {
       Object.entries(value).forEach(([subKey, subValue]) => {
@@ -208,6 +219,25 @@ const Emp = () => {
     setProjectData({ ...projectData, manager_id: selectedManagerId });
   };
 
+  const handleSwitchChange = (permissionName, permissionType) => (e) => {
+    const isChecked = e.target.checked;
+    setProjectData((prevData) => {
+      const updatedPermissions = prevData.permissions.map((perm) =>
+        perm.name === permissionName
+          ? {
+            ...perm,
+            value: isChecked
+              ? [...perm.value, permissionType]
+              : perm.value.filter((val) => val !== permissionType),
+          }
+          : perm
+      );
+      return { ...prevData, permissions: updatedPermissions };
+    });
+  };
+
+  console.log(projectData)
+
   return (
     <form onSubmit={handleSubmit}>
       <div className="hidden md:block">
@@ -218,6 +248,7 @@ const Emp = () => {
             <Tab>Guardian Information</Tab>
             <Tab>Bank Information</Tab>
             <Tab>Files Information</Tab>
+            <Tab>Permissions</Tab>
           </TabList>
 
           <TabPanels>
@@ -494,6 +525,38 @@ const Emp = () => {
                 Create Employee
               </Button>
             </TabPanel>
+
+            <TabPanel>
+              <Accordion allowMultiple>
+                {projectData.permissions.map((perm) => (
+                  <AccordionItem key={perm.name}>
+                    <AccordionButton className="text-xl font-semibold flex justify-between capitalize">{perm.name} <AccordionIcon /></AccordionButton>
+                    <AccordionPanel>
+                      <div
+                        className="w-full py-2 text-md font-semibold flex items-center justify-between"
+                      >
+                        Read <Switch size='md' isChecked={perm.value.includes("read")} onChange={handleSwitchChange(perm.name, "read")} />
+                      </div>
+                      <div
+                        className="w-full py-2 text-md font-semibold flex items-center justify-between"
+                      >
+                        Write <Switch size='md' isChecked={perm.value.includes("write")} onChange={handleSwitchChange(perm.name, "write")} />
+                      </div>
+                      <div
+                        className="w-full py-2 text-md font-semibold flex items-center justify-between"
+                      >
+                        Update <Switch size='md' isChecked={perm.value.includes("update")} onChange={handleSwitchChange(perm.name, "update")} />
+                      </div>
+                      <div
+                        className="w-full py-2 text-md font-semibold flex items-center justify-between"
+                      >
+                        Delete <Switch size='md' isChecked={perm.value.includes("delete")} onChange={handleSwitchChange(perm.name, "delete")} />
+                      </div>
+                    </AccordionPanel>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </TabPanel>
           </TabPanels>
         </Tabs>
       </div>
@@ -620,7 +683,37 @@ const Emp = () => {
             </TabPanel>
             <TabPanel>
               <div className="flex gap-3 mb-3 flex-col md:flex-row">
-                <FormControl id="permanentAddress" className="w-1/2">
+                <FormLabel>Permissions<RequiredIndicator /></FormLabel>
+                <Accordion allowToggle>
+                  {projectData.permissions.map((perm) => (
+                    <AccordionItem key={perm.name}>
+                      <AccordionButton className="text-xl font-semibold flex justify-between capitalize">{perm.name} <AccordionIcon /></AccordionButton>
+                      <AccordionPanel>
+                        <div
+                          className="w-full py-2 text-md font-semibold flex items-center justify-between"
+                        >
+                          Read <Switch size='md' isChecked={perm.value.includes("read")} onChange={handleSwitchChange(perm.name, "read")} />
+                        </div>
+                        <div
+                          className="w-full py-2 text-md font-semibold flex items-center justify-between"
+                        >
+                          Write <Switch size='md' isChecked={perm.value.includes("write")} onChange={handleSwitchChange(perm.name, "write")} />
+                        </div>
+                        <div
+                          className="w-full py-2 text-md font-semibold flex items-center justify-between"
+                        >
+                          Update <Switch size='md' isChecked={perm.value.includes("update")} onChange={handleSwitchChange(perm.name, "update")} />
+                        </div>
+                        <div
+                          className="w-full py-2 text-md font-semibold flex items-center justify-between"
+                        >
+                          Delete <Switch size='md' isChecked={perm.value.includes("delete")} onChange={handleSwitchChange(perm.name, "delete")} />
+                        </div>
+                      </AccordionPanel>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
+                <FormControl id="permanentAddress" className="w-1/2 mt-4">
                   <FormLabel>Permanent Address<RequiredIndicator /></FormLabel>
                   <Input
                     name="permanentAddress"

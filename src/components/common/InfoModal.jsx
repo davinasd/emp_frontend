@@ -291,7 +291,7 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                     <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">
                       Employee Information
                     </h1>
-                    {data.name && (
+                    {data?.name && (
                       <>
                         <Text className="text-sm font-bold text-gray-500 mt-3">
                           Name{" "}
@@ -299,7 +299,7 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                         <Text className="text-lg capitalize">{data.name}</Text>
                       </>
                     )}
-                    {data.gender && (
+                    {data?.gender && (
                       <>
                         <Text className="text-sm font-bold text-gray-500 mt-3">
                           Gender{" "}
@@ -309,7 +309,7 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                         </Text>
                       </>
                     )}
-                    {data.dob && (
+                    {data?.dob && (
                       <>
                         <Text className="text-sm font-bold text-gray-500 mt-3">
                           DOB{" "}
@@ -317,7 +317,7 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                         <Text className="text-lg capitalize">{data.dob}</Text>
                       </>
                     )}
-                    {data.joiningDate && (
+                    {data?.joiningDate && (
                       <>
                         <Text className="text-sm font-bold text-gray-500 mt-3">
                           Joining Date{" "}
@@ -327,7 +327,7 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                         </Text>
                       </>
                     )}
-                    {data.probationPeriod && (
+                    {data?.probationPeriod && (
                       <>
                         <Text className="text-sm font-bold text-gray-500 mt-3">
                           Probation Period{" "}
@@ -337,7 +337,7 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                         </Text>
                       </>
                     )}
-                    {data.leavingDate && (
+                    {data?.leavingDate && (
                       <>
                         <Text className="text-sm font-bold text-gray-500 mt-3">
                           Leaving Date{" "}
@@ -352,7 +352,7 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                     <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">
                       Position Information
                     </h1>
-                    {data.position && (
+                    {data?.position && (
                       <>
                         <Text className="text-sm font-bold text-gray-500 mt-3">
                           Position{" "}
@@ -362,7 +362,7 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                         </Text>
                       </>
                     )}
-                    {data.type && (
+                    {data?.type && (
                       <>
                         <Text className="text-sm font-bold text-gray-500 mt-3">
                           Type{" "}
@@ -370,7 +370,7 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                         <Text className="text-lg capitalize">{data.type}</Text>
                       </>
                     )}
-                    {data.designation && (
+                    {data?.designation && (
                       <>
                         <Text className="text-sm font-bold text-gray-500 mt-3">
                           Designation{" "}
@@ -380,7 +380,7 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                         </Text>
                       </>
                     )}
-                    {data.department && (
+                    {data?.department && (
                       <>
                         <Text className="text-sm font-bold text-gray-500 mt-3">
                           Department{" "}
@@ -395,7 +395,7 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                     <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">
                       Contact Information
                     </h1>
-                    {data.email && (
+                    {data?.email && (
                       <>
                         <Text className="text-sm font-bold text-gray-500 mt-3">
                           Email{" "}
@@ -403,7 +403,7 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                         <Text className="text-lg">{data.email}</Text>
                       </>
                     )}
-                    {data.contactNo && (
+                    {data?.contactNo && (
                       <>
                         <Text className="text-sm font-bold text-gray-500 mt-3">
                           Contact{" "}
@@ -411,7 +411,7 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                         <Text className="text-lg">{data.contactNo}</Text>
                       </>
                     )}
-                    {data.permanentAddress && (
+                    {data?.permanentAddress && (
                       <>
                         <Text className="text-sm font-bold text-gray-500 mt-3">
                           Permanent Address{" "}
@@ -434,7 +434,7 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                     <h1 className="text-lg font-semibold bg-gray-100 text-gray-500 rounded-md w-full px-3 py-1 mb-4">
                       Other Information
                     </h1>
-                    {data.requirement && (
+                    {/* {data?.requirement && (
                       <>
                         <Text className="text-sm font-bold text-gray-500 mt-3">
                           Requirements{" "}
@@ -443,8 +443,8 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                           {data.requirement}
                         </Text>
                       </>
-                    )}
-                    {data.aadharNumber && (
+                    )} */}
+                    {data?.aadharNumber && (
                       <>
                         <Text className="text-sm font-bold text-gray-500 mt-3">
                           Aadhar{" "}
@@ -454,7 +454,7 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                         </Text>
                       </>
                     )}
-                    {data.panNumber && (
+                    {data?.panNumber && (
                       <>
                         <Text className="text-sm font-bold text-gray-500 mt-3">
                           PAN{" "}
@@ -464,22 +464,22 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                         </Text>
                       </>
                     )}
-                    {data.bankDetails && (
+                    {data?.bankDetails && (
                       <>
                         <Text className="text-sm font-bold text-gray-500 mt-3">
                           Bank Details{" "}
                         </Text>
                         <Text className="text-lg capitalize">
-                          Name: {data.bankDetails.bankName}
+                          Name: {data.bankDetails?.bankName}
                         </Text>
                         <Text className="text-lg capitalize">
-                          Acc no: {data.bankDetails.bankAccountNo}
+                          Acc no: {data.bankDetails?.bankAccountNo}
                         </Text>
                         <Text className="text-lg capitalize">
-                          IFSC: {data.bankDetails.bankIfscCode}
+                          IFSC: {data.bankDetails?.bankIfscCode}
                         </Text>
                         <Text className="text-lg capitalize">
-                          Type: {data.bankDetails.type}
+                          Type: {data.bankDetails?.type}
                         </Text>
                       </>
                     )}
@@ -491,18 +491,24 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
                   </Text>
                   <div className="w-full flex gap-2 mt-2">
                     <Text className="text-lg font-bold">Permissions</Text>
-                    {data?.permissions?.map((item) => (
-                      <Tag key={item} className="text-lg">
-                        {item}
-                      </Tag>
-                    ))}
+                    {data?.permissions?.map((item, index) => {
+                      return (
+                        <div key={`perm-${index}`}>
+                          {item?.value?.map(val => (
+                            <Tag key={`addinfo-${index}`} className="text-lg">
+                              {val}
+                            </Tag>
+                          ))}
+                        </div>
+                      )
+                    })}
                   </div>
                   <div className="w-full flex gap-2 mt-2">
                     <Text className="text-lg font-bold">Guardian Details</Text>
                     {data?.guardianDetails &&
                       data.guardianDetails.map &&
                       data.guardianDetails.map((item, index) => (
-                        <div key={index}>
+                        <div key={`guardinfo-${index}`}>
                           {item.guardianName && (
                             <Text>Name: {item.guardianName}</Text>
                           )}
@@ -524,6 +530,7 @@ const InfoModal = ({ modalFor, data, onClose, isOpen }) => {
         </ModalContent>
       </Modal>
     );
+
   if (modalFor === "leave")
     return (
       <Modal

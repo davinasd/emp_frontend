@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from 'react'
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import { IoMdHome, IoMdPerson } from 'react-icons/io';
 import { IoLockOpen, IoPeopleSharp, IoPricetag } from "react-icons/io5";
@@ -12,6 +12,7 @@ import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPane
 import { MdOutlineCalendarMonth } from "react-icons/md";
 import { FcHome } from "react-icons/fc";
 import { FcCallTransfer, FcVoicePresentation, FcInspection, FcList, FcBusinessman, FcDocument, FcCalendar, FcFeedback, FcCurrencyExchange, FcPortraitMode, FcMoneyTransfer, FcUnlock, FcFaq, FcDebt, FcGenericSortingDesc, FcOpenedFolder, FcNext } from "react-icons/fc";
+import axios from 'axios';
 
 interface Props {
     isPhoneView: boolean;
@@ -22,7 +23,32 @@ interface Props {
 }
 
 const Sidebar = ({ isPhoneView, showSidebar, setShowSidebar, activeLink, setActiveLink }: Props) => {
+    const userDataString = localStorage.getItem("userData");
+    const userData = userDataString ? JSON.parse(userDataString) : null;
+    const employee_id = userData ? userData.employee_id : null;
+    const [currentUserData, setCurrentUserData] = useState({});
+
     const [accordionIndex, setAccordionIndex] = useState([10]);
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const response = await axios.get(`${import.meta.env.VITE_API_BASE}/api/admin/getEmployeeByID/${employee_id}`);
+                setCurrentUserData(response.data);
+                console.log(response.data);
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+                toast({
+                    title: "Error",
+                    description: "Failed to fetch user data. Please try again later.",
+                    status: "error",
+                    duration: 5000,
+                    isClosable: true,
+                });
+            }
+        };
+        fetchUserData();
+    }, [])
 
     const handleNavClose = () => {
         const windowWidth = window.innerWidth;
@@ -64,12 +90,20 @@ const Sidebar = ({ isPhoneView, showSidebar, setShowSidebar, activeLink, setActi
                         {(!isPhoneView && showSidebar) && <AccordionIcon />}
                     </AccordionButton>
                     <AccordionPanel bg={"#090f29"} rounded={"md"} p={0}>
-                        <Link to="/getAllEmp" onClick={handleNavClose} className={`flex pt-4 md:pt-0 flex-col md:flex-row text-center md:text-left items-center md:h-[45px] gap-2 px-4 rounded-md transition-all cursor-pointer ${activeLink === 'getAllEmp' ? 'bg-gray-500' : "hover:bg-gray-700"}`}>
-                            <FcPortraitMode size={20} />  <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Employee {!isPhoneView && "Information"}</span>
-                        </Link>
-                        <Link to="/getAllSlip" onClick={handleNavClose} className={`flex md:pt-0 pt-4 mb-4 md:mb-0 flex-col md:flex-row text-center md:text-left items-center md:h-[45px] gap-2 px-4 rounded-md transition-all cursor-pointer ${activeLink === 'getAllSlip' ? 'bg-gray-500' : "hover:bg-gray-700"}`}>
-                            <FcDocument size={18} />  <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Slip</span>
-                        </Link>
+                        {currentUserData?.permissions?.some((el) => {
+                            return el.name === "employee" && el.value.includes("read")
+                        }) && (
+                                <Link to="/getAllEmp" onClick={handleNavClose} className={`flex pt-4 md:pt-0 flex-col md:flex-row text-center md:text-left items-center md:h-[45px] gap-2 px-4 rounded-md transition-all cursor-pointer ${activeLink === 'getAllEmp' ? 'bg-gray-500' : "hover:bg-gray-700"}`}>
+                                    <FcPortraitMode size={20} />  <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Employee {!isPhoneView && "Information"}</span>
+                                </Link>
+                            )}
+                        {currentUserData?.permissions?.some((el) => {
+                            return el.name === "salarySlip" && el.value.includes("read")
+                        }) && (
+                                <Link to="/getAllSlip" onClick={handleNavClose} className={`flex md:pt-0 pt-4 mb-4 md:mb-0 flex-col md:flex-row text-center md:text-left items-center md:h-[45px] gap-2 px-4 rounded-md transition-all cursor-pointer ${activeLink === 'getAllSlip' ? 'bg-gray-500' : "hover:bg-gray-700"}`}>
+                                    <FcDocument size={18} />  <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Slip</span>
+                                </Link>
+                            )}
                         <Link to="/getAllLeaves" onClick={handleNavClose} className={`flex mb-4 md:mb-0 flex-col md:flex-row text-center md:text-left items-center md:h-[45px] gap-2 px-4 rounded-md transition-all cursor-pointer ${activeLink === 'getAllLeaves' ? 'bg-gray-500' : "hover:bg-gray-700"}`}>
                             <FcCalendar size={20} />  <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Leave {!isPhoneView && "Management"}</span>
                         </Link>
@@ -89,9 +123,13 @@ const Sidebar = ({ isPhoneView, showSidebar, setShowSidebar, activeLink, setActi
                         {(!isPhoneView && showSidebar) && <AccordionIcon />}
                     </AccordionButton>
                     <AccordionPanel bg={"#090f29"} rounded={"md"} p={0}>
-                        <Link to="/getAllInvoice" onClick={handleNavClose} className={`flex md:pt-0 pb-3 md:pb-0 pt-4 flex-col md:flex-row text-center md:text-left items-center md:h-[45px] gap-2 px-4 rounded-md transition-all cursor-pointer ${activeLink === 'getAllInvoice' ? 'bg-gray-500' : "hover:bg-gray-700"}`}>
-                            <FcMoneyTransfer />  <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Finance {!isPhoneView && "Management"}</span>
-                        </Link>
+                        {currentUserData?.permissions?.some((el) => {
+                            return el.name === "invoice" && el.value.includes("read")
+                        }) && (
+                                <Link to="/getAllInvoice" onClick={handleNavClose} className={`flex md:pt-0 pb-3 md:pb-0 pt-4 flex-col md:flex-row text-center md:text-left items-center md:h-[45px] gap-2 px-4 rounded-md transition-all cursor-pointer ${activeLink === 'getAllInvoice' ? 'bg-gray-500' : "hover:bg-gray-700"}`}>
+                                    <FcMoneyTransfer />  <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Finance {!isPhoneView && "Management"}</span>
+                                </Link>
+                            )}
                         <Link to="/getAllPaidInvoices" onClick={handleNavClose} className={`flex md:pt-0 pb-3 md:pb-0 pt-4 flex-col md:flex-row text-center md:text-left items-center md:h-[45px] gap-2 px-4 rounded-md transition-all cursor-pointer ${activeLink === 'getAllPaidInvoices' ? 'bg-gray-500' : "hover:bg-gray-700"}`}>
                             <FcDebt />  <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Paid {!isPhoneView && "Invoices"}</span>
                         </Link>
@@ -154,9 +192,6 @@ const Sidebar = ({ isPhoneView, showSidebar, setShowSidebar, activeLink, setActi
                     </AccordionPanel>
                 </AccordionItem>
             </Accordion>
-            {/* <Link to="/getAllSlip" onClick={handleNavClose} className={`flex items-center h-[45px] gap-2 mx-4 my-2 p-2 rounded-md transition-all cursor-pointer ${activeLink === 'getAllSlip' ? 'bg-gray-500' : "hover:bg-gray-700"}`}>
-                <LuNewspaper size={18} />  <span className={`${expandNavbar ? "visible" : "hidden"}`}>Slip Management</span>
-            </Link> */}
             <Link to="/getAllReceivable" onClick={handleNavClose} className={`flex flex-col md:flex-row pt-2 text-center md:text-left items-center md:h-[45px] gap-2 mx-4 my-2 p-2 rounded-md transition-all cursor-pointer ${activeLink === 'getAllReceivable' ? 'bg-gray-500' : "hover:bg-gray-700"}`}>
                 <FcFaq /> <span className={`md:text-[16px] text-[10px] md:${showSidebar ? "visible" : "hidden"}`}>Receivable {!isPhoneView && "Management"}</span>
             </Link>

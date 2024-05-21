@@ -1,4 +1,4 @@
-import { Avatar, IconButton } from '@chakra-ui/react'
+import { Avatar, IconButton, useToast } from '@chakra-ui/react'
 import {
   Menu,
   MenuButton,
@@ -22,15 +22,42 @@ import { MdOutlineAddTask } from 'react-icons/md';
 import { LuNewspaper } from 'react-icons/lu';
 import { HiOutlineDocumentDuplicate } from 'react-icons/hi2';
 import { SlEnvolopeLetter } from "react-icons/sl";
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const Navbar = ({ showSidebar, setShowSidebar }) => {
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const userDataString = localStorage.getItem("userData");
+  const userData = userDataString ? JSON.parse(userDataString) : null;
+  const employee_id = userData ? userData.employee_id : null;
+  const [currentUserData, setCurrentUserData] = useState({});
+
+  const toast = useToast();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector(selectUser);
 
   const MonthsList = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
   const DaysList = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"]
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_BASE}/api/admin/getEmployeeByID/${employee_id}`);
+        setCurrentUserData(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        toast({
+          title: "Error",
+          description: "Failed to fetch user data. Please try again later.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+      }
+    };
+    fetchUserData();
+  }, [])
 
   const handleLogout = () => {
     dispatch(clearUser());
@@ -69,12 +96,20 @@ const Navbar = ({ showSidebar, setShowSidebar }) => {
             />
             <MenuList>
               <MenuGroup title='Quick Create'>
-                <MenuItem p={0}>
-                  <Link to={"/createEmp"} className='w-full py-2 px-4 flex items-center gap-3'><IoPersonAddOutline size={16} /> Employee</Link>
-                </MenuItem>
-                <MenuItem p={0}>
-                  <Link to={"/createInvoice"} className='w-full py-2 px-4 flex items-center gap-3'><HiOutlineDocumentDuplicate size={16} /> Invoice</Link>
-                </MenuItem>
+                {currentUserData?.permissions?.some((el) => {
+                  return el.name === "employee" && el.value.includes("write")
+                }) && (
+                    <MenuItem p={0}>
+                      <Link to={"/createEmp"} className='w-full py-2 px-4 flex items-center gap-3'><IoPersonAddOutline size={16} /> Employee</Link>
+                    </MenuItem>
+                  )}
+                {currentUserData?.permissions?.some((el) => {
+                  return el.name === "invoice" && el.value.includes("write")
+                }) && (
+                    <MenuItem p={0}>
+                      <Link to={"/createInvoice"} className='w-full py-2 px-4 flex items-center gap-3'><HiOutlineDocumentDuplicate size={16} /> Invoice</Link>
+                    </MenuItem>
+                  )}
                 <MenuItem p={0}>
                   <Link to={"/createProject"} className='w-full py-2 px-4 flex items-center gap-3'><LiaProjectDiagramSolid size={18} /> Project</Link>
                 </MenuItem>
@@ -90,9 +125,13 @@ const Navbar = ({ showSidebar, setShowSidebar }) => {
                 <MenuItem p={0}>
                   <Link to={"/createTask"} className='w-full py-2 px-4 flex items-center gap-3'><MdOutlineAddTask size={18} /> Task</Link>
                 </MenuItem>
-                <MenuItem p={0}>
-                  <Link to={"/createSlip"} className='w-full py-2 px-4 flex items-center gap-3'><LuNewspaper /> Slip</Link>
-                </MenuItem>
+                {currentUserData?.permissions?.some((el) => {
+                  return el.name === "salarySlip" && el.value.includes("write")
+                }) && (
+                    <MenuItem p={0}>
+                      <Link to={"/createSlip"} className='w-full py-2 px-4 flex items-center gap-3'><LuNewspaper /> Slip</Link>
+                    </MenuItem>
+                  )}
                 <MenuItem p={0}>
                   <Link to={"/createLetter"} className='w-full py-2 px-4 flex items-center gap-3'><SlEnvolopeLetter /> Letter</Link>
                 </MenuItem>
@@ -108,7 +147,7 @@ const Navbar = ({ showSidebar, setShowSidebar }) => {
                 <MenuItem p={0}>
                   <Link to={"/addReceivable"} className='w-full py-2 px-4 flex items-center gap-3'><SlEnvolopeLetter /> Receivable</Link>
                 </MenuItem>
-                
+
               </MenuGroup>
             </MenuList>
           </Menu>
