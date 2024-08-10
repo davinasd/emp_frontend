@@ -37,7 +37,7 @@ const CreateHoliday = () => {
 
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_BASE}/api/admin/createHoliday`,
+        `${import.meta.env.VITE_API_BASE}/api/admin/createNewLeave`,
         holiday,
         {
           headers: {
@@ -78,7 +78,7 @@ const CreateHoliday = () => {
         boxShadow="lg"
         m="4"
       >
-        <Text fontSize="2xl" fontWeight="semibold" mb="4">Add New Holiday</Text>
+        <Text fontSize="2xl" fontWeight="semibold" mb="4">Add New Leave</Text>
         <form onSubmit={handleSubmit}>
           <FormControl id="title" isRequired>
             <FormLabel>Title</FormLabel>
